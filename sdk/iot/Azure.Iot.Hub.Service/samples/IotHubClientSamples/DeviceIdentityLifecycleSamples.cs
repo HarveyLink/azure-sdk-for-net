@@ -42,6 +42,9 @@ namespace Azure.Iot.Hub.Service.Samples
             // Update Device Twin.
             await UpdateDeviceTwinAsync(deviceId);
 
+            // Invoke method on device
+            await InvokeMethodOnDeviceAsync(deviceId);
+
             // Delete the device.
             await DeleteDeviceIdentityAsync(deviceId);
         }
@@ -221,6 +224,35 @@ namespace Azure.Iot.Hub.Service.Samples
             catch (Exception ex)
             {
                 SampleLogger.FatalError($"Failed to update a device identity due to:\n{ex}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Invoke a method on the device.
+        /// </summary>
+        /// <param name="deviceId">Unique identifier of the device to be updated.</param>
+        public async Task InvokeMethodOnDeviceAsync(string deviceId)
+        {
+            SampleLogger.PrintHeader("INVOKE REBOOT METHOD ON A DEVICE");
+
+            try
+            {
+                #region Snippet:IotInvokeMethodOnDevice
+
+                var request = new CloudToDeviceMethodRequest
+                {
+                    MethodName = "reboot",
+                };
+                Response<CloudToDeviceMethodResponse> response = await IoTHubServiceClient.Devices.InvokeMethodAsync(deviceId, request);
+
+                SampleLogger.PrintSuccess($"\t- Method invoked");
+
+                #endregion Snippet:IotInvokeMethodOnDevice
+            }
+            catch (Exception ex)
+            {
+                SampleLogger.FatalError($"Failed to invoke method on device due to:\n{ex}");
                 throw;
             }
         }
