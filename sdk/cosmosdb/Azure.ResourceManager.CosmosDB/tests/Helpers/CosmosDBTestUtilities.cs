@@ -10,6 +10,7 @@ namespace Azure.ResourceManager.CosmosDB.Tests
     public static class CosmosDBTestUtilities
     {
         internal const string ResourceGroupPrefix = "Default-CosmosDB-";
+
         internal const string Location = "West US";
         public static async Task TryRegisterResourceGroupAsync(ResourceGroupsOperations resourceGroupsOperations, string location, string resourceGroupName)
         {
