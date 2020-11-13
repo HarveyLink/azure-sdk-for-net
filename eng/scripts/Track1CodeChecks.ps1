@@ -1,7 +1,3 @@
-﻿param (
-    $InputConfig
-)
-
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 1
 
@@ -30,36 +26,93 @@ function Invoke-Block([scriptblock]$cmd) {
     }
 }
 
+# helper to turn PSCustomObject into a list of key/value pairs
+function Get-ObjectMembers {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $True, ValueFromPipeline = $True)]
+        [PSCustomObject]$obj
+    )
+    $obj | Get-Member -MemberType NoteProperty | ForEach-Object {
+        $key = $_.Name
+        [PSCustomObject]@{Key = $key; Value = $obj."$key" }
+    }
+}
+
 try {
-    $input = Get-Content $InputConfig | ConvertFrom-Json
-    $metaData = Get-Content $input.metaData
+    # For pipeline
+    #$Response = Invoke-WebRequest -URI https://api.github.com/repos/${env:Build.Repository.Name}/pulls/${env:System.PullRequest.PullRequestId}/files
 
-    $commit = ''
-    $readme = ''
-    [string]$path = Get-Location
-    $metaData | % {
-        if($_ -match 'Commit'){
-            $commit = $_.substring($_.length - 40, 40)
-        }
-        if ($_ -match 'cmd.exe') {
-            $_ -match 'https:[\S]*readme.md'
-            $readme = $matches[0]
+    $Response = Invoke-WebRequest -URI https://api.github.com/repos/Azure/azure-sdk-for-net/pulls/16267/files
+    $changeList = $Response.Content | ConvertFrom-Json
+    $rpMapping = Get-Content "./eng/scripts/RPMapping.json" | ConvertFrom-Json
+    $mataPath = @()
+    $folderName = @()
+    $rpIndex = @()
+
+    $changeList | ForEach-Object {
+        $fileName = $_.filename
+        if ($fileName -match 'eng/mgmt/mgmtmetadata') {
+            $mataPath += $fileName
         }
     }
-    $readme = $readme -replace "blob/[\S]*/specification", "blob/$commit/specification"
-    $path = ($path -replace "\\", "/") + "/sdk"
 
-    Invoke-Block {
-        & autorest --input-file=$readme --csharp --version=v2 --reflect-api-versions --csharp-sdks-folder=$path
+    if ($mataPath.Length -eq 0) {
+        $changeList | ForEach-Object {
+            $fileName = $_.filename
+            if ($fileName -match 'sdk/') {
+                $name = $fileName.substring(4, (($fileName.indexof('/Microsoft') - 4)))
+                If ($folderName -notcontains $name) {
+                    $folderName += $name
+                }
+            }
+        }
+        foreach ($item in $folderName) {
+            $rpMapping | Get-ObjectMembers | ForEach-Object {
+                $value = $_.Value
+                if ($value.PSObject.Properties.Name -eq $item) {
+                    $rpName = $_.Key
+                    If ($rpIndex -notcontains $rpName) {
+                        $rpIndex += $rpName
+                    }
+                }   
+            }
+        }
+        $rpIndex | ForEach-Object {
+            $path = "eng/mgmt/mgmtmetadata/$_" + "_resource-manager.txt"
+            $mataPath += $path
+        }
     }
 
-    Write-Host "git diff only sdk folder"
-    # prevent warning related to EOL differences which triggers an exception for some reason
-    & git -c core.safecrlf=false diff --ignore-space-at-eol --exit-code sdk/
-    if ($LastExitCode -ne 0) {
-        $status = git status -s | Out-String
-        $status = $status -replace "`n", "`n    "
-        LogError "Generated code is not up to date. You may need to run eng\scripts\Update-Snippets.ps1 or sdk\storage\generate.ps1 or eng\scripts\Export-API.ps1"
+    $mataPath | ForEach-Object {
+        $metaData = Get-Content $mataPath
+        $commit = ''
+        $readme = ''
+        [string]$path = Get-Location
+        $metaData | % {
+            if ($_ -match 'Commit') {
+                $commit = $_.substring($_.length - 40, 40)
+            }
+            if ($_ -match 'cmd.exe') {
+                $_ -match 'https:[\S]*readme.md'
+                $readme = $matches[0]
+            }
+        }
+        $readme = $readme -replace "blob/[\S]*/specification", "blob/$commit/specification"
+        $path = ($path -replace "\\", "/") + "/sdk"
+
+        Invoke-Block {
+            & autorest $readme --csharp --version=v2 --reflect-api-versions --csharp-sdks-folder=$path
+        }
+
+        # prevent warning related to EOL differences which triggers an exception for some reason
+        & git add -A
+        git -c core.safecrlf=false diff HEAD --name-only --ignore-space-at-eol --exit-code | 
+        if ($LastExitCode -ne 0) {
+            $status = git status -s | Out-String
+            $status = $status -replace "`n", "`n    "
+            LogError "Generated code is not up to date. You may need to run eng\scripts\Update-Snippets.ps1 or sdk\storage\generate.ps1 or eng\scripts\Export-API.ps1"
+        }
     }
 }
 finally {
