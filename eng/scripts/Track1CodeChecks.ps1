@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 1
+$exitCode=0
 
 [string[]] $errors = @()
 
@@ -107,8 +108,22 @@ try {
 
         # prevent warning related to EOL differences which triggers an exception for some reason
         & git add -A
-        git -c core.safecrlf=false diff HEAD --name-only --ignore-space-at-eol --exit-code | 
-        if ($LastExitCode -ne 0) {
+        $diffResult=@()
+        $diffResult = git -c core.safecrlf=false diff HEAD --name-only --ignore-space-at-eol
+        if($diffResult.Length -gt 1){
+            $exitCode ++
+        }
+        if(($diffResult.Length -eq 1) -And ($diffResult[0] -match 'SdkInfo_')){
+            $content = git -c core.safecrlf=false diff HEAD --ignore-space-at-eol $result[0]
+            $content[0..($content.Length-1)] | ForEach-Object {
+                if($_.StartsWith('+')){
+                    $exitCode ++
+                    break
+                }
+            }
+        }
+
+        if ($exitCode -ne 0) {
             $status = git status -s | Out-String
             $status = $status -replace "`n", "`n    "
             LogError "Generated code is not up to date. You may need to run eng\scripts\Update-Snippets.ps1 or sdk\storage\generate.ps1 or eng\scripts\Export-API.ps1"
