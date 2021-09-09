@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
+using Azure.ResourceManager.MachineLearningServices.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using NUnit.Framework;
@@ -37,16 +38,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
             _computeName = SessionRecording.GenerateAssetName(ComputeNamePrefix);
 
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).Value;
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
+            Workspace ws = (await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+                DataHelper.GenerateWorkspaceData())).Value;
 
-            ComputeResource compute = await ws.GetComputeResources().CreateOrUpdateAsync(
+            ComputeResource compute = (await ws.GetComputeResources().CreateOrUpdateAsync(
                 _computeName,
-                DataHelper.GenerateComputeResourceData());
+                DataHelper.GenerateComputeResourceData())).Value;
 
             _ = await ws.GetOnlineEndpointTrackedResources().CreateOrUpdateAsync(
                 _parentPrefix,
@@ -94,36 +95,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
             OnlineEndpointTrackedResource parent = await ws.GetOnlineEndpointTrackedResources().GetAsync(_parentPrefix);
 
-            OnlineDeploymentTrackedResource resource = null;
+            OnlineDeploymentCreateOrUpdateOperation resource = null;
             Assert.DoesNotThrowAsync(async () => resource = await parent.GetOnlineDeploymentTrackedResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateOnlineDeploymentTrackedResourceData()));
 
-            resource.Data.Properties.Description = "Updated";
+            resource.Value.Data.Properties.Description = "Updated";
             Assert.DoesNotThrowAsync(async () => resource = await parent.GetOnlineDeploymentTrackedResources().CreateOrUpdateAsync(
                 _resourceName,
-                resource.Data));
-            Assert.AreEqual("Updated", resource.Data.Properties.Description);
-        }
-
-        [TestCase]
-        [RecordedTest]
-        public async Task StartCreateOrUpdate()
-        {
-            ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
-            Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
-            OnlineEndpointTrackedResource parent = await ws.GetOnlineEndpointTrackedResources().GetAsync(_parentPrefix);
-
-            OnlineDeploymentTrackedResource resource = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await parent.GetOnlineDeploymentTrackedResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                DataHelper.GenerateOnlineDeploymentTrackedResourceData())).WaitForCompletionAsync());
-
-            resource.Data.Properties.Description = "Updated";
-            Assert.DoesNotThrowAsync(async () => resource = await (await parent.GetOnlineDeploymentTrackedResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                resource.Data)).WaitForCompletionAsync());
-            Assert.AreEqual("Updated", resource.Data.Properties.Description);
+                resource.Value.Data));
+            Assert.AreEqual("Updated", resource.Value.Data.Properties.Description);
         }
 
         [TestCase]
@@ -134,7 +115,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
             OnlineEndpointTrackedResource parent = await ws.GetOnlineEndpointTrackedResources().GetAsync(_parentPrefix);
 
-            Assert.DoesNotThrowAsync(async () => _ = await (await parent.GetOnlineDeploymentTrackedResources().StartCreateOrUpdateAsync(
+            Assert.DoesNotThrowAsync(async () => _ = await (await parent.GetOnlineDeploymentTrackedResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateOnlineDeploymentTrackedResourceData())).WaitForCompletionAsync());
 

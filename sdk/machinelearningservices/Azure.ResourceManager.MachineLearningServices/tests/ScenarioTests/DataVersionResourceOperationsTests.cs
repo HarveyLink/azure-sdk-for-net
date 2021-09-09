@@ -36,16 +36,12 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
             // Create RG and Res with GlobalClient
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
-                _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(_workspaceName, DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
-            DataContainerResource parent = await ws.GetDataContainerResources().CreateOrUpdateAsync(
-                _parentPrefix,
-                DataHelper.GenerateDataContainerResourceData());
+            DataContainerResource parent = await (await ws.GetDataContainerResources().CreateOrUpdateAsync(_parentPrefix, DataHelper.GenerateDataContainerResourceData())).WaitForCompletionAsync();
 
             _ = await parent.GetDataVersionResources().CreateOrUpdateAsync(
                 _resourceName,
@@ -62,11 +58,11 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             DataContainerResource parent = await ws.GetDataContainerResources().GetAsync(_parentPrefix);
 
             var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
-            DataVersionResource res = null;
+            DataVersionCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await parent.GetDataVersionResources().CreateOrUpdateAsync(
                 deleteResourceName,
                 DataHelper.GenerateDataVersionResourceData()));
-            Assert.DoesNotThrowAsync(async () => _ = await res.DeleteAsync());
+            Assert.DoesNotThrowAsync(async () => _ = await res.Value.DeleteAsync());
         }
 
         [TestCase]

@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
+using Azure.ResourceManager.MachineLearningServices.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using NUnit.Framework;
@@ -31,8 +32,8 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _workspaceName = SessionRecording.GenerateAssetName(WorkspacePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
             _ = await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
@@ -77,37 +78,17 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
 
-            WorkspaceConnection resource = null;
+            WorkspaceConnectionCreateOperation resource = null;
             Assert.DoesNotThrowAsync(async () => resource = await ws.GetWorkspaceConnections().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateWorkspaceConnectionData()));
 
-            resource.Data.Target = "www.google.com";
-            resource.Data.ValueFormat = null;
+            resource.Value.Data.Target = "www.google.com";
+            resource.Value.Data.ValueFormat = null;
             Assert.DoesNotThrowAsync(async () => resource = await ws.GetWorkspaceConnections().CreateOrUpdateAsync(
                 _resourceName,
-                resource.Data));
-            Assert.AreEqual("www.google.com", resource.Data.Target);
-        }
-
-        [TestCase]
-        [RecordedTest]
-        public async Task StartCreateOrUpdate()
-        {
-            ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
-            Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
-
-            WorkspaceConnection resource = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await ws.GetWorkspaceConnections().StartCreateOrUpdateAsync(
-                _resourceName,
-                DataHelper.GenerateWorkspaceConnectionData())).WaitForCompletionAsync());
-
-            resource.Data.Target = "www.google.com";
-            resource.Data.ValueFormat = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await ws.GetWorkspaceConnections().StartCreateOrUpdateAsync(
-                _resourceName,
-                resource.Data)).WaitForCompletionAsync());
-            Assert.AreEqual("www.google.com", resource.Data.Target);
+                resource.Value.Data));
+            Assert.AreEqual("www.google.com", resource.Value.Data.Target);
         }
 
         [TestCase]
@@ -117,7 +98,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
 
-            Assert.DoesNotThrowAsync(async () => _ = await (await ws.GetWorkspaceConnections().StartCreateOrUpdateAsync(
+            Assert.DoesNotThrowAsync(async () => _ = await (await ws.GetWorkspaceConnections().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateWorkspaceConnectionData())).WaitForCompletionAsync());
 

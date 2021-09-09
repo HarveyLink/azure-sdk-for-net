@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
+using Azure.ResourceManager.MachineLearningServices.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using NUnit.Framework;
@@ -33,12 +34,12 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _workspaceName = SessionRecording.GenerateAssetName(WorkspacePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+                DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
             _ = await ws.GetCodeContainerResources().CreateOrUpdateAsync(
                 _parentName,
@@ -86,36 +87,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
             CodeContainerResource parent = await ws.GetCodeContainerResources().GetAsync(_parentName);
 
-            CodeVersionResource resource = null;
+            CodeVersionCreateOrUpdateOperation resource = null;
             Assert.DoesNotThrowAsync(async () => resource = await parent.GetCodeVersionResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateCodeVersion()));
 
-            resource.Data.Properties.Description = "Updated";
+            resource.Value.Data.Properties.Description = "Updated";
             Assert.DoesNotThrowAsync(async () => resource = await parent.GetCodeVersionResources().CreateOrUpdateAsync(
                 _resourceName,
-                resource.Data.Properties));
-            Assert.AreEqual("Updated", resource.Data.Properties.Description);
-        }
-
-        [TestCase]
-        [RecordedTest]
-        public async Task StartCreateOrUpdate()
-        {
-            ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
-            Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
-            CodeContainerResource parent = await ws.GetCodeContainerResources().GetAsync(_parentName);
-
-            CodeVersionResource resource = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await parent.GetCodeVersionResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                DataHelper.GenerateCodeVersion())).WaitForCompletionAsync());
-
-            resource.Data.Properties.Description = "Updated";
-            Assert.DoesNotThrowAsync(async () => resource = await (await parent.GetCodeVersionResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                resource.Data.Properties)).WaitForCompletionAsync());
-            Assert.AreEqual("Updated", resource.Data.Properties.Description);
+                resource.Value.Data.Properties));
+            Assert.AreEqual("Updated", resource.Value.Data.Properties.Description);
         }
 
         [TestCase]
@@ -126,7 +107,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
             CodeContainerResource parent = await ws.GetCodeContainerResources().GetAsync(_parentName);
 
-            Assert.DoesNotThrowAsync(async () => _ = await (await parent.GetCodeVersionResources().StartCreateOrUpdateAsync(
+            Assert.DoesNotThrowAsync(async () => _ = await (await parent.GetCodeVersionResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateCodeVersion())).WaitForCompletionAsync());
 

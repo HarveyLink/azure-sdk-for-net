@@ -4,6 +4,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
+using Azure.ResourceManager.MachineLearningServices.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using NUnit.Framework;
@@ -32,8 +33,8 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _workspaceName = SessionRecording.GenerateAssetName(WorkspacePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
             _ = await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
@@ -79,36 +80,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
 
-            EnvironmentContainerResource resource = null;
+            EnvironmentContainerCreateOrUpdateOperation resource = null;
             Assert.DoesNotThrowAsync(async () => resource = await ws.GetEnvironmentContainerResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateEnvironmentContainerResourceData()));
 
-            resource.Data.Properties.Description = "Updated";
+            resource.Value.Data.Properties.Description = "Updated";
             Assert.DoesNotThrowAsync(async () => resource = await ws.GetEnvironmentContainerResources().CreateOrUpdateAsync(
                 _resourceName,
-                resource.Data.Properties));
-            Assert.AreEqual("Updated", resource.Data.Properties.Description);
-        }
-
-        // BUGBUG Environment does not support C, R, D even as swagger indicated so
-        //[TestCase]
-        //[RecordedTest]
-        public async Task StartCreateOrUpdate()
-        {
-            ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
-            Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
-
-            EnvironmentContainerResource resource = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await ws.GetEnvironmentContainerResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                DataHelper.GenerateEnvironmentContainerResourceData())).WaitForCompletionAsync());
-
-            resource.Data.Properties.Description = "Updated";
-            Assert.DoesNotThrowAsync(async () => resource = await (await ws.GetEnvironmentContainerResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                resource.Data.Properties)).WaitForCompletionAsync());
-            Assert.AreEqual("Updated", resource.Data.Properties.Description);
+                resource.Value.Data.Properties));
+            Assert.AreEqual("Updated", resource.Value.Data.Properties.Description);
         }
 
         [TestCase]

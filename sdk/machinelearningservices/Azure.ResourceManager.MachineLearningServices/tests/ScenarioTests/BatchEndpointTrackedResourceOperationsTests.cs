@@ -33,12 +33,9 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
             // Create RG and Res with GlobalClient
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups().CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
-                _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(_workspaceName, DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
             _ = await ws.GetBatchEndpointTrackedResources().CreateOrUpdateAsync(
                 _resourceName,
@@ -54,11 +51,11 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
 
             var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
-            BatchEndpointTrackedResource res = null;
+            BatchEndpointCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await ws.GetBatchEndpointTrackedResources().CreateOrUpdateAsync(
                 deleteResourceName,
                 DataHelper.GenerateBatchEndpointTrackedResourceData()));
-            Assert.DoesNotThrowAsync(async () => _ = await res.DeleteAsync());
+            Assert.DoesNotThrowAsync(async () => _ = await res.Value.DeleteAsync());
         }
 
         [TestCase]

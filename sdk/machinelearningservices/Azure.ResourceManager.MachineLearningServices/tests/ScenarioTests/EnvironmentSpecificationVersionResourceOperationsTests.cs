@@ -36,16 +36,12 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
             // Create RG and Res with GlobalClient
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
-                _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(_workspaceName, DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
-            EnvironmentContainerResource env = await ws.GetEnvironmentContainerResources().CreateOrUpdateAsync(
-                _environmentName,
-                DataHelper.GenerateEnvironmentContainerResourceData());
+            EnvironmentContainerResource env = await (await ws.GetEnvironmentContainerResources().CreateOrUpdateAsync(_environmentName, DataHelper.GenerateEnvironmentContainerResourceData())).WaitForCompletionAsync();
 
             _ = await env.GetEnvironmentSpecificationVersionResources().CreateOrUpdateAsync(
                 _resourceName,
@@ -62,11 +58,11 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             EnvironmentContainerResource env = await ws.GetEnvironmentContainerResources().GetAsync(_environmentName);
 
             var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
-            EnvironmentSpecificationVersionResource res = null;
+            EnvironmentSpecificationVersionCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await env.GetEnvironmentSpecificationVersionResources().CreateOrUpdateAsync(
                 deleteResourceName,
                 DataHelper.GenerateEnvironmentSpecificationVersionResourceData()));
-            Assert.DoesNotThrowAsync(async () => _ = await res.DeleteAsync());
+            Assert.DoesNotThrowAsync(async () => _ = await res.Value.DeleteAsync());
         }
 
         [TestCase]

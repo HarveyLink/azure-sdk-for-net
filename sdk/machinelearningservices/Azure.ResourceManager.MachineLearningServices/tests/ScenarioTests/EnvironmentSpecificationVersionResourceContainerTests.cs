@@ -4,6 +4,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
+using Azure.ResourceManager.MachineLearningServices.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using NUnit.Framework;
@@ -34,12 +35,12 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _workspaceName = SessionRecording.GenerateAssetName(WorkspacePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+                DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
             var envs = await ws.GetEnvironmentContainerResources().GetAllAsync().ToEnumerableAsync();
             Assert.Greater(envs.Count, 1);
@@ -88,36 +89,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
             EnvironmentContainerResource env = await ws.GetEnvironmentContainerResources().GetAsync(_environmentName);
 
-            EnvironmentSpecificationVersionResource resource = null;
+            EnvironmentSpecificationVersionCreateOrUpdateOperation resource = null;
             Assert.DoesNotThrowAsync(async () => resource = await env.GetEnvironmentSpecificationVersionResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateEnvironmentSpecificationVersionResourceData()));
 
-            resource.Data.Properties.Description = "Updated";
+            resource.Value.Data.Properties.Description = "Updated";
             Assert.DoesNotThrowAsync(async () => resource = await env.GetEnvironmentSpecificationVersionResources().CreateOrUpdateAsync(
                 _resourceName,
-                resource.Data.Properties));
-            Assert.AreEqual("Updated", resource.Data.Properties.Description);
-        }
-
-        [TestCase]
-        [RecordedTest]
-        public async Task StartCreateOrUpdate()
-        {
-            ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
-            Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
-            EnvironmentContainerResource env = await ws.GetEnvironmentContainerResources().GetAsync(_environmentName);
-
-            EnvironmentSpecificationVersionResource resource = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await env.GetEnvironmentSpecificationVersionResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                DataHelper.GenerateEnvironmentSpecificationVersionResourceData())).WaitForCompletionAsync());
-
-            resource.Data.Properties.Description = "Updated";
-            Assert.DoesNotThrowAsync(async () => resource = await (await env.GetEnvironmentSpecificationVersionResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                resource.Data.Properties)).WaitForCompletionAsync());
-            Assert.AreEqual("Updated", resource.Data.Properties.Description);
+                resource.Value.Data.Properties));
+            Assert.AreEqual("Updated", resource.Value.Data.Properties.Description);
         }
 
         [TestCase]
@@ -128,7 +109,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
             EnvironmentContainerResource env = await ws.GetEnvironmentContainerResources().GetAsync(_environmentName);
 
-            Assert.DoesNotThrowAsync(async () => _ = await (await env.GetEnvironmentSpecificationVersionResources().StartCreateOrUpdateAsync(
+            Assert.DoesNotThrowAsync(async () => _ = await (await env.GetEnvironmentSpecificationVersionResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateEnvironmentSpecificationVersionResourceData())).WaitForCompletionAsync());
 

@@ -39,16 +39,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _computeName = SessionRecording.GenerateAssetName(ComputeNamePrefix);
 
             // Create RG and Res with GlobalClient
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
             var id = $"/subscriptions/{SessionEnvironment.SubscriptionId}/resourceGroups/test-ml-common/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mltestid";
             var result = GlobalClient.DefaultSubscription.GetGenericResources().GetAsync(id)
                 .ConfigureAwait(false).GetAwaiter().GetResult();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+                DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
             _ = await ws.GetOnlineEndpointTrackedResources().CreateOrUpdateAsync(
                 _resourceName,
@@ -65,11 +65,11 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             ComputeResource compute = await ws.GetComputeResources().GetAsync(_computeName);
 
             var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
-            OnlineEndpointTrackedResource res = null;
+            OnlineEndpointCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await ws.GetOnlineEndpointTrackedResources().CreateOrUpdateAsync(
                 deleteResourceName,
                 DataHelper.GenerateOnlineEndpointTrackedResourceData()));
-            Assert.DoesNotThrowAsync(async () => _ = await res.DeleteAsync());
+            Assert.DoesNotThrowAsync(async () => _ = await res.Value.DeleteAsync());
         }
 
         [TestCase]
@@ -93,7 +93,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
 
             OnlineEndpointTrackedResource resource = await ws.GetOnlineEndpointTrackedResources().GetAsync(_resourceName);
             var update = new PartialOnlineEndpointPartialTrackedResource() { Properties = new PartialOnlineEndpoint() { Traffic = { { "deployment1", 0 } } } };
-            OnlineEndpointTrackedResource updatedResource = await resource.UpdateAsync(update);
+            OnlineEndpointTrackedResource updatedResource = await (await resource.UpdateAsync(update)).WaitForCompletionAsync();
             Assert.AreEqual(0, updatedResource.Data.Properties.Traffic["deployment1"]);
         }
 

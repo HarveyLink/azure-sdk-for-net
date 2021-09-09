@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Azure.Core.TestFramework;
 using Azure.ResourceManager.Core;
 using Azure.ResourceManager.MachineLearningServices.Tests.Extensions;
+using Azure.ResourceManager.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using Azure.ResourceManager.TestFramework;
@@ -92,17 +93,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests
                 "Microsoft.Storage",
                 "storageAccounts",
                 "track2mlstorage");
-            var res = new GenericResourceData()
+            var res = new GenericResourceData(Location.WestUS2)
             {
                 Kind = "StorageV2",
-                Location = Location.WestUS2,
                 Properties = new Dictionary<string, object>
                 {
                     { "minimumTlsVersion", "TLS1_2" },
                     { "allowBlobPublicAccess", true },
                     { "allowSharedKeyAccess", true }
                 },
-                Sku = new Sku() { Name = "Standard_LRS", Tier = "Standard" }
+                Sku = new Sku("Standard_LRS") { Tier = SkuTier.Standard }
             };
 
             _ = GlobalClient.DefaultSubscription.GetGenericResources().CreateOrUpdateAsync(id, res)
@@ -116,10 +116,9 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests
                 "microsoft.insights",
                 "components",
                 "track2mlappinsight");
-            var res = new GenericResourceData()
+            var res = new GenericResourceData(Location.WestUS2)
             {
                 Kind = "web",
-                Location = Location.WestUS2,
                 Properties = new Dictionary<string, object>
                 {
                     { "Ver", "V2" },
@@ -137,9 +136,8 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests
                 "Microsoft.KeyVault",
                 "vaults",
                 "track2mltestkeyvault");
-            var res = new GenericResourceData()
+            var res = new GenericResourceData(Location.WestUS2)
             {
-                Location = Location.WestUS2,
                 Properties = new Dictionary<string, object>
                 {
                     { "sku", new Dictionary<string, object> { { "Name", "Standard" }, { "Family", "A" } } },
@@ -176,11 +174,10 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests
                 "Microsoft.ContainerRegistry",
                 "registries",
                 "track2mlacr");
-            var res = new GenericResourceData()
+            var res = new GenericResourceData(Location.WestUS2)
             {
-                Location = Location.WestUS2,
                 Properties = new Dictionary<string, object>(),
-                Sku = new Sku() { Name = "basic", Tier = "basic" }
+                Sku = new Sku("basic") { Tier = SkuTier.Basic }
             };
 
             _ = GlobalClient.DefaultSubscription.GetGenericResources().CreateOrUpdateAsync(id, res)

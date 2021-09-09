@@ -34,12 +34,12 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
             // Create RG and Res with GlobalClient
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+                DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
             _ = await ws.GetComputeResources().CreateOrUpdateAsync(
                 _resourceName,
@@ -55,13 +55,13 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
 
             var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "d";
-            ComputeResource res = null;
+            ComputeCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await ws.GetComputeResources().CreateOrUpdateAsync(
                 deleteResourceName,
                 DataHelper.GenerateComputeResourceData()));
 
             var deleteParam = new UnderlyingResourceAction("Delete");
-            Assert.DoesNotThrowAsync(async () => _ = await res.DeleteAsync(deleteParam));
+            Assert.DoesNotThrowAsync(async () => _ = await res.Value.DeleteAsync(deleteParam));
         }
 
         [TestCase]
@@ -86,7 +86,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             ComputeResource resource = await ws.GetComputeResources().GetAsync(_resourceName);
             var update = new ScaleSettings(5, 0, TimeSpan.FromMinutes(5));
 
-            ComputeResource updatedResource = await resource.UpdateAsync(update);
+            ComputeResource updatedResource = await (await resource.UpdateAsync(update)).WaitForCompletionAsync();
             //BUGBUG
             //Assert.AreEqual(5, (updatedResource.Data.Properties as AmlCompute)?.Properties.ScaleSettings.MaxNodeCount);
             //Assert.AreEqual(0, (updatedResource.Data.Properties as AmlCompute)?.Properties.ScaleSettings.MinNodeCount);

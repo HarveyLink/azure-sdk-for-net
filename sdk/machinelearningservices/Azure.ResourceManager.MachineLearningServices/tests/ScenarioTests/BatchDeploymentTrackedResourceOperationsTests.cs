@@ -36,16 +36,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
             // Create RG and Res with GlobalClient
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+                DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
-            BatchEndpointTrackedResource parent = await ws.GetBatchEndpointTrackedResources().CreateOrUpdateAsync(
+            BatchEndpointTrackedResource parent = await (await ws.GetBatchEndpointTrackedResources().CreateOrUpdateAsync(
                 _parentPrefix,
-                DataHelper.GenerateBatchEndpointTrackedResourceData());
+                DataHelper.GenerateBatchEndpointTrackedResourceData())).WaitForCompletionAsync();
 
             _ = await parent.GetBatchDeploymentTrackedResources().CreateOrUpdateAsync(
                 _resourceName,
@@ -62,11 +62,11 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             BatchEndpointTrackedResource parent = await ws.GetBatchEndpointTrackedResources().GetAsync(_parentPrefix);
 
             var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
-            BatchDeploymentTrackedResource res = null;
+            BatchDeploymentCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await parent.GetBatchDeploymentTrackedResources().CreateOrUpdateAsync(
                 deleteResourceName,
                 DataHelper.GenerateBatchDeploymentTrackedResourceData()));
-            Assert.DoesNotThrowAsync(async () => _ = await res.DeleteAsync());
+            Assert.DoesNotThrowAsync(async () => _ = await res.Value.DeleteAsync());
         }
 
         [TestCase]

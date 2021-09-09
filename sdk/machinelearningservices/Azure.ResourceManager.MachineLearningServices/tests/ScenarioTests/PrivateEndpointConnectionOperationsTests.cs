@@ -26,7 +26,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             ResourceGroup rg = await CreateTestResourceGroup();
             var workspaceName = Recording.GenerateAssetName("testmlCreate");
             var workspace = await rg.GetWorkspaces().CreateOrUpdateAsync(workspaceName, DataHelper.GenerateWorkspaceData());
-            await PreparePrivateEndpoint(rg.Data.Name, workspace.Value.Id.ToString());
+            await PreparePrivateEndpoint(rg, workspace.Value.Id.ToString());
 
             // Connection name is a random value?
             var connections = await workspace.Value.GetPrivateEndpointConnections().GetAllAsync().ToEnumerableAsync();
@@ -35,39 +35,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Assert.Zero(connections.Count);
         }
 
-        [TestCase]
-        [RecordedTest]
-        public async Task StartDelete()
-        {
-            ResourceGroup rg = await CreateTestResourceGroup();
-            var workspaceName = Recording.GenerateAssetName("testmlCreate");
-            var workspace = await rg.GetWorkspaces().CreateOrUpdateAsync(workspaceName, DataHelper.GenerateWorkspaceData());
-            await PreparePrivateEndpoint(rg.Data.Name, workspace.Value.Id.ToString());
-
-            // Connection name is a random value?
-            var connections = await workspace.Value.GetPrivateEndpointConnections().GetAllAsync().ToEnumerableAsync();
-            await (await connections.FirstOrDefault().StartDeleteAsync()).WaitForCompletionResponseAsync();
-            connections = await workspace.Value.GetPrivateEndpointConnections().GetAllAsync().ToEnumerableAsync();
-            Assert.Zero(connections.Count);
-        }
-
         private async Task<ResourceGroup> CreateTestResourceGroup()
         {
-            return await Client
-                .DefaultSubscription
-                .GetResourceGroups()
-                .CreateOrUpdateAsync(
-                    Recording.GenerateAssetName("testmlrg"),
-                    new ResourceGroupData(Location.WestUS2));
+            return await (await Client.DefaultSubscription.GetResourceGroups().CreateOrUpdateAsync(Recording.GenerateAssetName("testmlrg"), new ResourceGroupData(Location.WestUS2))).WaitForCompletionAsync();
         }
 
-        private async Task PreparePrivateEndpoint(string rgName, string workspaceId)
+        private async Task PreparePrivateEndpoint(ResourceGroup rg, string workspaceId)
         {
-            var networkClient = new NetworkManagementClient(Client.DefaultSubscription.Id.SubscriptionId, TestEnvironment.Credential);
-
             // Create a VNet
             var vnetName = Recording.GenerateAssetName("testmlvnet");
-            var vnetParameter = new Network.Models.VirtualNetwork()
+            var vnetParameter = new VirtualNetworkData()
             {
                 AddressSpace = new Network.Models.AddressSpace()
                 {
@@ -75,16 +52,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
                 },
                 Location = TestEnvironment.Location,
                 Subnets = {
-                    new Network.Models.Subnet() { Name = "frontendSubnet", AddressPrefix = "10.0.1.0/24", PrivateEndpointNetworkPolicies = "Disabled"},
-                    new Network.Models.Subnet() { Name = "backendSubnet", AddressPrefix = "10.0.2.0/24", PrivateEndpointNetworkPolicies = "Disabled"},
+                    new SubnetData() { Name = "frontendSubnet", AddressPrefix = "10.0.1.0/24", PrivateEndpointNetworkPolicies = "Disabled"},
+                    new SubnetData() { Name = "backendSubnet", AddressPrefix = "10.0.2.0/24", PrivateEndpointNetworkPolicies = "Disabled"},
                 }
             };
-            var vnet = await (await networkClient.VirtualNetworks.StartCreateOrUpdateAsync(rgName, vnetName, vnetParameter)).WaitForCompletionAsync();
+            var vnet = await (await rg.GetVirtualNetworks().CreateOrUpdateAsync(vnetName, vnetParameter)).WaitForCompletionAsync();
 
             // Create a PrivateEndpoint
             var connectionName = Recording.GenerateAssetName("testmlCon");
             var endpointName = Recording.GenerateAssetName("testmlep");
-            var endpointParameter = new Network.Models.PrivateEndpoint()
+            var endpointParameter = new PrivateEndpointData()
             {
                 Location = TestEnvironment.Location,
                 PrivateLinkServiceConnections = {
@@ -96,9 +73,9 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
                         RequestMessage = "Please approve my connection."
                     }
                 },
-                Subnet = new Network.Models.Subnet() { Id = vnet.Value.Subnets.FirstOrDefault().Id }
+                Subnet = new SubnetData() { Id = vnet.Value.Data.Subnets.FirstOrDefault().Id }
             };
-            var endpoint = await (await networkClient.PrivateEndpoints.StartCreateOrUpdateAsync(rgName, endpointName, endpointParameter)).WaitForCompletionAsync();
+            var endpoint = await (await rg.GetPrivateEndpoints().CreateOrUpdateAsync(endpointName, endpointParameter)).WaitForCompletionAsync();
         }
     }
 }

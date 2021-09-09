@@ -86,16 +86,16 @@ directive:
     transform: >
         $["x-nullable"] = true;
 # TEMP Disable XXContainer's CUD
-  - from: swagger-document
-    where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/codes/{name}"].delete
-    transform: >
-        $["x-accessibility"] = "internal"
-  - from: swagger-document
-    where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/data/{name}"].delete
-    transform: >
-        $["x-accessibility"] = "internal"
-  - from: swagger-document
-    where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/models/{name}"].delete
-    transform: >
-        $["x-accessibility"] = "internal"
+  # - from: swagger-document
+  #   where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/codes/{name}"].delete
+  #   transform: >
+  #       $["x-accessibility"] = "internal"
+  # - from: swagger-document
+  #   where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/data/{name}"].delete
+  #   transform: >
+  #       $["x-accessibility"] = "internal"
+  # - from: swagger-document
+  #   where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MachineLearningServices/workspaces/{workspaceName}/models/{name}"].delete
+  #   transform: >
+  #       $["x-accessibility"] = "internal"
 ```

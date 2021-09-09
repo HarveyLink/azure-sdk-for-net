@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
+using Azure.ResourceManager.MachineLearningServices.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using NUnit.Framework;
@@ -31,8 +32,8 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _workspaceName = SessionRecording.GenerateAssetName(WorkspacePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
+                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
             _ = await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _workspaceName,
@@ -77,23 +78,10 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
 
-            ComputeResource resource = null;
+            ComputeCreateOrUpdateOperation resource = null;
             Assert.DoesNotThrowAsync(async () => resource = await ws.GetComputeResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateComputeResourceData()));
-        }
-
-        [TestCase]
-        [RecordedTest]
-        public async Task StartCreateOrUpdate()
-        {
-            ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
-            Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
-
-            ComputeResource resource = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await ws.GetComputeResources().StartCreateOrUpdateAsync(
-                _resourceName,
-                DataHelper.GenerateComputeResourceData())).WaitForCompletionAsync());
         }
 
         [TestCase]
@@ -104,7 +92,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
 
             ComputeResource resource = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await ws.GetComputeResources().StartCreateOrUpdateAsync(
+            Assert.DoesNotThrowAsync(async () => resource = await (await ws.GetComputeResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateComputeResourceData())).WaitForCompletionAsync());
 

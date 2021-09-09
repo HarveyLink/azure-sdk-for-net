@@ -175,10 +175,10 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
             var identity = new Models.ResourceIdentity()
             {
                 Type = ResourceIdentityAssignment.UserAssigned,
-                UserAssignedIdentities = { {
-                        resource.Id,
-                        new UserAssignedIdentityMeta()
-                    } }
+                //UserAssignedIdentities = { {
+                //        resource.Id,
+                //        new UserAssignedIdentityMeta()
+                //    } }
             };
             return new OnlineEndpointTrackedResourceData(Location.WestUS2, properties) { Kind = "SampleKind", Identity = identity };
         }

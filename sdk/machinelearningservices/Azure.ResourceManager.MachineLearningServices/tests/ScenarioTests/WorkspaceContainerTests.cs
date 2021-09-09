@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
+using Azure.ResourceManager.MachineLearningServices.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using NUnit.Framework;
@@ -67,34 +68,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         {
             ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
 
-            Workspace resource = null;
+            WorkspaceCreateOrUpdateOperation resource = null;
             Assert.DoesNotThrowAsync(async () => resource = await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateWorkspaceData()));
 
-            resource.Data.Description = "Updated";
+            resource.Value.Data.Description = "Updated";
             Assert.DoesNotThrowAsync(async () => resource = await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _resourceName,
-                resource.Data));
-            Assert.AreEqual("Updated", resource.Data.Description);
-        }
-
-        [TestCase]
-        [RecordedTest]
-        public async Task StartCreateOrUpdate()
-        {
-            ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
-
-            Workspace resource = null;
-            Assert.DoesNotThrowAsync(async () => resource = await (await rg.GetWorkspaces().StartCreateOrUpdateAsync(
-                _resourceName,
-                DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync());
-
-            resource.Data.Description = "Updated";
-            Assert.DoesNotThrowAsync(async () => resource = await (await rg.GetWorkspaces().StartCreateOrUpdateAsync(
-                _resourceName,
-                resource.Data)).WaitForCompletionAsync());
-            Assert.AreEqual("Updated", resource.Data.Description);
+                resource.Value.Data));
+            Assert.AreEqual("Updated", resource.Value.Data.Description);
         }
 
         [TestCase]
@@ -103,7 +86,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         {
             ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
 
-            Assert.DoesNotThrowAsync(async () => _ = await (await rg.GetWorkspaces().StartCreateOrUpdateAsync(
+            Assert.DoesNotThrowAsync(async () => _ = await (await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync());
 

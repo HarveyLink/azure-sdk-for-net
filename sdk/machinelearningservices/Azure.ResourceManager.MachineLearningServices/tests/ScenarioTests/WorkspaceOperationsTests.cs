@@ -31,8 +31,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
             // Create RG and Res with GlobalClient
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups().CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
             _ = await rg.GetWorkspaces().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateWorkspaceData());
@@ -45,11 +44,11 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         {
             ResourceGroup rg = await Client.DefaultSubscription.GetResourceGroups().GetAsync(_resourceGroupName);
             var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
-            Workspace ws = null;
+            WorkspaceCreateOrUpdateOperation ws = null;
             Assert.DoesNotThrowAsync(async () => ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
                 deleteResourceName,
                 DataHelper.GenerateWorkspaceData()));
-            Assert.DoesNotThrowAsync(async () => _ = await ws.DeleteAsync());
+            Assert.DoesNotThrowAsync(async () => _ = await ws.Value.DeleteAsync());
         }
 
         [TestCase]

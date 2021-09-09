@@ -39,20 +39,13 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _dataStoreName = SessionRecording.GenerateAssetName(DataStoreNamePrefix);
 
             // Create RG and Res with GlobalClient
-            ResourceGroup rg = await GlobalClient.DefaultSubscription.GetResourceGroups()
-                .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation));
+            ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups().CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await rg.GetWorkspaces().CreateOrUpdateAsync(
-                _workspaceName,
-                DataHelper.GenerateWorkspaceData());
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(_workspaceName, DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
-            ModelContainerResource parent = await ws.GetModelContainerResources().CreateOrUpdateAsync(
-                _parentPrefix,
-                DataHelper.GenerateModelContainerResourceData());
+            ModelContainerResource parent = await (await ws.GetModelContainerResources().CreateOrUpdateAsync(_parentPrefix, DataHelper.GenerateModelContainerResourceData())).WaitForCompletionAsync();
 
-            DatastorePropertiesResource dateStore = await ws.GetDatastorePropertiesResources().CreateOrUpdateAsync(
-                _dataStoreName,
-                DataHelper.GenerateDatastorePropertiesResourceData());
+            DatastorePropertiesResource dateStore = await (await ws.GetDatastorePropertiesResources().CreateOrUpdateAsync(_dataStoreName, DataHelper.GenerateDatastorePropertiesResourceData())).WaitForCompletionAsync();
 
             _ = await parent.GetModelVersionResources().CreateOrUpdateAsync(
                 "1",
@@ -70,11 +63,11 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             DatastorePropertiesResource dateStore = await ws.GetDatastorePropertiesResources().GetAsync(_dataStoreName);
 
             var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
-            ModelVersionResource res = null;
+            ModelVersionCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await parent.GetModelVersionResources().CreateOrUpdateAsync(
                 deleteResourceName,
                 DataHelper.GenerateModelVersionResourceData(dateStore)));
-            Assert.DoesNotThrowAsync(async () => _ = await res.DeleteAsync());
+            Assert.DoesNotThrowAsync(async () => _ = await res.Value.DeleteAsync());
         }
 
         [TestCase]
