@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         private const string ResourceGroupNamePrefix = "test-DataVersionResourceOperations";
         private const string WorkspacePrefix = "test-workspace";
         private const string ParentPrefix = "test-parent";
-        private const string ResourceNamePrefix = "test-resource";
+        private const string ResourceNamePrefix = "1";
         private readonly Location _defaultLocation = Location.WestUS2;
         private string _resourceName = ResourceNamePrefix;
         private string _workspaceName = WorkspacePrefix;
@@ -32,7 +32,6 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         public async Task SetupResources()
         {
             _parentPrefix = SessionRecording.GenerateAssetName(ParentPrefix);
-            _resourceName = SessionRecording.GenerateAssetName(ResourceNamePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
             // Create RG and Res with GlobalClient
@@ -57,7 +56,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
             DataContainerResource parent = await ws.GetDataContainerResources().GetAsync(_parentPrefix);
 
-            var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
+            var deleteResourceName = "2";
             DataVersionCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await parent.GetDataVersionResources().CreateOrUpdateAsync(
                 deleteResourceName,

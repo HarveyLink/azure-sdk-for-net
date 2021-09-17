@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         private const string ResourceGroupNamePrefix = "test-EnvironmentSpecificationVersionResourceOperations";
         private const string WorkspacePrefix = "test-workspace";
         private const string EnvironmentPrefix = "test-env";
-        private const string ResourceNamePrefix = "test-resource";
+        private const string ResourceNamePrefix = "1";
         private readonly Location _defaultLocation = Location.WestUS2;
         private string _resourceName = ResourceNamePrefix;
         private string _workspaceName = WorkspacePrefix;
@@ -32,16 +32,19 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         public async Task SetupResources()
         {
             _environmentName = SessionRecording.GenerateAssetName(EnvironmentPrefix);
-            _resourceName = SessionRecording.GenerateAssetName(ResourceNamePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
             // Create RG and Res with GlobalClient
             ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
                 .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
-            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(_workspaceName, DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
+            Workspace ws = await (await rg.GetWorkspaces().CreateOrUpdateAsync(
+                _workspaceName,
+                DataHelper.GenerateWorkspaceData())).WaitForCompletionAsync();
 
-            EnvironmentContainerResource env = await (await ws.GetEnvironmentContainerResources().CreateOrUpdateAsync(_environmentName, DataHelper.GenerateEnvironmentContainerResourceData())).WaitForCompletionAsync();
+            EnvironmentContainerResource env = await (await ws.GetEnvironmentContainerResources().CreateOrUpdateAsync(
+                _environmentName,
+                DataHelper.GenerateEnvironmentContainerResourceData())).WaitForCompletionAsync();
 
             _ = await env.GetEnvironmentSpecificationVersionResources().CreateOrUpdateAsync(
                 _resourceName,
@@ -57,7 +60,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Workspace ws = await rg.GetWorkspaces().GetAsync(_workspaceName);
             EnvironmentContainerResource env = await ws.GetEnvironmentContainerResources().GetAsync(_environmentName);
 
-            var deleteResourceName = Recording.GenerateAssetName(ResourceNamePrefix) + "_delete";
+            var deleteResourceName = "2";
             EnvironmentSpecificationVersionCreateOrUpdateOperation res = null;
             Assert.DoesNotThrowAsync(async () => res = await env.GetEnvironmentSpecificationVersionResources().CreateOrUpdateAsync(
                 deleteResourceName,

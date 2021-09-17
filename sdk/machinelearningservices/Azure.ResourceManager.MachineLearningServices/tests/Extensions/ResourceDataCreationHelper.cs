@@ -40,9 +40,43 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
             throw new NotImplementedException();
         }
 
-        public BatchDeploymentTrackedResourceData GenerateBatchDeploymentTrackedResourceData()
+        public BatchDeploymentTrackedResourceData GenerateBatchDeploymentTrackedResourceData(
+            string scoringscript,
+            CodeVersionResource code,
+            ModelVersionResource model,
+            EnvironmentSpecificationVersionResource environment,
+            ComputeResource compute)
         {
-            throw new NotImplementedException();
+            var batch = new BatchDeployment()
+            {
+                CodeConfiguration = new CodeConfiguration(scoringscript)
+                {
+                    CodeId = code.Id
+                },
+                Model = new IdAssetReference(model.Id)
+                {
+                    ReferenceType = ReferenceType.Id
+                },
+                EnvironmentId = environment.Id,
+                Compute = new ComputeConfiguration()
+                {
+                    Target = compute.Id,
+                    InstanceCount = 1,
+                    IsLocal = false
+                },
+                MiniBatchSize = 10,
+                OutputConfiguration = new BatchOutputConfiguration()
+                {
+                    OutputAction = BatchOutputAction.AppendRow,
+                    AppendRowFileName = "output.csv"
+                },
+                RetrySettings = new BatchRetrySettings()
+                {
+                    MaxRetries = 3,
+                    Timeout = TimeSpan.FromSeconds(30)
+                }
+            };
+            return new BatchDeploymentTrackedResourceData(Location.WestUS2, batch);
         }
 
         public BatchEndpointTrackedResourceData GenerateBatchEndpointTrackedResourceData()
@@ -65,6 +99,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
             };
         }
 
+        //TODO: upload code to datastore
         public CodeVersion GenerateCodeVersion()
         {
             return new CodeVersion("hello.py");
@@ -98,7 +133,13 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
                 new AzureBlobContents(
                     "track2mlstorage",
                     "datastore-container",
-                    new AccountKeyDatastoreCredentials() { Secrets = new AccountKeyDatastoreSecrets() { Key = "key" } },
+                    new AccountKeyDatastoreCredentials()
+                    {
+                        Secrets = new AccountKeyDatastoreSecrets()
+                        {
+                            Key = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("key"))
+                        }
+                    },
                     "core.windows.net",
                     "https")
                 ) {
@@ -112,7 +153,18 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
 
         public DataVersion GenerateDataVersionResourceData()
         {
-            throw new NotImplementedException();
+            return new DataVersion(@"https://azureopendatastorage.blob.core.windows.net/citydatacontainer/Safety/Release/city=SanFrancisco/*.parquet")
+            {
+                Tags ={
+                    { "opendatasets", "city_safety_sanfrancisco" }},
+                Properties ={
+                    {"_TimeSeries_Column:FineGrainTimestamp_" , "dateTime" },
+                    {"opendatasets","city_safety_sanfrancisco"},
+                    {"opendatasets:EndDate","08/18/2021 00:00:00 +00:00"},
+                    {"opendatasets:StartDate", "07/20/2021 00:00:00 +00:00"}},
+                IsAnonymous = false,
+                DatasetType = DatasetType.Simple
+            };
         }
 
         public EnvironmentContainer GenerateEnvironmentContainerResourceData()
@@ -131,25 +183,110 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
                 Docker = new DockerBuild("FROM python:3.7-slim")
             };
         }
-
-        public JobBase GenerateJobBaseResourceData()
+        public EnvironmentSpecificationVersion GenerateOnlineEndpointEnvironmentVersion()
         {
-            return new CommandJob("cd ~", new ComputeConfiguration() { IsLocal = true }) { Tags = { { "key1", "value1" } } };
+            return new EnvironmentSpecificationVersion
+            {
+                CondaFile =
+                "name: model-env\n" +
+                "channels:\n  " +
+                "- conda-forge\n" +
+                "dependencies:\n  " +
+                "- python=3.7\n  " +
+                "- numpy\n  " +
+                "- pip\n  " +
+                "- scikit-learn==0.24.1\n  " +
+                "- scipy\n  " +
+                "- pip:\n    " +
+                "- azureml-defaults\n    " +
+                "- inference-schema[numpy-support]\n    " +
+                "- joblib\n    " +
+                "- numpy\n    " +
+                "- scipy\n",
+                Description = "Test",
+                Docker = new DockerImage(@"https://mcr.microsoft.com/azureml/openmpi3.1.2-cuda10.2-cudnn8-ubuntu18.04:20210507.v1")
+            };
+        }
+        public EnvironmentSpecificationVersion GenerateBatchEndpointEnvironmentVersion()
+        {
+            return new EnvironmentSpecificationVersion
+            {
+                CondaFile =
+                "name: mnist-env\n" +
+                "channels:\n  " +
+                "- conda-forge\n" +
+                "dependencies:\n  " +
+                "- python=3.6.2\n  " +
+                "- pip\n  " +
+                "- pip:\n    " +
+                "- tensorflow==1.15.2\n    " +
+                "- pillow\n    " +
+                "- azureml-core\n    " +
+                "- azureml-dataset-runtime[fuse]\n",
+                Description = "Test",
+                Docker = new DockerImage(@"https://mcr.microsoft.com/azureml/openmpi3.1.2-cuda10.2-cudnn8-ubuntu18.04:20210507.v1")
+            };
+        }
+        public JobBase GenerateJobBaseResourceData(string experimentname, ComputeResource compute, EnvironmentSpecificationVersionResource env)
+        {
+            string command = "sleep 5";
+            return new CommandJob(
+                command,
+                new ComputeConfiguration()
+                {
+                    IsLocal = true
+                })
+            {
+                JobType = JobType.Command,
+                Compute = new ComputeConfiguration()
+                {
+                    Target = compute.Id
+                },
+                ExperimentName = experimentname,
+                Command = command,
+                EnvironmentId = env.Id,
+                Tags = { { "key1", "value1" } },
+                Properties =
+                {
+                    {"ProcessInfoFile","azureml-logs/process_info.json"},
+                    {"ProcessStatusFile","azureml-logs/process_status.json"}
+                }
+            };
         }
 
-        public LabelingJob GenerateLabelingJobResourceData()
+        public LabelingJob GenerateLabelingJobResourceData(DataContainerResource datacontainer, DataVersionResource data)
         {
-            throw new NotImplementedException();
+            var labelingjob = new LabelingJob(JobType.Labeling)
+            {
+                DatasetConfiguration = new LabelingDatasetConfiguration()
+                {
+                    AssetName = datacontainer.Data.Id,
+                    DatasetVersion = data.Data.Name
+                },
+                Description = "This is a test.",
+                LabelingJobMediaProperties = new LabelingJobMediaProperties()
+                {
+                    MediaType = MediaType.Image
+                }
+            };
+            var lb1 = new LabelClass() { DisplayName = "football" };
+            var lb2 = new LabelClass() { DisplayName = "basketball" };
+            var lc = new LabelCategory() { DisplayName = "DefaultCategory", AllowMultiSelect = false };
+            lc.Classes.Add("football", lb1);
+            lc.Classes.Add("basketball", lb2);
+            labelingjob.LabelCategories.Add(
+                "DefaultCategory", lc);
+            return labelingjob;
         }
 
         public ModelContainer GenerateModelContainerResourceData()
         {
             return new ModelContainer() { Properties = { { "key1", "value1" } }, Description = "Description", Tags = { { "key1", "value1" } } };
         }
-
+        //TODO: Upload model to datastore
         public ModelVersion GenerateModelVersionResourceData(DatastorePropertiesResource datastore)
         {
-            return new ModelVersion("Test.txt")
+            return new ModelVersion("model.pkl")
             {
                 DatastoreId = datastore.Data.Id,
                 Description = "Model version description",
@@ -158,10 +295,50 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
                 Properties = { { "key1", "value1" }, { "key2", "value2" } }
             };
         }
-
-        public OnlineDeploymentTrackedResourceData GenerateOnlineDeploymentTrackedResourceData()
+        public OnlineDeploymentTrackedResourceData GenerateOnlineDeploymentTrackedResourceData(
+                    string script,
+                    CodeVersionResource code,
+                    ModelVersionResource model,
+                    EnvironmentSpecificationVersionResource env)
         {
-            throw new NotImplementedException();
+            var od = new OnlineDeployment()
+            {
+                CodeConfiguration = new CodeConfiguration(script)
+                {
+                    CodeId = code.Id
+                },
+                Model = new IdAssetReference(model.Id)
+                {
+                    ReferenceType = ReferenceType.Id
+                },
+                EnvironmentId = env.Id,
+                ScaleSettings = new ManualScaleSettings()
+                {
+                    MinInstances = 1,
+                    MaxInstances = 2,
+                    ScaleType = ScaleType.Manual,
+                    InstanceCount = 1
+                },
+                AppInsightsEnabled = false,
+                RequestSettings = new OnlineRequestSettings()
+                {
+                    RequestTimeout = TimeSpan.FromMinutes(1),
+                    MaxConcurrentRequestsPerInstance = 1
+                },
+                LivenessProbe = new ProbeSettings()
+                {
+                    FailureThreshold = 30,
+                    SuccessThreshold = 1,
+                    Timeout = TimeSpan.FromSeconds(10),
+                    Period = TimeSpan.FromSeconds(2),
+                    InitialDelay = TimeSpan.FromSeconds(10)
+                },
+                EndpointComputeType = EndpointComputeType.Managed,
+            };
+            return new OnlineDeploymentTrackedResourceData(Location.WestUS2, od)
+            {
+                Kind = "Managed"
+            };
         }
 
         public OnlineEndpointTrackedResourceData GenerateOnlineEndpointTrackedResourceData(GenericResource resource = default)
