@@ -189,20 +189,20 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
             {
                 CondaFile =
                 "name: model-env\n" +
-                "channels:\n  " +
-                "- conda-forge\n" +
-                "dependencies:\n  " +
-                "- python=3.7\n  " +
-                "- numpy\n  " +
-                "- pip\n  " +
-                "- scikit-learn==0.24.1\n  " +
-                "- scipy\n  " +
-                "- pip:\n    " +
-                "- azureml-defaults\n    " +
-                "- inference-schema[numpy-support]\n    " +
-                "- joblib\n    " +
-                "- numpy\n    " +
-                "- scipy\n",
+                "channels:\n" +
+                "  - conda-forge\n" +
+                "  dependencies:\n" +
+                "- python=3.7\n" +
+                "  - numpy\n" +
+                "  - pip\n  " +
+                "- scikit-learn==0.24.1\n" +
+                "  - scipy\n" +
+                "  - pip:\n" +
+                "    - azureml-defaults\n" +
+                "    - inference-schema[numpy-support]\n" +
+                "    - joblib\n" +
+                "    - numpy\n" +
+                "    - scipy\n",
                 Description = "Test",
                 Docker = new DockerImage(@"https://mcr.microsoft.com/azureml/openmpi3.1.2-cuda10.2-cudnn8-ubuntu18.04:20210507.v1")
             };
@@ -213,16 +213,16 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
             {
                 CondaFile =
                 "name: mnist-env\n" +
-                "channels:\n  " +
-                "- conda-forge\n" +
-                "dependencies:\n  " +
-                "- python=3.6.2\n  " +
-                "- pip\n  " +
-                "- pip:\n    " +
-                "- tensorflow==1.15.2\n    " +
-                "- pillow\n    " +
-                "- azureml-core\n    " +
-                "- azureml-dataset-runtime[fuse]\n",
+                "channels:\n" +
+                "  - conda-forge\n" +
+                "dependencies:\n" +
+                "  - python=3.6.2\n" +
+                "  - pip\n" +
+                "  - pip:\n" +
+                "    - tensorflow==1.15.2\n" +
+                "    - pillow\n" +
+                "    - azureml-core\n" +
+                "    - azureml-dataset-runtime[fuse]\n",
                 Description = "Test",
                 Docker = new DockerImage(@"https://mcr.microsoft.com/azureml/openmpi3.1.2-cuda10.2-cudnn8-ubuntu18.04:20210507.v1")
             };
