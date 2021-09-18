@@ -29,6 +29,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         private string _codeContainerName = CodeContainerNamePrefix;
         private string _environmentContainerName = "AzureML-sklearn-0.24.1-ubuntu18.04-py37-cpu-inference";
         private string _environmentVersion = "12";
+        private string _datastoreName = "workspaceblobstore";
 
         public OnlineDeploymentTrackedResourceContainerTests(bool isAsync)
          : base(isAsync)
@@ -51,11 +52,11 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
                 _workspaceName,
                 DataHelper.GenerateWorkspaceData())).Value;
             //compute
-            ComputeResource compute = (await ws.GetComputeResources().CreateOrUpdateAsync(
+            _ = (await ws.GetComputeResources().CreateOrUpdateAsync(
                 _computeName,
                 DataHelper.GenerateComputeResourceData())).Value;
             //model
-            DatastorePropertiesResource datastore = await ws.GetDatastorePropertiesResources().GetAsync("azureml");
+            DatastorePropertiesResource datastore = await ws.GetDatastorePropertiesResources().GetAsync(_datastoreName);
             ModelContainerResource mcr = await (await ws.GetModelContainerResources().CreateOrUpdateAsync(
                 _modelContainerName,
                 DataHelper.GenerateModelContainerResourceData())).WaitForCompletionAsync();

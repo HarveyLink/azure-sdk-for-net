@@ -102,7 +102,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
         //TODO: upload code to datastore
         public CodeVersion GenerateCodeVersion()
         {
-            return new CodeVersion("hello.py");
+            return new CodeVersion("score.py");
         }
 
         public ComputeResourceData GenerateComputeResourceData()
@@ -116,7 +116,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
                     Properties = new AmlComputeProperties
                     {
                         ScaleSettings = new ScaleSettings(2),
-                        VmSize = "Standard_DS2_v2",
+                        VmSize = "Standard_NC6",
                     }
                 }
             };
@@ -180,53 +180,10 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.Extensions
             return new EnvironmentSpecificationVersion
             {
                 Description = "Test",
-                Docker = new DockerBuild("FROM python:3.7-slim")
+                Docker = new DockerImage("https://mcr.microsoft.com/azureml/sklearn-0.24.1-ubuntu18.04-py37-cpu-inference:20210906.v1")
             };
         }
-        public EnvironmentSpecificationVersion GenerateOnlineEndpointEnvironmentVersion()
-        {
-            return new EnvironmentSpecificationVersion
-            {
-                CondaFile =
-                "name: model-env\n" +
-                "channels:\n" +
-                "  - conda-forge\n" +
-                "  dependencies:\n" +
-                "- python=3.7\n" +
-                "  - numpy\n" +
-                "  - pip\n  " +
-                "- scikit-learn==0.24.1\n" +
-                "  - scipy\n" +
-                "  - pip:\n" +
-                "    - azureml-defaults\n" +
-                "    - inference-schema[numpy-support]\n" +
-                "    - joblib\n" +
-                "    - numpy\n" +
-                "    - scipy\n",
-                Description = "Test",
-                Docker = new DockerImage(@"https://mcr.microsoft.com/azureml/openmpi3.1.2-cuda10.2-cudnn8-ubuntu18.04:20210507.v1")
-            };
-        }
-        public EnvironmentSpecificationVersion GenerateBatchEndpointEnvironmentVersion()
-        {
-            return new EnvironmentSpecificationVersion
-            {
-                CondaFile =
-                "name: mnist-env\n" +
-                "channels:\n" +
-                "  - conda-forge\n" +
-                "dependencies:\n" +
-                "  - python=3.6.2\n" +
-                "  - pip\n" +
-                "  - pip:\n" +
-                "    - tensorflow==1.15.2\n" +
-                "    - pillow\n" +
-                "    - azureml-core\n" +
-                "    - azureml-dataset-runtime[fuse]\n",
-                Description = "Test",
-                Docker = new DockerImage(@"https://mcr.microsoft.com/azureml/openmpi3.1.2-cuda10.2-cudnn8-ubuntu18.04:20210507.v1")
-            };
-        }
+
         public JobBase GenerateJobBaseResourceData(string experimentname, ComputeResource compute, EnvironmentSpecificationVersionResource env)
         {
             string command = "sleep 5";

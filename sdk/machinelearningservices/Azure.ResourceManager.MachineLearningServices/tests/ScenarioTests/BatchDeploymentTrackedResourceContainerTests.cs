@@ -150,7 +150,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             BatchDeploymentCreateOrUpdateOperation resource = null;
             Assert.DoesNotThrowAsync(async () => resource = await parent.GetBatchDeploymentTrackedResources().CreateOrUpdateAsync(
                 _resourceName,
-                DataHelper.GenerateBatchDeploymentTrackedResourceData("BatchEndpoint/score.py", code, model, environment, compute)));
+                DataHelper.GenerateBatchDeploymentTrackedResourceData("score.py", code, model, environment, compute)));
 
             resource.Value.Data.Properties.Description = "Updated";
             Assert.DoesNotThrowAsync(async () => resource = await parent.GetBatchDeploymentTrackedResources().CreateOrUpdateAsync(
@@ -179,7 +179,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             ComputeResource compute = await ws.GetComputeResources().GetAsync(_computeName);
             Assert.DoesNotThrowAsync(async () => _ = await (await endpoint.GetBatchDeploymentTrackedResources().CreateOrUpdateAsync(
                 _resourceName,
-                DataHelper.GenerateBatchDeploymentTrackedResourceData("BatchEndpoint/score.py", code, model, environment, compute))).WaitForCompletionAsync());
+                DataHelper.GenerateBatchDeploymentTrackedResourceData("score.py", code, model, environment, compute))).WaitForCompletionAsync());
 
             Assert.IsTrue(await endpoint.GetBatchDeploymentTrackedResources().CheckIfExistsAsync(_resourceName));
             Assert.IsFalse(await endpoint.GetBatchDeploymentTrackedResources().CheckIfExistsAsync(_resourceName + "xyz"));
