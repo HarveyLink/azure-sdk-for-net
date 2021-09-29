@@ -15,11 +15,10 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         private const string ResourceGroupNamePrefix = "test-DataVersionResourceContainer";
         private const string WorkspacePrefix = "test-workspace";
         private const string ParentPrefix = "test-parent";
-        private const string ResourceNamePrefix = "test-resource";
         private readonly Location _defaultLocation = Location.WestUS2;
         private string _resourceGroupName = ResourceGroupNamePrefix;
         private string _workspaceName = WorkspacePrefix;
-        private string _resourceName = ResourceNamePrefix;
+        private string _resourceName = "1";
         private string _parentPrefix = ParentPrefix;
 
         public DataVersionResourceContainerTests(bool isAsync)
@@ -31,7 +30,6 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         public async Task SetupResources()
         {
             _parentPrefix = SessionRecording.GenerateAssetName(ParentPrefix);
-            _resourceName = SessionRecording.GenerateAssetName(ResourceNamePrefix);
             _workspaceName = SessionRecording.GenerateAssetName(WorkspacePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
 
@@ -113,7 +111,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
                 DataHelper.GenerateDataVersionResourceData())).WaitForCompletionAsync());
 
             Assert.IsTrue(await parent.GetDataVersionResources().CheckIfExistsAsync(_resourceName));
-            Assert.IsFalse(await parent.GetDataVersionResources().CheckIfExistsAsync(_resourceName + "xyz"));
+            Assert.IsFalse(await parent.GetDataVersionResources().CheckIfExistsAsync("67"));
         }
     }
 }

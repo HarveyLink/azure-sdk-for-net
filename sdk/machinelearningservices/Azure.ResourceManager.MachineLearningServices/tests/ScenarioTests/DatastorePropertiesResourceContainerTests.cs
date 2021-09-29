@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
     {
         private const string ResourceGroupNamePrefix = "test-DatastorePropertiesResourceContainer";
         private const string WorkspacePrefix = "test-workspace";
-        private const string ResourceNamePrefix = "test-resource";
+        private const string ResourceNamePrefix = "test_resource";
         private readonly Location _defaultLocation = Location.WestUS2;
         private string _resourceGroupName = ResourceGroupNamePrefix;
         private string _workspaceName = WorkspacePrefix;
@@ -31,7 +31,6 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             _resourceName = SessionRecording.GenerateAssetName(ResourceNamePrefix);
             _workspaceName = SessionRecording.GenerateAssetName(WorkspacePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
-
             ResourceGroup rg = await (await GlobalClient.DefaultSubscription.GetResourceGroups()
                 .CreateOrUpdateAsync(_resourceGroupName, new ResourceGroupData(_defaultLocation))).WaitForCompletionAsync();
 
@@ -82,7 +81,6 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
             Assert.DoesNotThrowAsync(async () => resource = await ws.GetDatastorePropertiesResources().CreateOrUpdateAsync(
                 _resourceName,
                 DataHelper.GenerateDatastorePropertiesResourceData()));
-
             resource.Value.Data.Properties.Description = "Updated";
             Assert.DoesNotThrowAsync(async () => resource = await ws.GetDatastorePropertiesResources().CreateOrUpdateAsync(
                 _resourceName,

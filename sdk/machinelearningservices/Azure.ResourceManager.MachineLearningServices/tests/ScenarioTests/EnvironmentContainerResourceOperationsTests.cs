@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
     {
         private const string ResourceGroupNamePrefix = "test-EnvironmentContainerResourceOperations";
         private const string WorkspacePrefix = "test-workspace";
-        private const string ResourceNamePrefix = "test-resource";
+        private const string ResourceNamePrefix = "test_resource";
         private readonly Location _defaultLocation = Location.WestUS2;
         private string _resourceName = ResourceNamePrefix;
         private string _workspaceName = WorkspacePrefix;

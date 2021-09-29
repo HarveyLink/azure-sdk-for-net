@@ -15,7 +15,7 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         private const string ResourceGroupNamePrefix = "test-ModelVersionResourceContainer";
         private const string WorkspacePrefix = "test-workspace";
         private const string ParentPrefix = "test-parent";
-        private const string ResourceNamePrefix = "test-resource";
+        private const string ResourceNamePrefix = "1";
         private const string DataStoreNamePrefix = "test_dataStore";
         private readonly Location _defaultLocation = Location.WestUS2;
         private string _resourceGroupName = ResourceGroupNamePrefix;
@@ -33,7 +33,6 @@ namespace Azure.ResourceManager.MachineLearningServices.Tests.ScenarioTests
         public async Task SetupResources()
         {
             _parentPrefix = SessionRecording.GenerateAssetName(ParentPrefix);
-            _resourceName = SessionRecording.GenerateAssetName(ResourceNamePrefix);
             _workspaceName = SessionRecording.GenerateAssetName(WorkspacePrefix);
             _resourceGroupName = SessionRecording.GenerateAssetName(ResourceGroupNamePrefix);
             _dataStoreName = SessionRecording.GenerateAssetName(DataStoreNamePrefix);
