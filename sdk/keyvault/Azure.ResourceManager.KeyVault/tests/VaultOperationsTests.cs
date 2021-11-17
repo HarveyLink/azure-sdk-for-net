@@ -305,7 +305,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
 
                 await createdVault.DeleteAsync().ConfigureAwait(false);
 
-                var deletedVault = await DeletedVaultCollection.GetAsync(Location).ConfigureAwait(false);
+                var deletedVault = await DeletedVaultCollection.GetAsync(Location, vaultName).ConfigureAwait(false);
                 Assert.IsTrue(deletedVault.Value.Data.Name.Equals(createdVault.Data.Name));
             }
 
