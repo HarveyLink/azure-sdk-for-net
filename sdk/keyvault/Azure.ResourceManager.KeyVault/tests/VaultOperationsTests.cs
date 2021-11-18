@@ -118,6 +118,8 @@ namespace Azure.ResourceManager.KeyVault.Tests
             {
                 await VaultCollection.GetAsync(VaultName);
             });
+
+            await DeletedVaultCollection.GetAsync(Location, VaultName).Result.Value.PurgeDeletedAsync().ConfigureAwait(false);
         }
 
         [Ignore("This SoftDelete parameter should be deprecated")]
@@ -140,9 +142,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
         [Test]
         public async Task KeyVaultManagementVaultTestCompoundIdentityAccessControlPolicy()
         {
-            AccessPolicy.ApplicationId = Guid.Parse(TestEnvironment.ClientId);
             VaultProperties.EnableSoftDelete = null;
-
             var parameters = new VaultCreateOrUpdateParameters(Location, VaultProperties);
             parameters.Tags.InitializeFrom(Tags);
 
@@ -166,6 +166,10 @@ namespace Azure.ResourceManager.KeyVault.Tests
                 true,
                 new[] { AccessPolicy },
                 Tags);
+            AccessPolicyEntry AccessPolicy2 = AccessPolicy;
+            AccessPolicy2.Permissions.Storage.Clear();
+            VaultAccessPolicyProperties policy = new VaultAccessPolicyProperties(new[] { AccessPolicy2 });
+            await vaultResponse.UpdateAccessPolicyAsync(AccessPolicyUpdateKind.Add, policy).ConfigureAwait(false);
 
             // Get
             var retrievedVault = await VaultCollection.GetAsync(VaultName);
@@ -182,7 +186,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
                 true,
                 true,
                 true,
-                new[] { AccessPolicy },
+                new[] { AccessPolicy, AccessPolicy2 },
                 Tags);
 
             // Delete
@@ -192,6 +196,8 @@ namespace Azure.ResourceManager.KeyVault.Tests
             {
                 await VaultCollection.GetAsync(VaultName);
             });
+
+            await DeletedVaultCollection.GetAsync(Location, VaultName).Result.Value.PurgeDeletedAsync().ConfigureAwait(false);
         }
 
         [Test]
@@ -232,7 +238,8 @@ namespace Azure.ResourceManager.KeyVault.Tests
             // Delete
             foreach (var item in vaultList)
             {
-                await item.DeleteAsync();
+                await item.DeleteAsync().ConfigureAwait(false);
+                await DeletedVaultCollection.GetAsync(Location, item.Data.Name).Result.Value.PurgeDeletedAsync().ConfigureAwait(false);
             }
         }
 
@@ -245,7 +252,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
             var vaultValue = createdVault.Value;
 
             // Delete
-            await vaultValue.DeleteAsync();
+            await vaultValue.DeleteAsync().ConfigureAwait(false);
 
             // Get deleted vault
             Assert.ThrowsAsync<RequestFailedException>(async () =>
@@ -264,7 +271,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
             var getResult =  await VaultCollection.GetAsync(VaultName);
 
             // Delete
-            await getResult.Value.DeleteAsync();
+            await getResult.Value.DeleteAsync().ConfigureAwait(false);
 
             VaultProperties.CreateMode = CreateMode.Recover;
             parameters = new VaultCreateOrUpdateParameters(Location, VaultProperties);
@@ -279,10 +286,10 @@ namespace Azure.ResourceManager.KeyVault.Tests
             getResult = await VaultCollection.GetAsync(VaultName);
 
             // Delete
-            await getResult.Value.DeleteAsync();
+            await getResult.Value.DeleteAsync().ConfigureAwait(false);
+            await DeletedVaultCollection.GetAsync(Location, VaultName).Result.Value.PurgeDeletedAsync().ConfigureAwait(false);
         }
 
-        [Ignore("Add this back when fix get with name/location issue")]
         [Test]
         public async Task KeyVaultManagementListDeletedVaults()
         {
@@ -309,18 +316,18 @@ namespace Azure.ResourceManager.KeyVault.Tests
                 Assert.IsTrue(deletedVault.Value.Data.Name.Equals(createdVault.Data.Name));
             }
 
-            var deletedVaults = DeletedVaultCollection.GetAllAsync().ToEnumerableAsync().Result;
-            Assert.NotNull(deletedVaults);
+            var deletedVaults = Client.GetDefaultSubscriptionAsync().Result.GetDeletedVaultsAsync().ToEnumerableAsync().Result;
+            Assert.GreaterOrEqual(deletedVaults.Count,3);
 
             foreach (var v in deletedVaults)
             {
-                var exists = resourceIds.Remove(v.Data.Properties.VaultId);
+                var exists = resourceIds.Remove(v.Properties.VaultId);
 
                 if (exists)
                 {
                     // Purge vault
-                    await v.PurgeAsync().ConfigureAwait(false);
-                    Assert.ThrowsAsync<RequestFailedException>(async () => await DeletedVaultCollection.GetAsync(Location));
+                    await DeletedVaultCollection.GetAsync(Location, v.Name).Result.Value.PurgeDeletedAsync().ConfigureAwait(false);
+                    Assert.ThrowsAsync<RequestFailedException>(async () => await DeletedVaultCollection.GetAsync(Location,v.Name));
                 }
                 if (resourceIds.Count == 0)
                     break;

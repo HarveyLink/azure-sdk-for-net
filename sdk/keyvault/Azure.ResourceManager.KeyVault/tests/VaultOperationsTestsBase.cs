@@ -37,6 +37,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
         public DeletedVaultCollection DeletedVaultCollection { get; set; }
         public ManagedHsmCollection ManagedHsmCollection { get; set; }
         public ResourceGroup ResourceGroup { get; set; }
+        public Subscription DefaultSubsSubscription { get; set; }
 
         protected VaultOperationsTestsBase(bool isAsync)
             : base(isAsync)
@@ -46,8 +47,8 @@ namespace Azure.ResourceManager.KeyVault.Tests
         protected async Task Initialize()
         {
             Client = GetArmClient();
-            Subscription subscription = await Client.GetDefaultSubscriptionAsync();
-            DeletedVaultCollection = subscription.GetDeletedVaults();
+            Subscription DefaultSubsSubscription = await Client.GetDefaultSubscriptionAsync().ConfigureAwait(false);
+            DeletedVaultCollection = DefaultSubsSubscription.GetDeletedVaults();
 
             if (Mode == RecordedTestMode.Playback)
             {
@@ -67,7 +68,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
             Location = "North Central US";
 
             ResGroupName = Recording.GenerateAssetName("sdktestrg");
-            var rgResponse = await subscription.GetResourceGroups().CreateOrUpdateAsync(ResGroupName, new ResourceGroupData(Location)).ConfigureAwait(false);
+            var rgResponse = await DefaultSubsSubscription.GetResourceGroups().CreateOrUpdateAsync(ResGroupName, new ResourceGroupData(Location)).ConfigureAwait(false);
             ResourceGroup = rgResponse.Value;
 
             VaultCollection = ResourceGroup.GetVaults();
