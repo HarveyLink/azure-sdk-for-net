@@ -28,7 +28,7 @@ namespace Azure.Graph.Rbac.Models
             }
             Optional<string> objectId = default;
             Optional<string> objectType = default;
-            Optional<DateTimeOffset> deletionTimestamp = default;
+            Optional<DateTimeOffset?> deletionTimestamp = default;
             IReadOnlyDictionary<string, object> additionalProperties = default;
             Dictionary<string, object> additionalPropertiesDictionary = new Dictionary<string, object>();
             foreach (var property in element.EnumerateObject())
@@ -47,7 +47,7 @@ namespace Azure.Graph.Rbac.Models
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        property.ThrowNonNullablePropertyIsNull();
+                        deletionTimestamp = null;
                         continue;
                     }
                     deletionTimestamp = property.Value.GetDateTimeOffset("O");

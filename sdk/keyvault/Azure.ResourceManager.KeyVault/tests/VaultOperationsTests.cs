@@ -169,7 +169,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
             AccessPolicyEntry AccessPolicy2 = AccessPolicy;
             AccessPolicy2.Permissions.Storage.Clear();
             VaultAccessPolicyProperties policy = new VaultAccessPolicyProperties(new[] { AccessPolicy2 });
-            await vaultResponse.UpdateAccessPolicyAsync(AccessPolicyUpdateKind.Add, policy).ConfigureAwait(false);
+            var result = await vaultResponse.UpdateAccessPolicyAsync(AccessPolicyUpdateKind.Replace, policy).ConfigureAwait(false);
 
             // Get
             var retrievedVault = await VaultCollection.GetAsync(VaultName);
@@ -186,7 +186,7 @@ namespace Azure.ResourceManager.KeyVault.Tests
                 true,
                 true,
                 true,
-                new[] { AccessPolicy, AccessPolicy2 },
+                new[] { AccessPolicy2 },
                 Tags);
 
             // Delete

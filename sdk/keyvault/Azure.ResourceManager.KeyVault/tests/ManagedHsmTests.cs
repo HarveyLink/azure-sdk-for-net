@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using Azure.Core.TestFramework;
 using Azure.ResourceManager.KeyVault.Models;
 using NUnit.Framework;
@@ -140,13 +141,15 @@ namespace Azure.ResourceManager.KeyVault.Tests
 
             // Delete
             await retrievedVault.Value.DeleteAsync();
-            //Purge need to use loaction parameter. Update them later.
-            //await retrievedVault.Value.PurgeDeletedAsync();
 
             Assert.ThrowsAsync<RequestFailedException>(async () =>
             {
                 await ManagedHsmCollection.GetAsync(VaultName);
             });
+
+            DeletedManagedHsmCollection deletedManagedHsmsCollection = Client.GetDefaultSubscriptionAsync().Result.GetDeletedManagedHsms();
+            DeletedManagedHsm deletedVault = await deletedManagedHsmsCollection.GetAsync(Location, VaultName).ConfigureAwait(false);
+            await deletedVault.PurgeDeletedAsync().ConfigureAwait(false);
         }
 
         [PlaybackOnly("One location only support one MHSM")]
@@ -180,13 +183,13 @@ namespace Azure.ResourceManager.KeyVault.Tests
             }
 
             Assert.True(resourceIds.Count == 0);
-
+            DeletedManagedHsmCollection deletedManagedHsmsCollection = Client.GetDefaultSubscriptionAsync().Result.GetDeletedManagedHsms();
             // Delete
             foreach (var item in vaultList)
             {
                 await item.DeleteAsync();
-                // Purge need to use loaction parameter. Update them later.
-                //await item.PurgeDeletedAsync();
+                DeletedManagedHsm deletedVault = await deletedManagedHsmsCollection.GetAsync(Location, item.Data.Name).ConfigureAwait(false);
+                await deletedVault.PurgeDeletedAsync().ConfigureAwait(false);
             }
         }
 
@@ -225,7 +228,10 @@ namespace Azure.ResourceManager.KeyVault.Tests
             var getResult = await ManagedHsmCollection.GetAsync(VaultName);
 
             // Delete
-            await getResult.Value.DeleteAsync();
+            await getResult.Value.DeleteAsync().ConfigureAwait(false);
+            DeletedManagedHsmCollection deletedManagedHsmsCollection = Client.GetDefaultSubscriptionAsync().Result.GetDeletedManagedHsms();
+            DeletedManagedHsm deletedVault = await deletedManagedHsmsCollection.GetAsync(Location, VaultName).ConfigureAwait(false);
+            await deletedVault.PurgeDeletedAsync().ConfigureAwait(false);
         }
 
         private void ValidateVault(
