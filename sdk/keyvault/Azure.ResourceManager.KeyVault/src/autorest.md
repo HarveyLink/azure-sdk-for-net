@@ -12,28 +12,11 @@ namespace: Azure.ResourceManager.KeyVault
 modelerfour:
   lenient-model-deduplication: true
 model-namespace: false
-mgmt-debug:
-  suppress-list-exception: true
+list-exception:
+  - /subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/locations/{location}/deletedVaults/{vaultName}
+  - /subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/locations/{location}/deletedManagedHSMs/{name}
 payload-flattening-threshold: 2
-# operation-group-to-resource-type:
-#     PrivateLinkResources: Microsoft.KeyVault/vaults/privateLinkResources
-#     MHSMPrivateLinkResources: Microsoft.KeyVault/managedHSMs/privateLinkResources
-#     DeletedVaults: Microsoft.KeyVault/deletedVaults
-# operation-group-to-resource:
-#     Vaults: Vault
-#     DeletedVaults: DeletedVault
-# operation-group-to-parent:
-#    DeletedVaults: subscriptions
 directive:
-#     - from: swagger-document
-#       where: $.paths
-#       transform: delete $['/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.KeyVault/vaults/{vaultName}/accessPolicies/{operationKind}']
-#     - from: swagger-document
-#       where: $.definitions
-#       transform: delete $['VaultAccessPolicyParameters']
-#     - from: swagger-document
-#       where: $.definitions
-#       transform: delete $['VaultAccessPolicyProperties']
     - from: swagger-document
       where: $.paths
       transform: delete $['/subscriptions/{subscriptionId}/resources']
@@ -43,13 +26,4 @@ directive:
     - from: swagger-document
       where: $['definitions']['ManagedHsmSku']['properties']['family']
       transform: delete $['x-ms-client-default']
-#     - from: swagger-document
-#       where: $['paths']['/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/deletedVaults']['get']
-#       transform: $.operationId = 'DeletedVaults_ListBySubscription'
-#     - from: swagger-document
-#       where: $['paths']['/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/locations/{location}/deletedVaults/{vaultName}']['get']
-#       transform: $.operationId = 'DeletedVaults_Get'
-#     - from: swagger-document
-#       where: $['paths']['/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/locations/{location}/deletedVaults/{vaultName}/purge']['post']
-#       transform: $.operationId = 'DeletedVaults_Purge'
 ```
