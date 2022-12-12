@@ -41,8 +41,8 @@ namespace Azure.ResourceManager.StorageMover
             Optional<SystemData> systemData = default;
             Optional<string> description = default;
             Optional<string> agentVersion = default;
-            string arcResourceId = default;
-            string arcVmUuid = default;
+            ResourceIdentifier arcResourceId = default;
+            Guid arcVmUuid = default;
             Optional<StorageMoverAgentStatus> agentStatus = default;
             Optional<DateTimeOffset> lastStatusUpdate = default;
             Optional<string> localIPAddress = default;
@@ -99,12 +99,12 @@ namespace Azure.ResourceManager.StorageMover
                         }
                         if (property0.NameEquals("arcResourceId"))
                         {
-                            arcResourceId = property0.Value.GetString();
+                            arcResourceId = new ResourceIdentifier(property0.Value.GetString());
                             continue;
                         }
                         if (property0.NameEquals("arcVmUuid"))
                         {
-                            arcVmUuid = property0.Value.GetString();
+                            arcVmUuid = property0.Value.GetGuid();
                             continue;
                         }
                         if (property0.NameEquals("agentStatus"))

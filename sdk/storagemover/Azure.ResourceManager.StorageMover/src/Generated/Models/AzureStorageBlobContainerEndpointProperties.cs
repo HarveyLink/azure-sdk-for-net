@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.StorageMover.Models
         /// <param name="storageAccountResourceId"> The Azure Resource ID of the storage account that is the target destination. </param>
         /// <param name="blobContainerName"> The name of the Storage blob container that is the target destination. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="storageAccountResourceId"/> or <paramref name="blobContainerName"/> is null. </exception>
-        public AzureStorageBlobContainerEndpointProperties(string storageAccountResourceId, string blobContainerName)
+        public AzureStorageBlobContainerEndpointProperties(ResourceIdentifier storageAccountResourceId, string blobContainerName)
         {
             Argument.AssertNotNull(storageAccountResourceId, nameof(storageAccountResourceId));
             Argument.AssertNotNull(blobContainerName, nameof(blobContainerName));
@@ -33,7 +33,7 @@ namespace Azure.ResourceManager.StorageMover.Models
         /// <param name="provisioningState"> The provisioning state of this resource. </param>
         /// <param name="storageAccountResourceId"> The Azure Resource ID of the storage account that is the target destination. </param>
         /// <param name="blobContainerName"> The name of the Storage blob container that is the target destination. </param>
-        internal AzureStorageBlobContainerEndpointProperties(EndpointType endpointType, string description, StorageMoverProvisioningState? provisioningState, string storageAccountResourceId, string blobContainerName) : base(endpointType, description, provisioningState)
+        internal AzureStorageBlobContainerEndpointProperties(EndpointType endpointType, string description, StorageMoverProvisioningState? provisioningState, ResourceIdentifier storageAccountResourceId, string blobContainerName) : base(endpointType, description, provisioningState)
         {
             StorageAccountResourceId = storageAccountResourceId;
             BlobContainerName = blobContainerName;
@@ -41,7 +41,7 @@ namespace Azure.ResourceManager.StorageMover.Models
         }
 
         /// <summary> The Azure Resource ID of the storage account that is the target destination. </summary>
-        public string StorageAccountResourceId { get; set; }
+        public ResourceIdentifier StorageAccountResourceId { get; set; }
         /// <summary> The name of the Storage blob container that is the target destination. </summary>
         public string BlobContainerName { get; set; }
     }

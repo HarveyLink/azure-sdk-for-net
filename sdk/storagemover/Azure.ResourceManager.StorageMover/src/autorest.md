@@ -30,6 +30,9 @@ rename-mapping:
   JobRun.properties.sourceResourceId: -|arm-id
   JobRun.properties.targetResourceId: -|arm-id
   JobRunResourceId.jobRunResourceId: -|arm-id
+  Agent.properties.arcResourceId: -|arm-id
+  Agent.properties.arcVmUuid: -|uuid
+  AzureStorageBlobContainerEndpointProperties.storageAccountResourceId: -|arm-id
 
 format-by-name-rules:
   'tenantId': 'uuid'

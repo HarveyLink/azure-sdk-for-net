@@ -126,11 +126,11 @@ namespace Azure.ResourceManager.StorageMover
     }
     public partial class StorageMoverAgentData : Azure.ResourceManager.Models.ResourceData
     {
-        public StorageMoverAgentData(string arcResourceId, string arcVmUuid) { }
+        public StorageMoverAgentData(Azure.Core.ResourceIdentifier arcResourceId, System.Guid arcVmUuid) { }
         public Azure.ResourceManager.StorageMover.Models.StorageMoverAgentStatus? AgentStatus { get { throw null; } }
         public string AgentVersion { get { throw null; } }
-        public string ArcResourceId { get { throw null; } set { } }
-        public string ArcVmUuid { get { throw null; } set { } }
+        public Azure.Core.ResourceIdentifier ArcResourceId { get { throw null; } set { } }
+        public System.Guid ArcVmUuid { get { throw null; } set { } }
         public string Description { get { throw null; } set { } }
         public Azure.ResourceManager.StorageMover.Models.StorageMoverAgentPropertiesErrorDetails ErrorDetails { get { throw null; } }
         public System.DateTimeOffset? LastStatusUpdate { get { throw null; } }
@@ -295,9 +295,9 @@ namespace Azure.ResourceManager.StorageMover.Models
 {
     public partial class AzureStorageBlobContainerEndpointProperties : Azure.ResourceManager.StorageMover.Models.EndpointBaseProperties
     {
-        public AzureStorageBlobContainerEndpointProperties(string storageAccountResourceId, string blobContainerName) { }
+        public AzureStorageBlobContainerEndpointProperties(Azure.Core.ResourceIdentifier storageAccountResourceId, string blobContainerName) { }
         public string BlobContainerName { get { throw null; } set { } }
-        public string StorageAccountResourceId { get { throw null; } set { } }
+        public Azure.Core.ResourceIdentifier StorageAccountResourceId { get { throw null; } set { } }
     }
     public abstract partial class EndpointBaseProperties
     {
