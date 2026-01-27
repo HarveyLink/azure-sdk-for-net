@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Azure.ResourceManager.AlertsManagement.Models
 {
@@ -46,25 +47,34 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertListResult"/>. </summary>
-        internal ServiceAlertListResult()
+        /// <param name="value"> The Alert items on this page. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        internal ServiceAlertListResult(IEnumerable<ServiceAlertData> value)
         {
-            Value = new ChangeTrackingList<ServiceAlertData>();
+            Argument.AssertNotNull(value, nameof(value));
+
+            Value = value.ToList();
         }
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertListResult"/>. </summary>
-        /// <param name="nextLink"> URL to fetch the next set of alerts. </param>
-        /// <param name="value"> List of alerts. </param>
+        /// <param name="value"> The Alert items on this page. </param>
+        /// <param name="nextLink"> The link to the next page of items. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal ServiceAlertListResult(string nextLink, IReadOnlyList<ServiceAlertData> value, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal ServiceAlertListResult(IReadOnlyList<ServiceAlertData> value, Uri nextLink, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
-            NextLink = nextLink;
             Value = value;
+            NextLink = nextLink;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
-        /// <summary> URL to fetch the next set of alerts. </summary>
-        public string NextLink { get; }
-        /// <summary> List of alerts. </summary>
+        /// <summary> Initializes a new instance of <see cref="ServiceAlertListResult"/> for deserialization. </summary>
+        internal ServiceAlertListResult()
+        {
+        }
+
+        /// <summary> The Alert items on this page. </summary>
         public IReadOnlyList<ServiceAlertData> Value { get; }
+        /// <summary> The link to the next page of items. </summary>
+        public Uri NextLink { get; }
     }
 }

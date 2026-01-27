@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertSummaryGroup"/>. </summary>
-        public ServiceAlertSummaryGroup()
+        internal ServiceAlertSummaryGroup()
         {
             Values = new ChangeTrackingList<ServiceAlertSummaryGroupItemInfo>();
         }
@@ -57,7 +57,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="groupedBy"> Name of the field aggregated. </param>
         /// <param name="values"> List of the items. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal ServiceAlertSummaryGroup(long? total, long? smartGroupsCount, string groupedBy, IList<ServiceAlertSummaryGroupItemInfo> values, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal ServiceAlertSummaryGroup(long? total, long? smartGroupsCount, string groupedBy, IReadOnlyList<ServiceAlertSummaryGroupItemInfo> values, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             Total = total;
             SmartGroupsCount = smartGroupsCount;
@@ -67,12 +67,12 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> Total count of the result set. </summary>
-        public long? Total { get; set; }
+        public long? Total { get; }
         /// <summary> Total count of the smart groups. </summary>
-        public long? SmartGroupsCount { get; set; }
+        public long? SmartGroupsCount { get; }
         /// <summary> Name of the field aggregated. </summary>
-        public string GroupedBy { get; set; }
+        public string GroupedBy { get; }
         /// <summary> List of the items. </summary>
-        public IList<ServiceAlertSummaryGroupItemInfo> Values { get; }
+        public IReadOnlyList<ServiceAlertSummaryGroupItemInfo> Values { get; }
     }
 }

@@ -36,6 +36,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private const string SmartDetectorValue = "SmartDetector";
         private const string VmInsightsValue = "VM Insights";
         private const string ZabbixValue = "Zabbix";
+        private const string ResourceHealthValue = "Resource Health";
 
         /// <summary> Application Insights. </summary>
         public static MonitorServiceSourceForAlert ApplicationInsights { get; } = new MonitorServiceSourceForAlert(ApplicationInsightsValue);
@@ -65,6 +66,8 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         public static MonitorServiceSourceForAlert VmInsights { get; } = new MonitorServiceSourceForAlert(VmInsightsValue);
         /// <summary> Zabbix. </summary>
         public static MonitorServiceSourceForAlert Zabbix { get; } = new MonitorServiceSourceForAlert(ZabbixValue);
+        /// <summary> Resource Health. </summary>
+        public static MonitorServiceSourceForAlert ResourceHealth { get; } = new MonitorServiceSourceForAlert(ResourceHealthValue);
         /// <summary> Determines if two <see cref="MonitorServiceSourceForAlert"/> values are the same. </summary>
         public static bool operator ==(MonitorServiceSourceForAlert left, MonitorServiceSourceForAlert right) => left.Equals(right);
         /// <summary> Determines if two <see cref="MonitorServiceSourceForAlert"/> values are not the same. </summary>

@@ -52,7 +52,7 @@ namespace Azure.ResourceManager.AlertsManagement
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertData"/>. </summary>
-        public ServiceAlertData()
+        internal ServiceAlertData()
         {
         }
 
@@ -70,6 +70,6 @@ namespace Azure.ResourceManager.AlertsManagement
         }
 
         /// <summary> Alert property bag. </summary>
-        public ServiceAlertProperties Properties { get; set; }
+        public ServiceAlertProperties Properties { get; }
     }
 }

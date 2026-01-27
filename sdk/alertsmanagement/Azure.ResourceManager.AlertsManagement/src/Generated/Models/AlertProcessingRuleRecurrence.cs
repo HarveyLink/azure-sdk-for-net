@@ -59,7 +59,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="startOn"> Start time for recurrence. </param>
         /// <param name="endOn"> End time for recurrence. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal AlertProcessingRuleRecurrence(RecurrenceType recurrenceType, TimeSpan? startOn, TimeSpan? endOn, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal AlertProcessingRuleRecurrence(RecurrenceType recurrenceType, string startOn, string endOn, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             RecurrenceType = recurrenceType;
             StartOn = startOn;
@@ -70,8 +70,8 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <summary> Specifies when the recurrence should be applied. </summary>
         internal RecurrenceType RecurrenceType { get; set; }
         /// <summary> Start time for recurrence. </summary>
-        public TimeSpan? StartOn { get; set; }
+        public string StartOn { get; set; }
         /// <summary> End time for recurrence. </summary>
-        public TimeSpan? EndOn { get; set; }
+        public string EndOn { get; set; }
     }
 }

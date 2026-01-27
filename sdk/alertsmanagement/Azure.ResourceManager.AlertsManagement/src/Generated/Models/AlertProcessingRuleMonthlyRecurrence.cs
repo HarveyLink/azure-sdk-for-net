@@ -31,7 +31,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="endOn"> End time for recurrence. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
         /// <param name="daysOfMonth"> Specifies the values for monthly recurrence pattern. </param>
-        internal AlertProcessingRuleMonthlyRecurrence(RecurrenceType recurrenceType, TimeSpan? startOn, TimeSpan? endOn, IDictionary<string, BinaryData> serializedAdditionalRawData, IList<int> daysOfMonth) : base(recurrenceType, startOn, endOn, serializedAdditionalRawData)
+        internal AlertProcessingRuleMonthlyRecurrence(RecurrenceType recurrenceType, string startOn, string endOn, IDictionary<string, BinaryData> serializedAdditionalRawData, IList<int> daysOfMonth) : base(recurrenceType, startOn, endOn, serializedAdditionalRawData)
         {
             DaysOfMonth = daysOfMonth;
             RecurrenceType = recurrenceType;

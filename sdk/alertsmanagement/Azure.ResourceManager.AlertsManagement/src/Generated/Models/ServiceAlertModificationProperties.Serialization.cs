@@ -87,7 +87,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
                 return null;
             }
             Guid? alertId = default;
-            IList<ServiceAlertModificationItemInfo> modifications = default;
+            IReadOnlyList<ServiceAlertModificationItemInfo> modifications = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())

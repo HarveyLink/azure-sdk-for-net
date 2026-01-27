@@ -21,7 +21,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task GetAlertProcessingRules_GetAlertProcessingRulesSubscriptionWide()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_List_Subscription.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_List_Subscription.json
             // this example is just showing the usage of "AlertProcessingRules_ListBySubscription" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -50,10 +50,10 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
 
         [Test]
         [Ignore("Only validating compilation of examples")]
-        public async Task GetServiceAlertSummary_Summary()
+        public async Task GetAlertRuleRecommendationsByTargetType_ListAlertRuleRecommendationsForMonitoringAccountsAtSubscriptionLevel()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/preview/2019-05-05-preview/examples/Alerts_Summary.json
-            // this example is just showing the usage of "Alerts_GetSummary" operation, for the dependent resources, they will have to be created separately.
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertRuleRecommendations/preview/2023-08-01-preview/examples/AlertRuleRecommendations_GetBySubscription_MAC.json
+            // this example is just showing the usage of "AlertRuleRecommendations_ListByTargetType" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
             TokenCredential cred = new DefaultAzureCredential();
@@ -62,16 +62,77 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
 
             // this example assumes you already have this SubscriptionResource created on azure
             // for more information of creating SubscriptionResource, please refer to the document of SubscriptionResource
-            string subscriptionId = "1e3ff1c0-771a-4119-a03b-be82a51e232d";
+            string subscriptionId = "2f00cc51-6809-498f-9ffc-48c42aff570d";
             ResourceIdentifier subscriptionResourceId = SubscriptionResource.CreateResourceIdentifier(subscriptionId);
             SubscriptionResource subscriptionResource = client.GetSubscriptionResource(subscriptionResourceId);
 
-            // invoke the operation
-            AlertsSummaryGroupByField groupby = new AlertsSummaryGroupByField("severity,alertState");
-            SubscriptionResourceGetServiceAlertSummaryOptions options = new SubscriptionResourceGetServiceAlertSummaryOptions(groupby);
-            ServiceAlertSummary result = await subscriptionResource.GetServiceAlertSummaryAsync(options);
+            // invoke the operation and iterate over the result
+            string targetType = "microsoft.monitor/accounts";
+            await foreach (AlertRuleRecommendationResource item in subscriptionResource.GetAlertRuleRecommendationsByTargetTypeAsync(targetType))
+            {
+                Console.WriteLine($"Succeeded: {item}");
+            }
 
-            Console.WriteLine($"Succeeded: {result}");
+            Console.WriteLine("Succeeded");
+        }
+
+        [Test]
+        [Ignore("Only validating compilation of examples")]
+        public async Task GetAlertRuleRecommendationsByTargetType_ListAlertRuleRecommendationsForVirtualMachinesAtSubscriptionLevel()
+        {
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertRuleRecommendations/preview/2023-08-01-preview/examples/AlertRuleRecommendations_GetBySubscription_VM.json
+            // this example is just showing the usage of "AlertRuleRecommendations_ListByTargetType" operation, for the dependent resources, they will have to be created separately.
+
+            // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
+            TokenCredential cred = new DefaultAzureCredential();
+            // authenticate your client
+            ArmClient client = new ArmClient(cred);
+
+            // this example assumes you already have this SubscriptionResource created on azure
+            // for more information of creating SubscriptionResource, please refer to the document of SubscriptionResource
+            string subscriptionId = "2f00cc51-6809-498f-9ffc-48c42aff570d";
+            ResourceIdentifier subscriptionResourceId = SubscriptionResource.CreateResourceIdentifier(subscriptionId);
+            SubscriptionResource subscriptionResource = client.GetSubscriptionResource(subscriptionResourceId);
+
+            // invoke the operation and iterate over the result
+            string targetType = "microsoft.compute/virtualmachines";
+            await foreach (AlertRuleRecommendationResource item in subscriptionResource.GetAlertRuleRecommendationsByTargetTypeAsync(targetType))
+            {
+                Console.WriteLine($"Succeeded: {item}");
+            }
+
+            Console.WriteLine("Succeeded");
+        }
+
+        [Test]
+        [Ignore("Only validating compilation of examples")]
+        public async Task GetPrometheusRuleGroupResources_ListSubscriptionResourcePrometheusRuleGroups()
+        {
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/PrometheusRuleGroups/stable/2023-03-01/examples/listSubscriptionPrometheusRuleGroups.json
+            // this example is just showing the usage of "PrometheusRuleGroups_ListBySubscription" operation, for the dependent resources, they will have to be created separately.
+
+            // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
+            TokenCredential cred = new DefaultAzureCredential();
+            // authenticate your client
+            ArmClient client = new ArmClient(cred);
+
+            // this example assumes you already have this SubscriptionResource created on azure
+            // for more information of creating SubscriptionResource, please refer to the document of SubscriptionResource
+            string subscriptionId = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+            ResourceIdentifier subscriptionResourceId = SubscriptionResource.CreateResourceIdentifier(subscriptionId);
+            SubscriptionResource subscriptionResource = client.GetSubscriptionResource(subscriptionResourceId);
+
+            // invoke the operation and iterate over the result
+            await foreach (PrometheusRuleGroupResource item in subscriptionResource.GetPrometheusRuleGroupResourcesAsync())
+            {
+                // the variable item is a resource, you could call other operations on this instance as well
+                // but just for demo, we get its data from this resource instance
+                PrometheusRuleGroupResourceData resourceData = item.Data;
+                // for demo we just print out the id
+                Console.WriteLine($"Succeeded on id: {resourceData.Id}");
+            }
+
+            Console.WriteLine("Succeeded");
         }
     }
 }

@@ -32,8 +32,1052 @@ namespace Azure.ResourceManager.AlertsManagement
         {
             _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
             _endpoint = endpoint ?? new Uri("https://management.azure.com");
-            _apiVersion = apiVersion ?? "2019-05-05-preview";
+            _apiVersion = apiVersion ?? "2025-05-25-preview";
             _userAgent = new TelemetryDetails(GetType().Assembly, applicationId);
+        }
+
+        internal RequestUriBuilder CreateGetAllRequestUri(string scope, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, string smartGroupId, bool? includeContext, bool? includeEgressConfig, long? pageCount, ListServiceAlertsSortByField? sortBy, AlertsManagementQuerySortOrder? sortOrder, string select, TimeRangeFilter? timeRange, string customTimeRange)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            if (targetResource != null)
+            {
+                uri.AppendQuery("targetResource", targetResource, true);
+            }
+            if (targetResourceType != null)
+            {
+                uri.AppendQuery("targetResourceType", targetResourceType, true);
+            }
+            if (targetResourceGroup != null)
+            {
+                uri.AppendQuery("targetResourceGroup", targetResourceGroup, true);
+            }
+            if (monitorService != null)
+            {
+                uri.AppendQuery("monitorService", monitorService.Value.ToString(), true);
+            }
+            if (monitorCondition != null)
+            {
+                uri.AppendQuery("monitorCondition", monitorCondition.Value.ToString(), true);
+            }
+            if (severity != null)
+            {
+                uri.AppendQuery("severity", severity.Value.ToString(), true);
+            }
+            if (alertState != null)
+            {
+                uri.AppendQuery("alertState", alertState.Value.ToString(), true);
+            }
+            if (alertRule != null)
+            {
+                uri.AppendQuery("alertRule", alertRule, true);
+            }
+            if (smartGroupId != null)
+            {
+                uri.AppendQuery("smartGroupId", smartGroupId, true);
+            }
+            if (includeContext != null)
+            {
+                uri.AppendQuery("includeContext", includeContext.Value, true);
+            }
+            if (includeEgressConfig != null)
+            {
+                uri.AppendQuery("includeEgressConfig", includeEgressConfig.Value, true);
+            }
+            if (pageCount != null)
+            {
+                uri.AppendQuery("pageCount", pageCount.Value, true);
+            }
+            if (sortBy != null)
+            {
+                uri.AppendQuery("sortBy", sortBy.Value.ToString(), true);
+            }
+            if (sortOrder != null)
+            {
+                uri.AppendQuery("sortOrder", sortOrder.Value.ToString(), true);
+            }
+            if (select != null)
+            {
+                uri.AppendQuery("select", select, true);
+            }
+            if (timeRange != null)
+            {
+                uri.AppendQuery("timeRange", timeRange.Value.ToString(), true);
+            }
+            if (customTimeRange != null)
+            {
+                uri.AppendQuery("customTimeRange", customTimeRange, true);
+            }
+            return uri;
+        }
+
+        internal HttpMessage CreateGetAllRequest(string scope, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, string smartGroupId, bool? includeContext, bool? includeEgressConfig, long? pageCount, ListServiceAlertsSortByField? sortBy, AlertsManagementQuerySortOrder? sortOrder, string select, TimeRangeFilter? timeRange, string customTimeRange)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            if (targetResource != null)
+            {
+                uri.AppendQuery("targetResource", targetResource, true);
+            }
+            if (targetResourceType != null)
+            {
+                uri.AppendQuery("targetResourceType", targetResourceType, true);
+            }
+            if (targetResourceGroup != null)
+            {
+                uri.AppendQuery("targetResourceGroup", targetResourceGroup, true);
+            }
+            if (monitorService != null)
+            {
+                uri.AppendQuery("monitorService", monitorService.Value.ToString(), true);
+            }
+            if (monitorCondition != null)
+            {
+                uri.AppendQuery("monitorCondition", monitorCondition.Value.ToString(), true);
+            }
+            if (severity != null)
+            {
+                uri.AppendQuery("severity", severity.Value.ToString(), true);
+            }
+            if (alertState != null)
+            {
+                uri.AppendQuery("alertState", alertState.Value.ToString(), true);
+            }
+            if (alertRule != null)
+            {
+                uri.AppendQuery("alertRule", alertRule, true);
+            }
+            if (smartGroupId != null)
+            {
+                uri.AppendQuery("smartGroupId", smartGroupId, true);
+            }
+            if (includeContext != null)
+            {
+                uri.AppendQuery("includeContext", includeContext.Value, true);
+            }
+            if (includeEgressConfig != null)
+            {
+                uri.AppendQuery("includeEgressConfig", includeEgressConfig.Value, true);
+            }
+            if (pageCount != null)
+            {
+                uri.AppendQuery("pageCount", pageCount.Value, true);
+            }
+            if (sortBy != null)
+            {
+                uri.AppendQuery("sortBy", sortBy.Value.ToString(), true);
+            }
+            if (sortOrder != null)
+            {
+                uri.AppendQuery("sortOrder", sortOrder.Value.ToString(), true);
+            }
+            if (select != null)
+            {
+                uri.AppendQuery("select", select, true);
+            }
+            if (timeRange != null)
+            {
+                uri.AppendQuery("timeRange", timeRange.Value.ToString(), true);
+            }
+            if (customTimeRange != null)
+            {
+                uri.AppendQuery("customTimeRange", customTimeRange, true);
+            }
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> List all existing alerts, where the results can be filtered on the basis of multiple parameters (e.g. time range). The results can then be sorted on the basis specific fields, with the default being lastModifiedDateTime. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
+        /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
+        /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
+        /// <param name="monitorService"> Filter by monitor service which generates the alert instance. Default value is select all. </param>
+        /// <param name="monitorCondition"> Filter by monitor condition which is either 'Fired' or 'Resolved'. Default value is to select all. </param>
+        /// <param name="severity"> Filter by severity.  Default value is select all. </param>
+        /// <param name="alertState"> Filter by state of the alert instance. Default value is to select all. </param>
+        /// <param name="alertRule"> Filter by specific alert rule.  Default value is to select all. </param>
+        /// <param name="smartGroupId"> Filter the alerts list by the Smart Group Id. Default value is none. </param>
+        /// <param name="includeContext"> Include context which has contextual data specific to the monitor service. Default value is false'. </param>
+        /// <param name="includeEgressConfig"> Include egress config which would be used for displaying the content in portal.  Default value is 'false'. </param>
+        /// <param name="pageCount"> Determines number of alerts returned per page in response. Permissible value is between 1 to 250. When the "includeContent"  filter is selected, maximum value allowed is 25. Default value is 25. </param>
+        /// <param name="sortBy"> Sort the query results by input field,  Default value is 'lastModifiedDateTime'. </param>
+        /// <param name="sortOrder"> Sort the query results order in either ascending or descending.  Default value is 'desc' for time fields and 'asc' for others. </param>
+        /// <param name="select"> This filter allows to selection of the fields(comma separated) which would  be part of the essential section. This would allow to project only the  required fields rather than getting entire content.  Default is to fetch all the fields in the essentials section. </param>
+        /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
+        /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public async Task<Response<ServiceAlertListResult>> GetAllAsync(string scope, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, string smartGroupId = null, bool? includeContext = null, bool? includeEgressConfig = null, long? pageCount = null, ListServiceAlertsSortByField? sortBy = null, AlertsManagementQuerySortOrder? sortOrder = null, string select = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+
+            using var message = CreateGetAllRequest(scope, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, smartGroupId, includeContext, includeEgressConfig, pageCount, sortBy, sortOrder, select, timeRange, customTimeRange);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertListResult value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = ServiceAlertListResult.DeserializeServiceAlertListResult(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> List all existing alerts, where the results can be filtered on the basis of multiple parameters (e.g. time range). The results can then be sorted on the basis specific fields, with the default being lastModifiedDateTime. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
+        /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
+        /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
+        /// <param name="monitorService"> Filter by monitor service which generates the alert instance. Default value is select all. </param>
+        /// <param name="monitorCondition"> Filter by monitor condition which is either 'Fired' or 'Resolved'. Default value is to select all. </param>
+        /// <param name="severity"> Filter by severity.  Default value is select all. </param>
+        /// <param name="alertState"> Filter by state of the alert instance. Default value is to select all. </param>
+        /// <param name="alertRule"> Filter by specific alert rule.  Default value is to select all. </param>
+        /// <param name="smartGroupId"> Filter the alerts list by the Smart Group Id. Default value is none. </param>
+        /// <param name="includeContext"> Include context which has contextual data specific to the monitor service. Default value is false'. </param>
+        /// <param name="includeEgressConfig"> Include egress config which would be used for displaying the content in portal.  Default value is 'false'. </param>
+        /// <param name="pageCount"> Determines number of alerts returned per page in response. Permissible value is between 1 to 250. When the "includeContent"  filter is selected, maximum value allowed is 25. Default value is 25. </param>
+        /// <param name="sortBy"> Sort the query results by input field,  Default value is 'lastModifiedDateTime'. </param>
+        /// <param name="sortOrder"> Sort the query results order in either ascending or descending.  Default value is 'desc' for time fields and 'asc' for others. </param>
+        /// <param name="select"> This filter allows to selection of the fields(comma separated) which would  be part of the essential section. This would allow to project only the  required fields rather than getting entire content.  Default is to fetch all the fields in the essentials section. </param>
+        /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
+        /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public Response<ServiceAlertListResult> GetAll(string scope, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, string smartGroupId = null, bool? includeContext = null, bool? includeEgressConfig = null, long? pageCount = null, ListServiceAlertsSortByField? sortBy = null, AlertsManagementQuerySortOrder? sortOrder = null, string select = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+
+            using var message = CreateGetAllRequest(scope, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, smartGroupId, includeContext, includeEgressConfig, pageCount, sortBy, sortOrder, select, timeRange, customTimeRange);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertListResult value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = ServiceAlertListResult.DeserializeServiceAlertListResult(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateGetByIdRequestUri(string scope, string alertId)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            return uri;
+        }
+
+        internal HttpMessage CreateGetByIdRequest(string scope, string alertId)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Get information related to a specific alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to get alert by id then use parent resource of scope. So in this example get alert by id call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}'. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<ServiceAlertData>> GetByIdAsync(string scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetByIdRequest(scope, alertId);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertData value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                case 404:
+                    return Response.FromValue((ServiceAlertData)null, message.Response);
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Get information related to a specific alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to get alert by id then use parent resource of scope. So in this example get alert by id call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}'. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<ServiceAlertData> GetById(string scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetByIdRequest(scope, alertId);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertData value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                case 404:
+                    return Response.FromValue((ServiceAlertData)null, message.Response);
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateChangeStateRequestUri(string scope, string alertId, ServiceAlertState newState, Comments comment)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, true);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/changestate", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            uri.AppendQuery("newState", newState.ToString(), true);
+            return uri;
+        }
+
+        internal HttpMessage CreateChangeStateRequest(string scope, string alertId, ServiceAlertState newState, Comments comment)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Post;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, true);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/changestate", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            uri.AppendQuery("newState", newState.ToString(), true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            if (comment != null)
+            {
+                request.Headers.Add("Content-Type", "application/json");
+                var content = new Utf8JsonRequestContent();
+                content.JsonWriter.WriteObjectValue(comment, ModelSerializationExtensions.WireOptions);
+                request.Content = content;
+            }
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Change the state of an alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to change state of this particular alert then use parent resource of scope. So in this example change state call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}'. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="newState"> New state of the alert. </param>
+        /// <param name="comment"> reason of change alert state. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="scope"/> or <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<ServiceAlertData>> ChangeStateAsync(string scope, string alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateChangeStateRequest(scope, alertId, newState, comment);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertData value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Change the state of an alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to change state of this particular alert then use parent resource of scope. So in this example change state call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}'. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="newState"> New state of the alert. </param>
+        /// <param name="comment"> reason of change alert state. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="scope"/> or <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<ServiceAlertData> ChangeState(string scope, string alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateChangeStateRequest(scope, alertId, newState, comment);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertData value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateGetEnrichmentsRequestUri(string scope, string alertId)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/enrichments", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            return uri;
+        }
+
+        internal HttpMessage CreateGetEnrichmentsRequest(string scope, string alertId)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/enrichments", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Get the enrichments of an alert. It returns a collection of one object named default. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<AlertEnrichmentsList>> GetEnrichmentsAsync(string scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetEnrichmentsRequest(scope, alertId);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        AlertEnrichmentsList value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = AlertEnrichmentsList.DeserializeAlertEnrichmentsList(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Get the enrichments of an alert. It returns a collection of one object named default. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<AlertEnrichmentsList> GetEnrichments(string scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetEnrichmentsRequest(scope, alertId);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        AlertEnrichmentsList value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = AlertEnrichmentsList.DeserializeAlertEnrichmentsList(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateGetHistoryRequestUri(string scope, string alertId)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/history", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            return uri;
+        }
+
+        internal HttpMessage CreateGetHistoryRequest(string scope, string alertId)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/history", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Get the history of an alert, which captures any monitor condition changes (Fired/Resolved), alert state changes (New/Acknowledged/Closed) and applied action rules for that particular alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to get history of this particular alert then use parent resource of scope. So in this example get history call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}/history'. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<ServiceAlertModification>> GetHistoryAsync(string scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetHistoryRequest(scope, alertId);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertModification value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = ServiceAlertModification.DeserializeServiceAlertModification(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Get the history of an alert, which captures any monitor condition changes (Fired/Resolved), alert state changes (New/Acknowledged/Closed) and applied action rules for that particular alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to get history of this particular alert then use parent resource of scope. So in this example get history call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}/history'. </summary>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<ServiceAlertModification> GetHistory(string scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetHistoryRequest(scope, alertId);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertModification value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = ServiceAlertModification.DeserializeServiceAlertModification(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateGetSummaryRequestUri(string scope, AlertsSummaryGroupByField groupby, bool? includeSmartGroupsCount, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, TimeRangeFilter? timeRange, string customTimeRange)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alertsSummary", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            uri.AppendQuery("groupby", groupby.ToString(), true);
+            if (includeSmartGroupsCount != null)
+            {
+                uri.AppendQuery("includeSmartGroupsCount", includeSmartGroupsCount.Value, true);
+            }
+            if (targetResource != null)
+            {
+                uri.AppendQuery("targetResource", targetResource, true);
+            }
+            if (targetResourceType != null)
+            {
+                uri.AppendQuery("targetResourceType", targetResourceType, true);
+            }
+            if (targetResourceGroup != null)
+            {
+                uri.AppendQuery("targetResourceGroup", targetResourceGroup, true);
+            }
+            if (monitorService != null)
+            {
+                uri.AppendQuery("monitorService", monitorService.Value.ToString(), true);
+            }
+            if (monitorCondition != null)
+            {
+                uri.AppendQuery("monitorCondition", monitorCondition.Value.ToString(), true);
+            }
+            if (severity != null)
+            {
+                uri.AppendQuery("severity", severity.Value.ToString(), true);
+            }
+            if (alertState != null)
+            {
+                uri.AppendQuery("alertState", alertState.Value.ToString(), true);
+            }
+            if (alertRule != null)
+            {
+                uri.AppendQuery("alertRule", alertRule, true);
+            }
+            if (timeRange != null)
+            {
+                uri.AppendQuery("timeRange", timeRange.Value.ToString(), true);
+            }
+            if (customTimeRange != null)
+            {
+                uri.AppendQuery("customTimeRange", customTimeRange, true);
+            }
+            return uri;
+        }
+
+        internal HttpMessage CreateGetSummaryRequest(string scope, AlertsSummaryGroupByField groupby, bool? includeSmartGroupsCount, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, TimeRangeFilter? timeRange, string customTimeRange)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/", false);
+            uri.AppendPath(scope, false);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alertsSummary", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            uri.AppendQuery("groupby", groupby.ToString(), true);
+            if (includeSmartGroupsCount != null)
+            {
+                uri.AppendQuery("includeSmartGroupsCount", includeSmartGroupsCount.Value, true);
+            }
+            if (targetResource != null)
+            {
+                uri.AppendQuery("targetResource", targetResource, true);
+            }
+            if (targetResourceType != null)
+            {
+                uri.AppendQuery("targetResourceType", targetResourceType, true);
+            }
+            if (targetResourceGroup != null)
+            {
+                uri.AppendQuery("targetResourceGroup", targetResourceGroup, true);
+            }
+            if (monitorService != null)
+            {
+                uri.AppendQuery("monitorService", monitorService.Value.ToString(), true);
+            }
+            if (monitorCondition != null)
+            {
+                uri.AppendQuery("monitorCondition", monitorCondition.Value.ToString(), true);
+            }
+            if (severity != null)
+            {
+                uri.AppendQuery("severity", severity.Value.ToString(), true);
+            }
+            if (alertState != null)
+            {
+                uri.AppendQuery("alertState", alertState.Value.ToString(), true);
+            }
+            if (alertRule != null)
+            {
+                uri.AppendQuery("alertRule", alertRule, true);
+            }
+            if (timeRange != null)
+            {
+                uri.AppendQuery("timeRange", timeRange.Value.ToString(), true);
+            }
+            if (customTimeRange != null)
+            {
+                uri.AppendQuery("customTimeRange", customTimeRange, true);
+            }
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity). </summary>
+        /// <param name="scope"> The fully qualified Azure Resource manager identifier of the resource. </param>
+        /// <param name="groupby"> This parameter allows the result set to be grouped by input fields. For example, groupby=severity,alertstate. </param>
+        /// <param name="includeSmartGroupsCount"> Include count of the SmartGroups as part of the summary. Default value is 'false'. </param>
+        /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
+        /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
+        /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
+        /// <param name="monitorService"> Filter by monitor service which generates the alert instance. Default value is select all. </param>
+        /// <param name="monitorCondition"> Filter by monitor condition which is either 'Fired' or 'Resolved'. Default value is to select all. </param>
+        /// <param name="severity"> Filter by severity.  Default value is select all. </param>
+        /// <param name="alertState"> Filter by state of the alert instance. Default value is to select all. </param>
+        /// <param name="alertRule"> Filter by specific alert rule.  Default value is to select all. </param>
+        /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
+        /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public async Task<Response<ServiceAlertSummary>> GetSummaryAsync(string scope, AlertsSummaryGroupByField groupby, bool? includeSmartGroupsCount = null, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+
+            using var message = CreateGetSummaryRequest(scope, groupby, includeSmartGroupsCount, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, timeRange, customTimeRange);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertSummary value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = ServiceAlertSummary.DeserializeServiceAlertSummary(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity). </summary>
+        /// <param name="scope"> The fully qualified Azure Resource manager identifier of the resource. </param>
+        /// <param name="groupby"> This parameter allows the result set to be grouped by input fields. For example, groupby=severity,alertstate. </param>
+        /// <param name="includeSmartGroupsCount"> Include count of the SmartGroups as part of the summary. Default value is 'false'. </param>
+        /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
+        /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
+        /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
+        /// <param name="monitorService"> Filter by monitor service which generates the alert instance. Default value is select all. </param>
+        /// <param name="monitorCondition"> Filter by monitor condition which is either 'Fired' or 'Resolved'. Default value is to select all. </param>
+        /// <param name="severity"> Filter by severity.  Default value is select all. </param>
+        /// <param name="alertState"> Filter by state of the alert instance. Default value is to select all. </param>
+        /// <param name="alertRule"> Filter by specific alert rule.  Default value is to select all. </param>
+        /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
+        /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public Response<ServiceAlertSummary> GetSummary(string scope, AlertsSummaryGroupByField groupby, bool? includeSmartGroupsCount = null, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+
+            using var message = CreateGetSummaryRequest(scope, groupby, includeSmartGroupsCount, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, timeRange, customTimeRange);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertSummary value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = ServiceAlertSummary.DeserializeServiceAlertSummary(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateGetByIdTenantRequestUri(string alertId)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            return uri;
+        }
+
+        internal HttpMessage CreateGetByIdTenantRequest(string alertId)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Get information related to a specific alert. </summary>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<ServiceAlertData>> GetByIdTenantAsync(string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetByIdTenantRequest(alertId);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertData value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                case 404:
+                    return Response.FromValue((ServiceAlertData)null, message.Response);
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Get information related to a specific alert. </summary>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<ServiceAlertData> GetByIdTenant(string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetByIdTenantRequest(alertId);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertData value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                case 404:
+                    return Response.FromValue((ServiceAlertData)null, message.Response);
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateChangeStateTenantRequestUri(string alertId, ServiceAlertState newState, Comments comment)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/changestate", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            uri.AppendQuery("newState", newState.ToString(), true);
+            return uri;
+        }
+
+        internal HttpMessage CreateChangeStateTenantRequest(string alertId, ServiceAlertState newState, Comments comment)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Post;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/changestate", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            uri.AppendQuery("newState", newState.ToString(), true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            if (comment != null)
+            {
+                request.Headers.Add("Content-Type", "application/json");
+                var content = new Utf8JsonRequestContent();
+                content.JsonWriter.WriteObjectValue(comment, ModelSerializationExtensions.WireOptions);
+                request.Content = content;
+            }
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Change the state of an alert. </summary>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="newState"> New state of the alert. </param>
+        /// <param name="comment"> reason of change alert state. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<ServiceAlertData>> ChangeStateTenantAsync(string alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateChangeStateTenantRequest(alertId, newState, comment);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertData value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Change the state of an alert. </summary>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="newState"> New state of the alert. </param>
+        /// <param name="comment"> reason of change alert state. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<ServiceAlertData> ChangeStateTenant(string alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateChangeStateTenantRequest(alertId, newState, comment);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertData value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateGetHistoryTenantRequestUri(string alertId)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/history", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            return uri;
+        }
+
+        internal HttpMessage CreateGetHistoryTenantRequest(string alertId)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
+            uri.AppendPath(alertId, true);
+            uri.AppendPath("/history", false);
+            uri.AppendQuery("api-version", _apiVersion, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Get the history of an alert, which captures any monitor condition changes (Fired/Resolved), alert state changes (New/Acknowledged/Closed) and applied action rules for that particular alert. </summary>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<ServiceAlertModification>> GetHistoryTenantAsync(string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetHistoryTenantRequest(alertId);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertModification value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = ServiceAlertModification.DeserializeServiceAlertModification(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Get the history of an alert, which captures any monitor condition changes (Fired/Resolved), alert state changes (New/Acknowledged/Closed) and applied action rules for that particular alert. </summary>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<ServiceAlertModification> GetHistoryTenant(string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetHistoryTenantRequest(alertId);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ServiceAlertModification value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = ServiceAlertModification.DeserializeServiceAlertModification(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
         }
 
         internal RequestUriBuilder CreateMetaDataRequestUri(RetrievedInformationIdentifier identifier)
@@ -104,714 +1148,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateGetAllRequestUri(string subscriptionId, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, string smartGroupId, bool? includeContext, bool? includeEgressConfig, long? pageCount, ListServiceAlertsSortByField? sortBy, AlertsManagementQuerySortOrder? sortOrder, string select, TimeRangeFilter? timeRange, string customTimeRange)
-        {
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts", false);
-            if (targetResource != null)
-            {
-                uri.AppendQuery("targetResource", targetResource, true);
-            }
-            if (targetResourceType != null)
-            {
-                uri.AppendQuery("targetResourceType", targetResourceType, true);
-            }
-            if (targetResourceGroup != null)
-            {
-                uri.AppendQuery("targetResourceGroup", targetResourceGroup, true);
-            }
-            if (monitorService != null)
-            {
-                uri.AppendQuery("monitorService", monitorService.Value.ToString(), true);
-            }
-            if (monitorCondition != null)
-            {
-                uri.AppendQuery("monitorCondition", monitorCondition.Value.ToString(), true);
-            }
-            if (severity != null)
-            {
-                uri.AppendQuery("severity", severity.Value.ToString(), true);
-            }
-            if (alertState != null)
-            {
-                uri.AppendQuery("alertState", alertState.Value.ToString(), true);
-            }
-            if (alertRule != null)
-            {
-                uri.AppendQuery("alertRule", alertRule, true);
-            }
-            if (smartGroupId != null)
-            {
-                uri.AppendQuery("smartGroupId", smartGroupId, true);
-            }
-            if (includeContext != null)
-            {
-                uri.AppendQuery("includeContext", includeContext.Value, true);
-            }
-            if (includeEgressConfig != null)
-            {
-                uri.AppendQuery("includeEgressConfig", includeEgressConfig.Value, true);
-            }
-            if (pageCount != null)
-            {
-                uri.AppendQuery("pageCount", pageCount.Value, true);
-            }
-            if (sortBy != null)
-            {
-                uri.AppendQuery("sortBy", sortBy.Value.ToString(), true);
-            }
-            if (sortOrder != null)
-            {
-                uri.AppendQuery("sortOrder", sortOrder.Value.ToString(), true);
-            }
-            if (select != null)
-            {
-                uri.AppendQuery("select", select, true);
-            }
-            if (timeRange != null)
-            {
-                uri.AppendQuery("timeRange", timeRange.Value.ToString(), true);
-            }
-            if (customTimeRange != null)
-            {
-                uri.AppendQuery("customTimeRange", customTimeRange, true);
-            }
-            uri.AppendQuery("api-version", _apiVersion, true);
-            return uri;
-        }
-
-        internal HttpMessage CreateGetAllRequest(string subscriptionId, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, string smartGroupId, bool? includeContext, bool? includeEgressConfig, long? pageCount, ListServiceAlertsSortByField? sortBy, AlertsManagementQuerySortOrder? sortOrder, string select, TimeRangeFilter? timeRange, string customTimeRange)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts", false);
-            if (targetResource != null)
-            {
-                uri.AppendQuery("targetResource", targetResource, true);
-            }
-            if (targetResourceType != null)
-            {
-                uri.AppendQuery("targetResourceType", targetResourceType, true);
-            }
-            if (targetResourceGroup != null)
-            {
-                uri.AppendQuery("targetResourceGroup", targetResourceGroup, true);
-            }
-            if (monitorService != null)
-            {
-                uri.AppendQuery("monitorService", monitorService.Value.ToString(), true);
-            }
-            if (monitorCondition != null)
-            {
-                uri.AppendQuery("monitorCondition", monitorCondition.Value.ToString(), true);
-            }
-            if (severity != null)
-            {
-                uri.AppendQuery("severity", severity.Value.ToString(), true);
-            }
-            if (alertState != null)
-            {
-                uri.AppendQuery("alertState", alertState.Value.ToString(), true);
-            }
-            if (alertRule != null)
-            {
-                uri.AppendQuery("alertRule", alertRule, true);
-            }
-            if (smartGroupId != null)
-            {
-                uri.AppendQuery("smartGroupId", smartGroupId, true);
-            }
-            if (includeContext != null)
-            {
-                uri.AppendQuery("includeContext", includeContext.Value, true);
-            }
-            if (includeEgressConfig != null)
-            {
-                uri.AppendQuery("includeEgressConfig", includeEgressConfig.Value, true);
-            }
-            if (pageCount != null)
-            {
-                uri.AppendQuery("pageCount", pageCount.Value, true);
-            }
-            if (sortBy != null)
-            {
-                uri.AppendQuery("sortBy", sortBy.Value.ToString(), true);
-            }
-            if (sortOrder != null)
-            {
-                uri.AppendQuery("sortOrder", sortOrder.Value.ToString(), true);
-            }
-            if (select != null)
-            {
-                uri.AppendQuery("select", select, true);
-            }
-            if (timeRange != null)
-            {
-                uri.AppendQuery("timeRange", timeRange.Value.ToString(), true);
-            }
-            if (customTimeRange != null)
-            {
-                uri.AppendQuery("customTimeRange", customTimeRange, true);
-            }
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            _userAgent.Apply(message);
-            return message;
-        }
-
-        /// <summary> List all existing alerts, where the results can be filtered on the basis of multiple parameters (e.g. time range). The results can then be sorted on the basis specific fields, with the default being lastModifiedDateTime. </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
-        /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
-        /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
-        /// <param name="monitorService"> Filter by monitor service which generates the alert instance. Default value is select all. </param>
-        /// <param name="monitorCondition"> Filter by monitor condition which is either 'Fired' or 'Resolved'. Default value is to select all. </param>
-        /// <param name="severity"> Filter by severity.  Default value is select all. </param>
-        /// <param name="alertState"> Filter by state of the alert instance. Default value is to select all. </param>
-        /// <param name="alertRule"> Filter by specific alert rule.  Default value is to select all. </param>
-        /// <param name="smartGroupId"> Filter the alerts list by the Smart Group Id. Default value is none. </param>
-        /// <param name="includeContext"> Include context which has contextual data specific to the monitor service. Default value is false'. </param>
-        /// <param name="includeEgressConfig"> Include egress config which would be used for displaying the content in portal.  Default value is 'false'. </param>
-        /// <param name="pageCount"> Determines number of alerts returned per page in response. Permissible value is between 1 to 250. When the "includeContent"  filter is selected, maximum value allowed is 25. Default value is 25. </param>
-        /// <param name="sortBy"> Sort the query results by input field,  Default value is 'lastModifiedDateTime'. </param>
-        /// <param name="sortOrder"> Sort the query results order in either ascending or descending.  Default value is 'desc' for time fields and 'asc' for others. </param>
-        /// <param name="select"> This filter allows to selection of the fields(comma separated) which would  be part of the essential section. This would allow to project only the  required fields rather than getting entire content.  Default is to fetch all the fields in the essentials section. </param>
-        /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
-        /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertListResult>> GetAllAsync(string subscriptionId, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, string smartGroupId = null, bool? includeContext = null, bool? includeEgressConfig = null, long? pageCount = null, ListServiceAlertsSortByField? sortBy = null, AlertsManagementQuerySortOrder? sortOrder = null, string select = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateGetAllRequest(subscriptionId, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, smartGroupId, includeContext, includeEgressConfig, pageCount, sortBy, sortOrder, select, timeRange, customTimeRange);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertListResult value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
-                        value = ServiceAlertListResult.DeserializeServiceAlertListResult(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> List all existing alerts, where the results can be filtered on the basis of multiple parameters (e.g. time range). The results can then be sorted on the basis specific fields, with the default being lastModifiedDateTime. </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
-        /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
-        /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
-        /// <param name="monitorService"> Filter by monitor service which generates the alert instance. Default value is select all. </param>
-        /// <param name="monitorCondition"> Filter by monitor condition which is either 'Fired' or 'Resolved'. Default value is to select all. </param>
-        /// <param name="severity"> Filter by severity.  Default value is select all. </param>
-        /// <param name="alertState"> Filter by state of the alert instance. Default value is to select all. </param>
-        /// <param name="alertRule"> Filter by specific alert rule.  Default value is to select all. </param>
-        /// <param name="smartGroupId"> Filter the alerts list by the Smart Group Id. Default value is none. </param>
-        /// <param name="includeContext"> Include context which has contextual data specific to the monitor service. Default value is false'. </param>
-        /// <param name="includeEgressConfig"> Include egress config which would be used for displaying the content in portal.  Default value is 'false'. </param>
-        /// <param name="pageCount"> Determines number of alerts returned per page in response. Permissible value is between 1 to 250. When the "includeContent"  filter is selected, maximum value allowed is 25. Default value is 25. </param>
-        /// <param name="sortBy"> Sort the query results by input field,  Default value is 'lastModifiedDateTime'. </param>
-        /// <param name="sortOrder"> Sort the query results order in either ascending or descending.  Default value is 'desc' for time fields and 'asc' for others. </param>
-        /// <param name="select"> This filter allows to selection of the fields(comma separated) which would  be part of the essential section. This would allow to project only the  required fields rather than getting entire content.  Default is to fetch all the fields in the essentials section. </param>
-        /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
-        /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertListResult> GetAll(string subscriptionId, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, string smartGroupId = null, bool? includeContext = null, bool? includeEgressConfig = null, long? pageCount = null, ListServiceAlertsSortByField? sortBy = null, AlertsManagementQuerySortOrder? sortOrder = null, string select = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateGetAllRequest(subscriptionId, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, smartGroupId, includeContext, includeEgressConfig, pageCount, sortBy, sortOrder, select, timeRange, customTimeRange);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertListResult value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
-                        value = ServiceAlertListResult.DeserializeServiceAlertListResult(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        internal RequestUriBuilder CreateGetByIdRequestUri(string subscriptionId, Guid alertId)
-        {
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
-            uri.AppendPath(alertId, true);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            return uri;
-        }
-
-        internal HttpMessage CreateGetByIdRequest(string subscriptionId, Guid alertId)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
-            uri.AppendPath(alertId, true);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            _userAgent.Apply(message);
-            return message;
-        }
-
-        /// <summary> Get information related to a specific alert. </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertData>> GetByIdAsync(string subscriptionId, Guid alertId, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateGetByIdRequest(subscriptionId, alertId);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertData value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
-                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                case 404:
-                    return Response.FromValue((ServiceAlertData)null, message.Response);
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> Get information related to a specific alert. </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertData> GetById(string subscriptionId, Guid alertId, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateGetByIdRequest(subscriptionId, alertId);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertData value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
-                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                case 404:
-                    return Response.FromValue((ServiceAlertData)null, message.Response);
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        internal RequestUriBuilder CreateChangeStateRequestUri(string subscriptionId, Guid alertId, ServiceAlertState newState, string comment)
-        {
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
-            uri.AppendPath(alertId, true);
-            uri.AppendPath("/changestate", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            uri.AppendQuery("newState", newState.ToString(), true);
-            return uri;
-        }
-
-        internal HttpMessage CreateChangeStateRequest(string subscriptionId, Guid alertId, ServiceAlertState newState, string comment)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Post;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
-            uri.AppendPath(alertId, true);
-            uri.AppendPath("/changestate", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            uri.AppendQuery("newState", newState.ToString(), true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            if (comment != null)
-            {
-                request.Headers.Add("Content-Type", "application/json");
-                var content = new Utf8JsonRequestContent();
-                content.JsonWriter.WriteStringValue(comment);
-                request.Content = content;
-            }
-            _userAgent.Apply(message);
-            return message;
-        }
-
-        /// <summary> Change the state of an alert. </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
-        /// <param name="newState"> New state of the alert. </param>
-        /// <param name="comment"> reason of change alert state. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertData>> ChangeStateAsync(string subscriptionId, Guid alertId, ServiceAlertState newState, string comment = null, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateChangeStateRequest(subscriptionId, alertId, newState, comment);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertData value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
-                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> Change the state of an alert. </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
-        /// <param name="newState"> New state of the alert. </param>
-        /// <param name="comment"> reason of change alert state. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertData> ChangeState(string subscriptionId, Guid alertId, ServiceAlertState newState, string comment = null, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateChangeStateRequest(subscriptionId, alertId, newState, comment);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertData value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
-                        value = ServiceAlertData.DeserializeServiceAlertData(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        internal RequestUriBuilder CreateGetHistoryRequestUri(string subscriptionId, Guid alertId)
-        {
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
-            uri.AppendPath(alertId, true);
-            uri.AppendPath("/history", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            return uri;
-        }
-
-        internal HttpMessage CreateGetHistoryRequest(string subscriptionId, Guid alertId)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alerts/", false);
-            uri.AppendPath(alertId, true);
-            uri.AppendPath("/history", false);
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            _userAgent.Apply(message);
-            return message;
-        }
-
-        /// <summary> Get the history of an alert, which captures any monitor condition changes (Fired/Resolved) and alert state changes (New/Acknowledged/Closed). </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertModification>> GetHistoryAsync(string subscriptionId, Guid alertId, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateGetHistoryRequest(subscriptionId, alertId);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertModification value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
-                        value = ServiceAlertModification.DeserializeServiceAlertModification(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> Get the history of an alert, which captures any monitor condition changes (Fired/Resolved) and alert state changes (New/Acknowledged/Closed). </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertModification> GetHistory(string subscriptionId, Guid alertId, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateGetHistoryRequest(subscriptionId, alertId);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertModification value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
-                        value = ServiceAlertModification.DeserializeServiceAlertModification(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        internal RequestUriBuilder CreateGetSummaryRequestUri(string subscriptionId, AlertsSummaryGroupByField groupby, bool? includeSmartGroupsCount, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, TimeRangeFilter? timeRange, string customTimeRange)
-        {
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alertsSummary", false);
-            uri.AppendQuery("groupby", groupby.ToString(), true);
-            if (includeSmartGroupsCount != null)
-            {
-                uri.AppendQuery("includeSmartGroupsCount", includeSmartGroupsCount.Value, true);
-            }
-            if (targetResource != null)
-            {
-                uri.AppendQuery("targetResource", targetResource, true);
-            }
-            if (targetResourceType != null)
-            {
-                uri.AppendQuery("targetResourceType", targetResourceType, true);
-            }
-            if (targetResourceGroup != null)
-            {
-                uri.AppendQuery("targetResourceGroup", targetResourceGroup, true);
-            }
-            if (monitorService != null)
-            {
-                uri.AppendQuery("monitorService", monitorService.Value.ToString(), true);
-            }
-            if (monitorCondition != null)
-            {
-                uri.AppendQuery("monitorCondition", monitorCondition.Value.ToString(), true);
-            }
-            if (severity != null)
-            {
-                uri.AppendQuery("severity", severity.Value.ToString(), true);
-            }
-            if (alertState != null)
-            {
-                uri.AppendQuery("alertState", alertState.Value.ToString(), true);
-            }
-            if (alertRule != null)
-            {
-                uri.AppendQuery("alertRule", alertRule, true);
-            }
-            if (timeRange != null)
-            {
-                uri.AppendQuery("timeRange", timeRange.Value.ToString(), true);
-            }
-            if (customTimeRange != null)
-            {
-                uri.AppendQuery("customTimeRange", customTimeRange, true);
-            }
-            uri.AppendQuery("api-version", _apiVersion, true);
-            return uri;
-        }
-
-        internal HttpMessage CreateGetSummaryRequest(string subscriptionId, AlertsSummaryGroupByField groupby, bool? includeSmartGroupsCount, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, TimeRangeFilter? timeRange, string customTimeRange)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Get;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/subscriptions/", false);
-            uri.AppendPath(subscriptionId, true);
-            uri.AppendPath("/providers/Microsoft.AlertsManagement/alertsSummary", false);
-            uri.AppendQuery("groupby", groupby.ToString(), true);
-            if (includeSmartGroupsCount != null)
-            {
-                uri.AppendQuery("includeSmartGroupsCount", includeSmartGroupsCount.Value, true);
-            }
-            if (targetResource != null)
-            {
-                uri.AppendQuery("targetResource", targetResource, true);
-            }
-            if (targetResourceType != null)
-            {
-                uri.AppendQuery("targetResourceType", targetResourceType, true);
-            }
-            if (targetResourceGroup != null)
-            {
-                uri.AppendQuery("targetResourceGroup", targetResourceGroup, true);
-            }
-            if (monitorService != null)
-            {
-                uri.AppendQuery("monitorService", monitorService.Value.ToString(), true);
-            }
-            if (monitorCondition != null)
-            {
-                uri.AppendQuery("monitorCondition", monitorCondition.Value.ToString(), true);
-            }
-            if (severity != null)
-            {
-                uri.AppendQuery("severity", severity.Value.ToString(), true);
-            }
-            if (alertState != null)
-            {
-                uri.AppendQuery("alertState", alertState.Value.ToString(), true);
-            }
-            if (alertRule != null)
-            {
-                uri.AppendQuery("alertRule", alertRule, true);
-            }
-            if (timeRange != null)
-            {
-                uri.AppendQuery("timeRange", timeRange.Value.ToString(), true);
-            }
-            if (customTimeRange != null)
-            {
-                uri.AppendQuery("customTimeRange", customTimeRange, true);
-            }
-            uri.AppendQuery("api-version", _apiVersion, true);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            _userAgent.Apply(message);
-            return message;
-        }
-
-        /// <summary> Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity). </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="groupby"> This parameter allows the result set to be grouped by input fields (Maximum 2 comma separated fields supported). For example, groupby=severity or groupby=severity,alertstate. </param>
-        /// <param name="includeSmartGroupsCount"> Include count of the SmartGroups as part of the summary. Default value is 'false'. </param>
-        /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
-        /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
-        /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
-        /// <param name="monitorService"> Filter by monitor service which generates the alert instance. Default value is select all. </param>
-        /// <param name="monitorCondition"> Filter by monitor condition which is either 'Fired' or 'Resolved'. Default value is to select all. </param>
-        /// <param name="severity"> Filter by severity.  Default value is select all. </param>
-        /// <param name="alertState"> Filter by state of the alert instance. Default value is to select all. </param>
-        /// <param name="alertRule"> Filter by specific alert rule.  Default value is to select all. </param>
-        /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
-        /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertSummary>> GetSummaryAsync(string subscriptionId, AlertsSummaryGroupByField groupby, bool? includeSmartGroupsCount = null, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateGetSummaryRequest(subscriptionId, groupby, includeSmartGroupsCount, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, timeRange, customTimeRange);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertSummary value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
-                        value = ServiceAlertSummary.DeserializeServiceAlertSummary(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity). </summary>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
-        /// <param name="groupby"> This parameter allows the result set to be grouped by input fields (Maximum 2 comma separated fields supported). For example, groupby=severity or groupby=severity,alertstate. </param>
-        /// <param name="includeSmartGroupsCount"> Include count of the SmartGroups as part of the summary. Default value is 'false'. </param>
-        /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
-        /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
-        /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
-        /// <param name="monitorService"> Filter by monitor service which generates the alert instance. Default value is select all. </param>
-        /// <param name="monitorCondition"> Filter by monitor condition which is either 'Fired' or 'Resolved'. Default value is to select all. </param>
-        /// <param name="severity"> Filter by severity.  Default value is select all. </param>
-        /// <param name="alertState"> Filter by state of the alert instance. Default value is to select all. </param>
-        /// <param name="alertRule"> Filter by specific alert rule.  Default value is to select all. </param>
-        /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
-        /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertSummary> GetSummary(string subscriptionId, AlertsSummaryGroupByField groupby, bool? includeSmartGroupsCount = null, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
-        {
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
-
-            using var message = CreateGetSummaryRequest(subscriptionId, groupby, includeSmartGroupsCount, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, timeRange, customTimeRange);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        ServiceAlertSummary value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
-                        value = ServiceAlertSummary.DeserializeServiceAlertSummary(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        internal RequestUriBuilder CreateGetAllNextPageRequestUri(string nextLink, string subscriptionId, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, string smartGroupId, bool? includeContext, bool? includeEgressConfig, long? pageCount, ListServiceAlertsSortByField? sortBy, AlertsManagementQuerySortOrder? sortOrder, string select, TimeRangeFilter? timeRange, string customTimeRange)
+        internal RequestUriBuilder CreateGetAllNextPageRequestUri(string nextLink, string scope, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, string smartGroupId, bool? includeContext, bool? includeEgressConfig, long? pageCount, ListServiceAlertsSortByField? sortBy, AlertsManagementQuerySortOrder? sortOrder, string select, TimeRangeFilter? timeRange, string customTimeRange)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -819,7 +1156,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateGetAllNextPageRequest(string nextLink, string subscriptionId, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, string smartGroupId, bool? includeContext, bool? includeEgressConfig, long? pageCount, ListServiceAlertsSortByField? sortBy, AlertsManagementQuerySortOrder? sortOrder, string select, TimeRangeFilter? timeRange, string customTimeRange)
+        internal HttpMessage CreateGetAllNextPageRequest(string nextLink, string scope, string targetResource, string targetResourceType, string targetResourceGroup, MonitorServiceSourceForAlert? monitorService, MonitorCondition? monitorCondition, ServiceAlertSeverity? severity, ServiceAlertState? alertState, string alertRule, string smartGroupId, bool? includeContext, bool? includeEgressConfig, long? pageCount, ListServiceAlertsSortByField? sortBy, AlertsManagementQuerySortOrder? sortOrder, string select, TimeRangeFilter? timeRange, string customTimeRange)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -835,7 +1172,7 @@ namespace Azure.ResourceManager.AlertsManagement
 
         /// <summary> List all existing alerts, where the results can be filtered on the basis of multiple parameters (e.g. time range). The results can then be sorted on the basis specific fields, with the default being lastModifiedDateTime. </summary>
         /// <param name="nextLink"> The URL to the next page of results. </param>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
+        /// <param name="scope"> undefined. </param>
         /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
         /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
         /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
@@ -854,14 +1191,13 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
         /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> or <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertListResult>> GetAllNextPageAsync(string nextLink, string subscriptionId, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, string smartGroupId = null, bool? includeContext = null, bool? includeEgressConfig = null, long? pageCount = null, ListServiceAlertsSortByField? sortBy = null, AlertsManagementQuerySortOrder? sortOrder = null, string select = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> or <paramref name="scope"/> is null. </exception>
+        public async Task<Response<ServiceAlertListResult>> GetAllNextPageAsync(string nextLink, string scope, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, string smartGroupId = null, bool? includeContext = null, bool? includeEgressConfig = null, long? pageCount = null, ListServiceAlertsSortByField? sortBy = null, AlertsManagementQuerySortOrder? sortOrder = null, string select = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(nextLink, nameof(nextLink));
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
+            Argument.AssertNotNull(scope, nameof(scope));
 
-            using var message = CreateGetAllNextPageRequest(nextLink, subscriptionId, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, smartGroupId, includeContext, includeEgressConfig, pageCount, sortBy, sortOrder, select, timeRange, customTimeRange);
+            using var message = CreateGetAllNextPageRequest(nextLink, scope, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, smartGroupId, includeContext, includeEgressConfig, pageCount, sortBy, sortOrder, select, timeRange, customTimeRange);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -879,7 +1215,7 @@ namespace Azure.ResourceManager.AlertsManagement
 
         /// <summary> List all existing alerts, where the results can be filtered on the basis of multiple parameters (e.g. time range). The results can then be sorted on the basis specific fields, with the default being lastModifiedDateTime. </summary>
         /// <param name="nextLink"> The URL to the next page of results. </param>
-        /// <param name="subscriptionId"> The ID of the target subscription. </param>
+        /// <param name="scope"> undefined. </param>
         /// <param name="targetResource"> Filter by target resource( which is full ARM ID) Default value is select all. </param>
         /// <param name="targetResourceType"> Filter by target resource type. Default value is select all. </param>
         /// <param name="targetResourceGroup"> Filter by target resource group name. Default value is select all. </param>
@@ -898,14 +1234,13 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="timeRange"> Filter by time range by below listed values. Default value is 1 day. </param>
         /// <param name="customTimeRange"> Filter by custom time range in the format &lt;start-time&gt;/&lt;end-time&gt;  where time is in (ISO-8601 format)'. Permissible values is within 30 days from  query time. Either timeRange or customTimeRange could be used but not both. Default is none. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> or <paramref name="subscriptionId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertListResult> GetAllNextPage(string nextLink, string subscriptionId, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, string smartGroupId = null, bool? includeContext = null, bool? includeEgressConfig = null, long? pageCount = null, ListServiceAlertsSortByField? sortBy = null, AlertsManagementQuerySortOrder? sortOrder = null, string select = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> or <paramref name="scope"/> is null. </exception>
+        public Response<ServiceAlertListResult> GetAllNextPage(string nextLink, string scope, string targetResource = null, string targetResourceType = null, string targetResourceGroup = null, MonitorServiceSourceForAlert? monitorService = null, MonitorCondition? monitorCondition = null, ServiceAlertSeverity? severity = null, ServiceAlertState? alertState = null, string alertRule = null, string smartGroupId = null, bool? includeContext = null, bool? includeEgressConfig = null, long? pageCount = null, ListServiceAlertsSortByField? sortBy = null, AlertsManagementQuerySortOrder? sortOrder = null, string select = null, TimeRangeFilter? timeRange = null, string customTimeRange = null, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(nextLink, nameof(nextLink));
-            Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
+            Argument.AssertNotNull(scope, nameof(scope));
 
-            using var message = CreateGetAllNextPageRequest(nextLink, subscriptionId, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, smartGroupId, includeContext, includeEgressConfig, pageCount, sortBy, sortOrder, select, timeRange, customTimeRange);
+            using var message = CreateGetAllNextPageRequest(nextLink, scope, targetResource, targetResourceType, targetResourceGroup, monitorService, monitorCondition, severity, alertState, alertRule, smartGroupId, includeContext, includeEgressConfig, pageCount, sortBy, sortOrder, select, timeRange, customTimeRange);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -914,6 +1249,86 @@ namespace Azure.ResourceManager.AlertsManagement
                         ServiceAlertListResult value = default;
                         using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
                         value = ServiceAlertListResult.DeserializeServiceAlertListResult(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal RequestUriBuilder CreateGetEnrichmentsNextPageRequestUri(string nextLink, string scope, string alertId)
+        {
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendRawNextLink(nextLink, false);
+            return uri;
+        }
+
+        internal HttpMessage CreateGetEnrichmentsNextPageRequest(string nextLink, string scope, string alertId)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendRawNextLink(nextLink, false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            _userAgent.Apply(message);
+            return message;
+        }
+
+        /// <summary> Get the enrichments of an alert. It returns a collection of one object named default. </summary>
+        /// <param name="nextLink"> The URL to the next page of results. </param>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/>, <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<AlertEnrichmentsList>> GetEnrichmentsNextPageAsync(string nextLink, string scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(nextLink, nameof(nextLink));
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetEnrichmentsNextPageRequest(nextLink, scope, alertId);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        AlertEnrichmentsList value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions, cancellationToken).ConfigureAwait(false);
+                        value = AlertEnrichmentsList.DeserializeAlertEnrichmentsList(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Get the enrichments of an alert. It returns a collection of one object named default. </summary>
+        /// <param name="nextLink"> The URL to the next page of results. </param>
+        /// <param name="scope"> undefined. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/>, <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<AlertEnrichmentsList> GetEnrichmentsNextPage(string nextLink, string scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(nextLink, nameof(nextLink));
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
+
+            using var message = CreateGetEnrichmentsNextPageRequest(nextLink, scope, alertId);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        AlertEnrichmentsList value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream, ModelSerializationExtensions.JsonDocumentOptions);
+                        value = AlertEnrichmentsList.DeserializeAlertEnrichmentsList(document.RootElement);
                         return Response.FromValue(value, message.Response);
                     }
                 default:

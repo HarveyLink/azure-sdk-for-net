@@ -20,7 +20,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task Get_Get()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/preview/2019-05-05-preview/examples/SmartGroups_GetById.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/Legacy/preview/2019-05-05-preview/examples/SmartGroups_GetById.json
             // this example is just showing the usage of "SmartGroups_GetById" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -49,7 +49,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task ChangeState_Changestate()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/preview/2019-05-05-preview/examples/SmartGroups_ChangeState.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/Legacy/preview/2019-05-05-preview/examples/SmartGroups_ChangeState.json
             // this example is just showing the usage of "SmartGroups_ChangeState" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -79,7 +79,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task GetHistory_Resolve()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/preview/2019-05-05-preview/examples/SmartGroups_History.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/Legacy/preview/2019-05-05-preview/examples/SmartGroups_History.json
             // this example is just showing the usage of "SmartGroups_GetHistory" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line

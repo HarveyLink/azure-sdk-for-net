@@ -20,7 +20,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task Get_GetAlertProcessingRuleById()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_GetById.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_GetById.json
             // this example is just showing the usage of "AlertProcessingRules_GetByName" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -50,7 +50,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task Delete_DeleteAlertProcessingRule()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_Delete.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_Delete.json
             // this example is just showing the usage of "AlertProcessingRules_Delete" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -76,7 +76,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task Update_PatchAlertProcessingRule()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_Patch.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_Patch.json
             // this example is just showing the usage of "AlertProcessingRules_Update" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line

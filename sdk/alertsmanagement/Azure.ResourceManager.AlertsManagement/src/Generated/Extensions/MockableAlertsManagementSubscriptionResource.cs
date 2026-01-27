@@ -20,8 +20,10 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
     {
         private ClientDiagnostics _alertProcessingRuleClientDiagnostics;
         private AlertProcessingRulesRestOperations _alertProcessingRuleRestClient;
-        private ClientDiagnostics _serviceAlertAlertsClientDiagnostics;
-        private AlertsRestOperations _serviceAlertAlertsRestClient;
+        private ClientDiagnostics _alertRuleRecommendationsClientDiagnostics;
+        private AlertRuleRecommendationsRestOperations _alertRuleRecommendationsRestClient;
+        private ClientDiagnostics _prometheusRuleGroupResourcePrometheusRuleGroupsClientDiagnostics;
+        private PrometheusRuleGroupsRestOperations _prometheusRuleGroupResourcePrometheusRuleGroupsRestClient;
 
         /// <summary> Initializes a new instance of the <see cref="MockableAlertsManagementSubscriptionResource"/> class for mocking. </summary>
         protected MockableAlertsManagementSubscriptionResource()
@@ -37,78 +39,15 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
 
         private ClientDiagnostics AlertProcessingRuleClientDiagnostics => _alertProcessingRuleClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.AlertsManagement", AlertProcessingRuleResource.ResourceType.Namespace, Diagnostics);
         private AlertProcessingRulesRestOperations AlertProcessingRuleRestClient => _alertProcessingRuleRestClient ??= new AlertProcessingRulesRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint, GetApiVersionOrNull(AlertProcessingRuleResource.ResourceType));
-        private ClientDiagnostics ServiceAlertAlertsClientDiagnostics => _serviceAlertAlertsClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.AlertsManagement", ServiceAlertResource.ResourceType.Namespace, Diagnostics);
-        private AlertsRestOperations ServiceAlertAlertsRestClient => _serviceAlertAlertsRestClient ??= new AlertsRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint, GetApiVersionOrNull(ServiceAlertResource.ResourceType));
+        private ClientDiagnostics AlertRuleRecommendationsClientDiagnostics => _alertRuleRecommendationsClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.AlertsManagement", ProviderConstants.DefaultProviderNamespace, Diagnostics);
+        private AlertRuleRecommendationsRestOperations AlertRuleRecommendationsRestClient => _alertRuleRecommendationsRestClient ??= new AlertRuleRecommendationsRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint);
+        private ClientDiagnostics PrometheusRuleGroupResourcePrometheusRuleGroupsClientDiagnostics => _prometheusRuleGroupResourcePrometheusRuleGroupsClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.AlertsManagement", PrometheusRuleGroupResource.ResourceType.Namespace, Diagnostics);
+        private PrometheusRuleGroupsRestOperations PrometheusRuleGroupResourcePrometheusRuleGroupsRestClient => _prometheusRuleGroupResourcePrometheusRuleGroupsRestClient ??= new PrometheusRuleGroupsRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint, GetApiVersionOrNull(PrometheusRuleGroupResource.ResourceType));
 
         private string GetApiVersionOrNull(ResourceType resourceType)
         {
             TryGetApiVersion(resourceType, out string apiVersion);
             return apiVersion;
-        }
-
-        /// <summary> Gets a collection of ServiceAlertResources in the SubscriptionResource. </summary>
-        /// <returns> An object representing collection of ServiceAlertResources and their operations over a ServiceAlertResource. </returns>
-        public virtual ServiceAlertCollection GetServiceAlerts()
-        {
-            return GetCachedClient(client => new ServiceAlertCollection(client, Id));
-        }
-
-        /// <summary>
-        /// Get information related to a specific alert
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Alerts_GetById</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        [ForwardsClientCalls]
-        public virtual async Task<Response<ServiceAlertResource>> GetServiceAlertAsync(Guid alertId, CancellationToken cancellationToken = default)
-        {
-            return await GetServiceAlerts().GetAsync(alertId, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Get information related to a specific alert
-        /// <list type="bullet">
-        /// <item>
-        /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
-        /// </item>
-        /// <item>
-        /// <term>Operation Id</term>
-        /// <description>Alerts_GetById</description>
-        /// </item>
-        /// <item>
-        /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        [ForwardsClientCalls]
-        public virtual Response<ServiceAlertResource> GetServiceAlert(Guid alertId, CancellationToken cancellationToken = default)
-        {
-            return GetServiceAlerts().Get(alertId, cancellationToken);
         }
 
         /// <summary> Gets a collection of SmartGroupResources in the SubscriptionResource. </summary>
@@ -237,87 +176,123 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
         }
 
         /// <summary>
-        /// Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity).
+        /// Retrieve alert rule recommendations for a target type.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alertsSummary</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alertRuleRecommendations</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>Alerts_GetSummary</description>
+        /// <description>AlertRuleRecommendations_ListByTargetType</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
+        /// <description>2023-08-01-preview</description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="options"> A property bag which contains all the parameters of this method except the LRO qualifier and request context parameter. </param>
+        /// <param name="targetType"> The recommendations target type. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="options"/> is null. </exception>
-        public virtual async Task<Response<ServiceAlertSummary>> GetServiceAlertSummaryAsync(SubscriptionResourceGetServiceAlertSummaryOptions options, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="targetType"/> is null. </exception>
+        /// <returns> An async collection of <see cref="AlertRuleRecommendationResource"/> that may take multiple service requests to iterate over. </returns>
+        public virtual AsyncPageable<AlertRuleRecommendationResource> GetAlertRuleRecommendationsByTargetTypeAsync(string targetType, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNull(options, nameof(options));
+            Argument.AssertNotNull(targetType, nameof(targetType));
 
-            using var scope = ServiceAlertAlertsClientDiagnostics.CreateScope("MockableAlertsManagementSubscriptionResource.GetServiceAlertSummary");
-            scope.Start();
-            try
-            {
-                var response = await ServiceAlertAlertsRestClient.GetSummaryAsync(Id.SubscriptionId, options.Groupby, options.IncludeSmartGroupsCount, options.TargetResource, options.TargetResourceType, options.TargetResourceGroup, options.MonitorService, options.MonitorCondition, options.Severity, options.AlertState, options.AlertRule, options.TimeRange, options.CustomTimeRange, cancellationToken).ConfigureAwait(false);
-                return response;
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
+            HttpMessage FirstPageRequest(int? pageSizeHint) => AlertRuleRecommendationsRestClient.CreateListByTargetTypeRequest(Id.SubscriptionId, targetType);
+            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => AlertRuleRecommendationsRestClient.CreateListByTargetTypeNextPageRequest(nextLink, Id.SubscriptionId, targetType);
+            return GeneratorPageableHelpers.CreateAsyncPageable(FirstPageRequest, NextPageRequest, e => AlertRuleRecommendationResource.DeserializeAlertRuleRecommendationResource(e), AlertRuleRecommendationsClientDiagnostics, Pipeline, "MockableAlertsManagementSubscriptionResource.GetAlertRuleRecommendationsByTargetType", "value", "nextLink", cancellationToken);
         }
 
         /// <summary>
-        /// Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity).
+        /// Retrieve alert rule recommendations for a target type.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alertsSummary</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alertRuleRecommendations</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>Alerts_GetSummary</description>
+        /// <description>AlertRuleRecommendations_ListByTargetType</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
+        /// <description>2023-08-01-preview</description>
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="options"> A property bag which contains all the parameters of this method except the LRO qualifier and request context parameter. </param>
+        /// <param name="targetType"> The recommendations target type. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="options"/> is null. </exception>
-        public virtual Response<ServiceAlertSummary> GetServiceAlertSummary(SubscriptionResourceGetServiceAlertSummaryOptions options, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="targetType"/> is null. </exception>
+        /// <returns> A collection of <see cref="AlertRuleRecommendationResource"/> that may take multiple service requests to iterate over. </returns>
+        public virtual Pageable<AlertRuleRecommendationResource> GetAlertRuleRecommendationsByTargetType(string targetType, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNull(options, nameof(options));
+            Argument.AssertNotNull(targetType, nameof(targetType));
 
-            using var scope = ServiceAlertAlertsClientDiagnostics.CreateScope("MockableAlertsManagementSubscriptionResource.GetServiceAlertSummary");
-            scope.Start();
-            try
-            {
-                var response = ServiceAlertAlertsRestClient.GetSummary(Id.SubscriptionId, options.Groupby, options.IncludeSmartGroupsCount, options.TargetResource, options.TargetResourceType, options.TargetResourceGroup, options.MonitorService, options.MonitorCondition, options.Severity, options.AlertState, options.AlertRule, options.TimeRange, options.CustomTimeRange, cancellationToken);
-                return response;
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
+            HttpMessage FirstPageRequest(int? pageSizeHint) => AlertRuleRecommendationsRestClient.CreateListByTargetTypeRequest(Id.SubscriptionId, targetType);
+            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => AlertRuleRecommendationsRestClient.CreateListByTargetTypeNextPageRequest(nextLink, Id.SubscriptionId, targetType);
+            return GeneratorPageableHelpers.CreatePageable(FirstPageRequest, NextPageRequest, e => AlertRuleRecommendationResource.DeserializeAlertRuleRecommendationResource(e), AlertRuleRecommendationsClientDiagnostics, Pipeline, "MockableAlertsManagementSubscriptionResource.GetAlertRuleRecommendationsByTargetType", "value", "nextLink", cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieve Prometheus all rule group definitions in a subscription.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/prometheusRuleGroups</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>PrometheusRuleGroups_ListBySubscription</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-03-01</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="PrometheusRuleGroupResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <returns> An async collection of <see cref="PrometheusRuleGroupResource"/> that may take multiple service requests to iterate over. </returns>
+        public virtual AsyncPageable<PrometheusRuleGroupResource> GetPrometheusRuleGroupResourcesAsync(CancellationToken cancellationToken = default)
+        {
+            HttpMessage FirstPageRequest(int? pageSizeHint) => PrometheusRuleGroupResourcePrometheusRuleGroupsRestClient.CreateListBySubscriptionRequest(Id.SubscriptionId);
+            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => PrometheusRuleGroupResourcePrometheusRuleGroupsRestClient.CreateListBySubscriptionNextPageRequest(nextLink, Id.SubscriptionId);
+            return GeneratorPageableHelpers.CreateAsyncPageable(FirstPageRequest, NextPageRequest, e => new PrometheusRuleGroupResource(Client, PrometheusRuleGroupResourceData.DeserializePrometheusRuleGroupResourceData(e)), PrometheusRuleGroupResourcePrometheusRuleGroupsClientDiagnostics, Pipeline, "MockableAlertsManagementSubscriptionResource.GetPrometheusRuleGroupResources", "value", "nextLink", cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieve Prometheus all rule group definitions in a subscription.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/prometheusRuleGroups</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>PrometheusRuleGroups_ListBySubscription</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-03-01</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="PrometheusRuleGroupResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <returns> A collection of <see cref="PrometheusRuleGroupResource"/> that may take multiple service requests to iterate over. </returns>
+        public virtual Pageable<PrometheusRuleGroupResource> GetPrometheusRuleGroupResources(CancellationToken cancellationToken = default)
+        {
+            HttpMessage FirstPageRequest(int? pageSizeHint) => PrometheusRuleGroupResourcePrometheusRuleGroupsRestClient.CreateListBySubscriptionRequest(Id.SubscriptionId);
+            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => PrometheusRuleGroupResourcePrometheusRuleGroupsRestClient.CreateListBySubscriptionNextPageRequest(nextLink, Id.SubscriptionId);
+            return GeneratorPageableHelpers.CreatePageable(FirstPageRequest, NextPageRequest, e => new PrometheusRuleGroupResource(Client, PrometheusRuleGroupResourceData.DeserializePrometheusRuleGroupResourceData(e)), PrometheusRuleGroupResourcePrometheusRuleGroupsClientDiagnostics, Pipeline, "MockableAlertsManagementSubscriptionResource.GetPrometheusRuleGroupResources", "value", "nextLink", cancellationToken);
         }
     }
 }

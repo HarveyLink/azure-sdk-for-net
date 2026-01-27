@@ -48,7 +48,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="SmartGroupModification"/>. </summary>
-        public SmartGroupModification()
+        internal SmartGroupModification()
         {
         }
 
@@ -66,6 +66,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> Properties of the smartGroup modification item. </summary>
-        public SmartGroupModificationProperties Properties { get; set; }
+        public SmartGroupModificationProperties Properties { get; }
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Azure.Core;
 using Azure.ResourceManager.AlertsManagement.Mocking;
 using Azure.ResourceManager.AlertsManagement.Models;
+using Azure.ResourceManager.ManagementGroups;
 using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.AlertsManagement
@@ -21,6 +22,11 @@ namespace Azure.ResourceManager.AlertsManagement
         private static MockableAlertsManagementArmClient GetMockableAlertsManagementArmClient(ArmClient client)
         {
             return client.GetCachedClient(client0 => new MockableAlertsManagementArmClient(client0));
+        }
+
+        private static MockableAlertsManagementManagementGroupResource GetMockableAlertsManagementManagementGroupResource(ArmResource resource)
+        {
+            return resource.GetCachedClient(client => new MockableAlertsManagementManagementGroupResource(client, resource.Id));
         }
 
         private static MockableAlertsManagementResourceGroupResource GetMockableAlertsManagementResourceGroupResource(ArmResource resource)
@@ -36,6 +42,232 @@ namespace Azure.ResourceManager.AlertsManagement
         private static MockableAlertsManagementTenantResource GetMockableAlertsManagementTenantResource(ArmResource resource)
         {
             return resource.GetCachedClient(client => new MockableAlertsManagementTenantResource(client, resource.Id));
+        }
+
+        /// <summary>
+        /// Gets a collection of ServiceAlertResources in the ArmClient.
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetServiceAlerts(ResourceIdentifier)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> An object representing collection of ServiceAlertResources and their operations over a ServiceAlertResource. </returns>
+        public static ServiceAlertCollection GetServiceAlerts(this ArmClient client, ResourceIdentifier scope)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableAlertsManagementArmClient(client).GetServiceAlerts(scope);
+        }
+
+        /// <summary>
+        /// Get information related to a specific alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to get alert by id then use parent resource of scope. So in this example get alert by id call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}'.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{scope}/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetById</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="ServiceAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetServiceAlertAsync(ResourceIdentifier,string,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public static async Task<Response<ServiceAlertResource>> GetServiceAlertAsync(this ArmClient client, ResourceIdentifier scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return await GetMockableAlertsManagementArmClient(client).GetServiceAlertAsync(scope, alertId, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get information related to a specific alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to get alert by id then use parent resource of scope. So in this example get alert by id call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}'.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{scope}/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetById</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="ServiceAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetServiceAlert(ResourceIdentifier,string,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public static Response<ServiceAlertResource> GetServiceAlert(this ArmClient client, ResourceIdentifier scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableAlertsManagementArmClient(client).GetServiceAlert(scope, alertId, cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieve alert rule recommendations for a resource.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{resourceUri}/providers/Microsoft.AlertsManagement/alertRuleRecommendations</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>AlertRuleRecommendations_ListByResource</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-08-01-preview</description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetAlertRuleRecommendationsByResource(ResourceIdentifier,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        public static AsyncPageable<AlertRuleRecommendationResource> GetAlertRuleRecommendationsByResourceAsync(this ArmClient client, ResourceIdentifier scope, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableAlertsManagementArmClient(client).GetAlertRuleRecommendationsByResourceAsync(scope, cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieve alert rule recommendations for a resource.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{resourceUri}/providers/Microsoft.AlertsManagement/alertRuleRecommendations</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>AlertRuleRecommendations_ListByResource</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-08-01-preview</description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetAlertRuleRecommendationsByResource(ResourceIdentifier,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        public static Pageable<AlertRuleRecommendationResource> GetAlertRuleRecommendationsByResource(this ArmClient client, ResourceIdentifier scope, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableAlertsManagementArmClient(client).GetAlertRuleRecommendationsByResource(scope, cancellationToken);
+        }
+
+        /// <summary>
+        /// Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity).
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{scope}/providers/Microsoft.AlertsManagement/alertsSummary</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetSummary</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetServiceAlertSummary(ResourceIdentifier,ArmResourceGetServiceAlertSummaryOptions,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="options"> A property bag which contains all the parameters of this method except the LRO qualifier and request context parameter. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> or <paramref name="options"/> is null. </exception>
+        public static async Task<Response<ServiceAlertSummary>> GetServiceAlertSummaryAsync(this ArmClient client, ResourceIdentifier scope, ArmResourceGetServiceAlertSummaryOptions options, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return await GetMockableAlertsManagementArmClient(client).GetServiceAlertSummaryAsync(scope, options, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity).
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{scope}/providers/Microsoft.AlertsManagement/alertsSummary</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetSummary</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetServiceAlertSummary(ResourceIdentifier,ArmResourceGetServiceAlertSummaryOptions,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="options"> A property bag which contains all the parameters of this method except the LRO qualifier and request context parameter. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> or <paramref name="options"/> is null. </exception>
+        public static Response<ServiceAlertSummary> GetServiceAlertSummary(this ArmClient client, ResourceIdentifier scope, ArmResourceGetServiceAlertSummaryOptions options, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableAlertsManagementArmClient(client).GetServiceAlertSummary(scope, options, cancellationToken);
         }
 
         /// <summary>
@@ -77,6 +309,63 @@ namespace Azure.ResourceManager.AlertsManagement
         }
 
         /// <summary>
+        /// Gets an object representing a <see cref="TenantAlertResource" /> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="TenantAlertResource.CreateResourceIdentifier" /> to create a <see cref="TenantAlertResource" /> <see cref="ResourceIdentifier" /> from its components.
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetTenantAlertResource(ResourceIdentifier)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="TenantAlertResource"/> object. </returns>
+        public static TenantAlertResource GetTenantAlertResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableAlertsManagementArmClient(client).GetTenantAlertResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="PrometheusRuleGroupResource" /> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="PrometheusRuleGroupResource.CreateResourceIdentifier" /> to create a <see cref="PrometheusRuleGroupResource" /> <see cref="ResourceIdentifier" /> from its components.
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetPrometheusRuleGroupResource(ResourceIdentifier)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="PrometheusRuleGroupResource"/> object. </returns>
+        public static PrometheusRuleGroupResource GetPrometheusRuleGroupResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableAlertsManagementArmClient(client).GetPrometheusRuleGroupResource(id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="TenantActivityLogAlertResource" /> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="TenantActivityLogAlertResource.CreateResourceIdentifier" /> to create a <see cref="TenantActivityLogAlertResource" /> <see cref="ResourceIdentifier" /> from its components.
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementArmClient.GetTenantActivityLogAlertResource(ResourceIdentifier)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="client"> The <see cref="ArmClient" /> instance the method will execute against. </param>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="client"/> is null. </exception>
+        /// <returns> Returns a <see cref="TenantActivityLogAlertResource"/> object. </returns>
+        public static TenantActivityLogAlertResource GetTenantActivityLogAlertResource(this ArmClient client, ResourceIdentifier id)
+        {
+            Argument.AssertNotNull(client, nameof(client));
+
+            return GetMockableAlertsManagementArmClient(client).GetTenantActivityLogAlertResource(id);
+        }
+
+        /// <summary>
         /// Gets an object representing a <see cref="SmartGroupResource" /> along with the instance operations that can be performed on it but with no data.
         /// You can use <see cref="SmartGroupResource.CreateResourceIdentifier" /> to create a <see cref="SmartGroupResource" /> <see cref="ResourceIdentifier" /> from its components.
         /// <item>
@@ -93,6 +382,99 @@ namespace Azure.ResourceManager.AlertsManagement
             Argument.AssertNotNull(client, nameof(client));
 
             return GetMockableAlertsManagementArmClient(client).GetSmartGroupResource(id);
+        }
+
+        /// <summary>
+        /// Gets a collection of TenantActivityLogAlertResources in the ManagementGroupResource.
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementManagementGroupResource.GetTenantActivityLogAlertResources()"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="managementGroupResource"> The <see cref="ManagementGroupResource" /> instance the method will execute against. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="managementGroupResource"/> is null. </exception>
+        /// <returns> An object representing collection of TenantActivityLogAlertResources and their operations over a TenantActivityLogAlertResource. </returns>
+        public static TenantActivityLogAlertResourceCollection GetTenantActivityLogAlertResources(this ManagementGroupResource managementGroupResource)
+        {
+            Argument.AssertNotNull(managementGroupResource, nameof(managementGroupResource));
+
+            return GetMockableAlertsManagementManagementGroupResource(managementGroupResource).GetTenantActivityLogAlertResources();
+        }
+
+        /// <summary>
+        /// Get Tenant Activity Log Alert rule.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/providers/Microsoft.Management/managementGroups/{managementGroupName}/providers/Microsoft.AlertsManagement/tenantActivityLogAlerts/{alertRuleName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>TenantActivityLogAlerts_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-04-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="TenantActivityLogAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementManagementGroupResource.GetTenantActivityLogAlertResourceAsync(string,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="managementGroupResource"> The <see cref="ManagementGroupResource" /> instance the method will execute against. </param>
+        /// <param name="alertRuleName"> The name of the Tenant Activity Log Alert rule. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="managementGroupResource"/> or <paramref name="alertRuleName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertRuleName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public static async Task<Response<TenantActivityLogAlertResource>> GetTenantActivityLogAlertResourceAsync(this ManagementGroupResource managementGroupResource, string alertRuleName, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(managementGroupResource, nameof(managementGroupResource));
+
+            return await GetMockableAlertsManagementManagementGroupResource(managementGroupResource).GetTenantActivityLogAlertResourceAsync(alertRuleName, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get Tenant Activity Log Alert rule.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/providers/Microsoft.Management/managementGroups/{managementGroupName}/providers/Microsoft.AlertsManagement/tenantActivityLogAlerts/{alertRuleName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>TenantActivityLogAlerts_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-04-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="TenantActivityLogAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementManagementGroupResource.GetTenantActivityLogAlertResource(string,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="managementGroupResource"> The <see cref="ManagementGroupResource" /> instance the method will execute against. </param>
+        /// <param name="alertRuleName"> The name of the Tenant Activity Log Alert rule. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="managementGroupResource"/> or <paramref name="alertRuleName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertRuleName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public static Response<TenantActivityLogAlertResource> GetTenantActivityLogAlertResource(this ManagementGroupResource managementGroupResource, string alertRuleName, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(managementGroupResource, nameof(managementGroupResource));
+
+            return GetMockableAlertsManagementManagementGroupResource(managementGroupResource).GetTenantActivityLogAlertResource(alertRuleName, cancellationToken);
         }
 
         /// <summary>
@@ -189,94 +571,96 @@ namespace Azure.ResourceManager.AlertsManagement
         }
 
         /// <summary>
-        /// Gets a collection of ServiceAlertResources in the SubscriptionResource.
+        /// Gets a collection of PrometheusRuleGroupResources in the ResourceGroupResource.
         /// <item>
         /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetServiceAlerts()"/> instead.</description>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementResourceGroupResource.GetPrometheusRuleGroupResources()"/> instead.</description>
         /// </item>
         /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
-        /// <returns> An object representing collection of ServiceAlertResources and their operations over a ServiceAlertResource. </returns>
-        public static ServiceAlertCollection GetServiceAlerts(this SubscriptionResource subscriptionResource)
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> is null. </exception>
+        /// <returns> An object representing collection of PrometheusRuleGroupResources and their operations over a PrometheusRuleGroupResource. </returns>
+        public static PrometheusRuleGroupResourceCollection GetPrometheusRuleGroupResources(this ResourceGroupResource resourceGroupResource)
         {
-            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
+            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
 
-            return GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetServiceAlerts();
+            return GetMockableAlertsManagementResourceGroupResource(resourceGroupResource).GetPrometheusRuleGroupResources();
         }
 
         /// <summary>
-        /// Get information related to a specific alert
+        /// Retrieve a Prometheus rule group definition.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AlertsManagement/prometheusRuleGroups/{ruleGroupName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>Alerts_GetById</description>
+        /// <description>PrometheusRuleGroups_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
+        /// <description>2023-03-01</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
+        /// <description><see cref="PrometheusRuleGroupResource"/></description>
         /// </item>
         /// </list>
         /// <item>
         /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetServiceAlertAsync(Guid,CancellationToken)"/> instead.</description>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementResourceGroupResource.GetPrometheusRuleGroupResourceAsync(string,CancellationToken)"/> instead.</description>
         /// </item>
         /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
+        /// <param name="ruleGroupName"> The name of the rule group. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> or <paramref name="ruleGroupName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="ruleGroupName"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public static async Task<Response<ServiceAlertResource>> GetServiceAlertAsync(this SubscriptionResource subscriptionResource, Guid alertId, CancellationToken cancellationToken = default)
+        public static async Task<Response<PrometheusRuleGroupResource>> GetPrometheusRuleGroupResourceAsync(this ResourceGroupResource resourceGroupResource, string ruleGroupName, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
+            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
 
-            return await GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetServiceAlertAsync(alertId, cancellationToken).ConfigureAwait(false);
+            return await GetMockableAlertsManagementResourceGroupResource(resourceGroupResource).GetPrometheusRuleGroupResourceAsync(ruleGroupName, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Get information related to a specific alert
+        /// Retrieve a Prometheus rule group definition.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AlertsManagement/prometheusRuleGroups/{ruleGroupName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>Alerts_GetById</description>
+        /// <description>PrometheusRuleGroups_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
+        /// <description>2023-03-01</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
+        /// <description><see cref="PrometheusRuleGroupResource"/></description>
         /// </item>
         /// </list>
         /// <item>
         /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetServiceAlert(Guid,CancellationToken)"/> instead.</description>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementResourceGroupResource.GetPrometheusRuleGroupResource(string,CancellationToken)"/> instead.</description>
         /// </item>
         /// </summary>
-        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="resourceGroupResource"> The <see cref="ResourceGroupResource" /> instance the method will execute against. </param>
+        /// <param name="ruleGroupName"> The name of the rule group. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupResource"/> or <paramref name="ruleGroupName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="ruleGroupName"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public static Response<ServiceAlertResource> GetServiceAlert(this SubscriptionResource subscriptionResource, Guid alertId, CancellationToken cancellationToken = default)
+        public static Response<PrometheusRuleGroupResource> GetPrometheusRuleGroupResource(this ResourceGroupResource resourceGroupResource, string ruleGroupName, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
+            Argument.AssertNotNull(resourceGroupResource, nameof(resourceGroupResource));
 
-            return GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetServiceAlert(alertId, cancellationToken);
+            return GetMockableAlertsManagementResourceGroupResource(resourceGroupResource).GetPrometheusRuleGroupResource(ruleGroupName, cancellationToken);
         }
 
         /// <summary>
@@ -443,75 +827,234 @@ namespace Azure.ResourceManager.AlertsManagement
         }
 
         /// <summary>
-        /// Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity).
+        /// Retrieve alert rule recommendations for a target type.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alertsSummary</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alertRuleRecommendations</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>Alerts_GetSummary</description>
+        /// <description>AlertRuleRecommendations_ListByTargetType</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
+        /// <description>2023-08-01-preview</description>
         /// </item>
         /// </list>
         /// <item>
         /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetServiceAlertSummary(SubscriptionResourceGetServiceAlertSummaryOptions,CancellationToken)"/> instead.</description>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetAlertRuleRecommendationsByTargetType(string,CancellationToken)"/> instead.</description>
         /// </item>
         /// </summary>
         /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <param name="options"> A property bag which contains all the parameters of this method except the LRO qualifier and request context parameter. </param>
+        /// <param name="targetType"> The recommendations target type. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> or <paramref name="options"/> is null. </exception>
-        public static async Task<Response<ServiceAlertSummary>> GetServiceAlertSummaryAsync(this SubscriptionResource subscriptionResource, SubscriptionResourceGetServiceAlertSummaryOptions options, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> or <paramref name="targetType"/> is null. </exception>
+        /// <returns> An async collection of <see cref="AlertRuleRecommendationResource"/> that may take multiple service requests to iterate over. </returns>
+        public static AsyncPageable<AlertRuleRecommendationResource> GetAlertRuleRecommendationsByTargetTypeAsync(this SubscriptionResource subscriptionResource, string targetType, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
 
-            return await GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetServiceAlertSummaryAsync(options, cancellationToken).ConfigureAwait(false);
+            return GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetAlertRuleRecommendationsByTargetTypeAsync(targetType, cancellationToken);
         }
 
         /// <summary>
-        /// Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity).
+        /// Retrieve alert rule recommendations for a target type.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alertsSummary</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/alertRuleRecommendations</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>Alerts_GetSummary</description>
+        /// <description>AlertRuleRecommendations_ListByTargetType</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
+        /// <description>2023-08-01-preview</description>
         /// </item>
         /// </list>
         /// <item>
         /// <term>Mocking</term>
-        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetServiceAlertSummary(SubscriptionResourceGetServiceAlertSummaryOptions,CancellationToken)"/> instead.</description>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetAlertRuleRecommendationsByTargetType(string,CancellationToken)"/> instead.</description>
         /// </item>
         /// </summary>
         /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
-        /// <param name="options"> A property bag which contains all the parameters of this method except the LRO qualifier and request context parameter. </param>
+        /// <param name="targetType"> The recommendations target type. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> or <paramref name="options"/> is null. </exception>
-        public static Response<ServiceAlertSummary> GetServiceAlertSummary(this SubscriptionResource subscriptionResource, SubscriptionResourceGetServiceAlertSummaryOptions options, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> or <paramref name="targetType"/> is null. </exception>
+        /// <returns> A collection of <see cref="AlertRuleRecommendationResource"/> that may take multiple service requests to iterate over. </returns>
+        public static Pageable<AlertRuleRecommendationResource> GetAlertRuleRecommendationsByTargetType(this SubscriptionResource subscriptionResource, string targetType, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
 
-            return GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetServiceAlertSummary(options, cancellationToken);
+            return GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetAlertRuleRecommendationsByTargetType(targetType, cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieve Prometheus all rule group definitions in a subscription.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/prometheusRuleGroups</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>PrometheusRuleGroups_ListBySubscription</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-03-01</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="PrometheusRuleGroupResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetPrometheusRuleGroupResources(CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
+        /// <returns> An async collection of <see cref="PrometheusRuleGroupResource"/> that may take multiple service requests to iterate over. </returns>
+        public static AsyncPageable<PrometheusRuleGroupResource> GetPrometheusRuleGroupResourcesAsync(this SubscriptionResource subscriptionResource, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
+
+            return GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetPrometheusRuleGroupResourcesAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieve Prometheus all rule group definitions in a subscription.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.AlertsManagement/prometheusRuleGroups</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>PrometheusRuleGroups_ListBySubscription</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-03-01</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="PrometheusRuleGroupResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementSubscriptionResource.GetPrometheusRuleGroupResources(CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="subscriptionResource"> The <see cref="SubscriptionResource" /> instance the method will execute against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="subscriptionResource"/> is null. </exception>
+        /// <returns> A collection of <see cref="PrometheusRuleGroupResource"/> that may take multiple service requests to iterate over. </returns>
+        public static Pageable<PrometheusRuleGroupResource> GetPrometheusRuleGroupResources(this SubscriptionResource subscriptionResource, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(subscriptionResource, nameof(subscriptionResource));
+
+            return GetMockableAlertsManagementSubscriptionResource(subscriptionResource).GetPrometheusRuleGroupResources(cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets a collection of TenantAlertResources in the TenantResource.
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementTenantResource.GetTenantAlerts()"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="tenantResource"> The <see cref="TenantResource" /> instance the method will execute against. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="tenantResource"/> is null. </exception>
+        /// <returns> An object representing collection of TenantAlertResources and their operations over a TenantAlertResource. </returns>
+        public static TenantAlertCollection GetTenantAlerts(this TenantResource tenantResource)
+        {
+            Argument.AssertNotNull(tenantResource, nameof(tenantResource));
+
+            return GetMockableAlertsManagementTenantResource(tenantResource).GetTenantAlerts();
+        }
+
+        /// <summary>
+        /// Get information related to a specific alert.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetByIdTenant</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="TenantAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementTenantResource.GetTenantAlertAsync(string,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="tenantResource"> The <see cref="TenantResource" /> instance the method will execute against. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="tenantResource"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public static async Task<Response<TenantAlertResource>> GetTenantAlertAsync(this TenantResource tenantResource, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(tenantResource, nameof(tenantResource));
+
+            return await GetMockableAlertsManagementTenantResource(tenantResource).GetTenantAlertAsync(alertId, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get information related to a specific alert.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetByIdTenant</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="TenantAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementTenantResource.GetTenantAlert(string,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="tenantResource"> The <see cref="TenantResource" /> instance the method will execute against. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="tenantResource"/> or <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public static Response<TenantAlertResource> GetTenantAlert(this TenantResource tenantResource, string alertId, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(tenantResource, nameof(tenantResource));
+
+            return GetMockableAlertsManagementTenantResource(tenantResource).GetTenantAlert(alertId, cancellationToken);
         }
 
         /// <summary>
@@ -527,11 +1070,7 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
+        /// <description>2025-05-25-preview</description>
         /// </item>
         /// </list>
         /// <item>
@@ -563,11 +1102,7 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2019-05-05-preview</description>
-        /// </item>
-        /// <item>
-        /// <term>Resource</term>
-        /// <description><see cref="ServiceAlertResource"/></description>
+        /// <description>2025-05-25-preview</description>
         /// </item>
         /// </list>
         /// <item>
@@ -584,6 +1119,146 @@ namespace Azure.ResourceManager.AlertsManagement
             Argument.AssertNotNull(tenantResource, nameof(tenantResource));
 
             return GetMockableAlertsManagementTenantResource(tenantResource).GetServiceAlertMetadata(identifier, cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieves the results of a simulated historical execution of an alert rule
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{resourceId}/providers/microsoft.AlertsManagement/previewAlertRule</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>PreviewAlertRule</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-07-01-preview</description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementTenantResource.PreviewAlertRule(string,PreviewAlertRuleContent,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="tenantResource"> The <see cref="TenantResource" /> instance the method will execute against. </param>
+        /// <param name="resourceId"> The <see cref="string"/> to use. </param>
+        /// <param name="content"> The <see cref="PreviewAlertRuleContent"/> to use. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentException"> <paramref name="resourceId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="tenantResource"/>, <paramref name="resourceId"/> or <paramref name="content"/> is null. </exception>
+        public static async Task<Response<PreviewAlertRuleResponse>> PreviewAlertRuleAsync(this TenantResource tenantResource, string resourceId, PreviewAlertRuleContent content, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(tenantResource, nameof(tenantResource));
+
+            return await GetMockableAlertsManagementTenantResource(tenantResource).PreviewAlertRuleAsync(resourceId, content, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Retrieves the results of a simulated historical execution of an alert rule
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{resourceId}/providers/microsoft.AlertsManagement/previewAlertRule</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>PreviewAlertRule</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-07-01-preview</description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementTenantResource.PreviewAlertRule(string,PreviewAlertRuleContent,CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="tenantResource"> The <see cref="TenantResource" /> instance the method will execute against. </param>
+        /// <param name="resourceId"> The <see cref="string"/> to use. </param>
+        /// <param name="content"> The <see cref="PreviewAlertRuleContent"/> to use. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentException"> <paramref name="resourceId"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="tenantResource"/>, <paramref name="resourceId"/> or <paramref name="content"/> is null. </exception>
+        public static Response<PreviewAlertRuleResponse> PreviewAlertRule(this TenantResource tenantResource, string resourceId, PreviewAlertRuleContent content, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(tenantResource, nameof(tenantResource));
+
+            return GetMockableAlertsManagementTenantResource(tenantResource).PreviewAlertRule(resourceId, content, cancellationToken);
+        }
+
+        /// <summary>
+        /// Get a list of all Tenant Activity Log Alert rules in the tenant.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/providers/Microsoft.AlertsManagement/tenantActivityLogAlerts</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>TenantActivityLogAlerts_ListByTenant</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-04-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="TenantActivityLogAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementTenantResource.GetTenantActivityLogAlertResources(CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="tenantResource"> The <see cref="TenantResource" /> instance the method will execute against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="tenantResource"/> is null. </exception>
+        /// <returns> An async collection of <see cref="TenantActivityLogAlertResource"/> that may take multiple service requests to iterate over. </returns>
+        public static AsyncPageable<TenantActivityLogAlertResource> GetTenantActivityLogAlertResourcesAsync(this TenantResource tenantResource, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(tenantResource, nameof(tenantResource));
+
+            return GetMockableAlertsManagementTenantResource(tenantResource).GetTenantActivityLogAlertResourcesAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Get a list of all Tenant Activity Log Alert rules in the tenant.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/providers/Microsoft.AlertsManagement/tenantActivityLogAlerts</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>TenantActivityLogAlerts_ListByTenant</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-04-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="TenantActivityLogAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// <item>
+        /// <term>Mocking</term>
+        /// <description>To mock this method, please mock <see cref="MockableAlertsManagementTenantResource.GetTenantActivityLogAlertResources(CancellationToken)"/> instead.</description>
+        /// </item>
+        /// </summary>
+        /// <param name="tenantResource"> The <see cref="TenantResource" /> instance the method will execute against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="tenantResource"/> is null. </exception>
+        /// <returns> A collection of <see cref="TenantActivityLogAlertResource"/> that may take multiple service requests to iterate over. </returns>
+        public static Pageable<TenantActivityLogAlertResource> GetTenantActivityLogAlertResources(this TenantResource tenantResource, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(tenantResource, nameof(tenantResource));
+
+            return GetMockableAlertsManagementTenantResource(tenantResource).GetTenantActivityLogAlertResources(cancellationToken);
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="SmartGroupModificationItemInfo"/>. </summary>
-        public SmartGroupModificationItemInfo()
+        internal SmartGroupModificationItemInfo()
         {
         }
 
@@ -72,18 +72,18 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> Reason for the modification. </summary>
-        public SmartGroupModificationEvent? ModificationEvent { get; set; }
+        public SmartGroupModificationEvent? ModificationEvent { get; }
         /// <summary> Old value. </summary>
-        public string OldValue { get; set; }
+        public string OldValue { get; }
         /// <summary> New value. </summary>
-        public string NewValue { get; set; }
+        public string NewValue { get; }
         /// <summary> Modified date and time. </summary>
-        public DateTimeOffset? ModifiedOn { get; set; }
+        public DateTimeOffset? ModifiedOn { get; }
         /// <summary> Modified user details (Principal client name). </summary>
-        public string ModifiedBy { get; set; }
+        public string ModifiedBy { get; }
         /// <summary> Modification comments. </summary>
-        public string Comments { get; set; }
+        public string Comments { get; }
         /// <summary> Description of the modification. </summary>
-        public string Description { get; set; }
+        public string Description { get; }
     }
 }

@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="SmartGroupModificationProperties"/>. </summary>
-        public SmartGroupModificationProperties()
+        internal SmartGroupModificationProperties()
         {
             Modifications = new ChangeTrackingList<SmartGroupModificationItemInfo>();
         }
@@ -56,7 +56,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="modifications"> Modification details. </param>
         /// <param name="nextLink"> URL to fetch the next set of results. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal SmartGroupModificationProperties(Guid? smartGroupId, IList<SmartGroupModificationItemInfo> modifications, string nextLink, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal SmartGroupModificationProperties(Guid? smartGroupId, IReadOnlyList<SmartGroupModificationItemInfo> modifications, string nextLink, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             SmartGroupId = smartGroupId;
             Modifications = modifications;
@@ -67,8 +67,8 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <summary> Unique Id of the smartGroup for which the history is being retrieved. </summary>
         public Guid? SmartGroupId { get; }
         /// <summary> Modification details. </summary>
-        public IList<SmartGroupModificationItemInfo> Modifications { get; }
+        public IReadOnlyList<SmartGroupModificationItemInfo> Modifications { get; }
         /// <summary> URL to fetch the next set of results. </summary>
-        public string NextLink { get; set; }
+        public string NextLink { get; }
     }
 }

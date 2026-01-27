@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertActionStatus"/>. </summary>
-        public ServiceAlertActionStatus()
+        internal ServiceAlertActionStatus()
         {
         }
 
@@ -60,6 +60,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> Value indicating whether alert is suppressed. </summary>
-        public bool? IsSuppressed { get; set; }
+        public bool? IsSuppressed { get; }
     }
 }

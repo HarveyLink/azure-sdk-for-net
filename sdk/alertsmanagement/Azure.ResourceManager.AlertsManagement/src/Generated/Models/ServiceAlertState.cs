@@ -25,6 +25,11 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private const string NewValue = "New";
         private const string AcknowledgedValue = "Acknowledged";
         private const string ClosedValue = "Closed";
+        private const string NoAlertValue = "NoAlert";
+        private const string FiredValue = "Fired";
+        private const string FiringValue = "Firing";
+        private const string ResolvingValue = "Resolving";
+        private const string ResolvedValue = "Resolved";
 
         /// <summary> New. </summary>
         public static ServiceAlertState New { get; } = new ServiceAlertState(NewValue);
@@ -32,6 +37,16 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         public static ServiceAlertState Acknowledged { get; } = new ServiceAlertState(AcknowledgedValue);
         /// <summary> Closed. </summary>
         public static ServiceAlertState Closed { get; } = new ServiceAlertState(ClosedValue);
+        /// <summary> NoAlert. </summary>
+        public static ServiceAlertState NoAlert { get; } = new ServiceAlertState(NoAlertValue);
+        /// <summary> Fired. </summary>
+        public static ServiceAlertState Fired { get; } = new ServiceAlertState(FiredValue);
+        /// <summary> Firing. </summary>
+        public static ServiceAlertState Firing { get; } = new ServiceAlertState(FiringValue);
+        /// <summary> Resolving. </summary>
+        public static ServiceAlertState Resolving { get; } = new ServiceAlertState(ResolvingValue);
+        /// <summary> Resolved. </summary>
+        public static ServiceAlertState Resolved { get; } = new ServiceAlertState(ResolvedValue);
         /// <summary> Determines if two <see cref="ServiceAlertState"/> values are the same. </summary>
         public static bool operator ==(ServiceAlertState left, ServiceAlertState right) => left.Equals(right);
         /// <summary> Determines if two <see cref="ServiceAlertState"/> values are not the same. </summary>

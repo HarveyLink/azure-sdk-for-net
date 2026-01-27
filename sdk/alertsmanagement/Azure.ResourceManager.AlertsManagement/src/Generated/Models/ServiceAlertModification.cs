@@ -48,7 +48,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertModification"/>. </summary>
-        public ServiceAlertModification()
+        internal ServiceAlertModification()
         {
         }
 
@@ -57,7 +57,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="name"> The name. </param>
         /// <param name="resourceType"> The resourceType. </param>
         /// <param name="systemData"> The systemData. </param>
-        /// <param name="properties"> Properties of the alert modification item. </param>
+        /// <param name="properties"> Alert modification history properties. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
         internal ServiceAlertModification(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, ServiceAlertModificationProperties properties, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData)
         {
@@ -65,7 +65,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
-        /// <summary> Properties of the alert modification item. </summary>
-        public ServiceAlertModificationProperties Properties { get; set; }
+        /// <summary> Alert modification history properties. </summary>
+        public ServiceAlertModificationProperties Properties { get; }
     }
 }

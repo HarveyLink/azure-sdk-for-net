@@ -69,6 +69,11 @@ namespace Azure.ResourceManager.AlertsManagement.Models
                 writer.WritePropertyName("description"u8);
                 writer.WriteStringValue(Description);
             }
+            if (Optional.IsDefined(Details))
+            {
+                writer.WritePropertyName("details"u8);
+                writer.WriteObjectValue(Details, options);
+            }
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
                 foreach (var item in _serializedAdditionalRawData)
@@ -113,6 +118,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             string modifiedBy = default;
             string comments = default;
             string description = default;
+            BaseDetails details = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -156,6 +162,15 @@ namespace Azure.ResourceManager.AlertsManagement.Models
                     description = property.Value.GetString();
                     continue;
                 }
+                if (property.NameEquals("details"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    details = BaseDetails.DeserializeBaseDetails(property.Value, options);
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     rawDataDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
@@ -170,6 +185,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
                 modifiedBy,
                 comments,
                 description,
+                details,
                 serializedAdditionalRawData);
         }
 

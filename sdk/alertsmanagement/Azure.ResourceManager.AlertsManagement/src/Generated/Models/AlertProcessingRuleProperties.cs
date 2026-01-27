@@ -73,7 +73,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// Please note <see cref="AlertProcessingRuleAction"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
         /// The available derived classes include <see cref="AlertProcessingRuleAddGroupsAction"/> and <see cref="AlertProcessingRuleRemoveAllGroupsAction"/>.
         /// </param>
-        /// <param name="description"> Description of alert processing rule. </param>
+        /// <param name="description"> Actions to be applied.Description of alert processing rule. </param>
         /// <param name="isEnabled"> Indicates if the given alert processing rule is enabled or disabled. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
         internal AlertProcessingRuleProperties(IList<string> scopes, IList<AlertProcessingRuleCondition> conditions, AlertProcessingRuleSchedule schedule, IList<AlertProcessingRuleAction> actions, string description, bool? isEnabled, IDictionary<string, BinaryData> serializedAdditionalRawData)
@@ -104,7 +104,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// The available derived classes include <see cref="AlertProcessingRuleAddGroupsAction"/> and <see cref="AlertProcessingRuleRemoveAllGroupsAction"/>.
         /// </summary>
         public IList<AlertProcessingRuleAction> Actions { get; }
-        /// <summary> Description of alert processing rule. </summary>
+        /// <summary> Actions to be applied.Description of alert processing rule. </summary>
         public string Description { get; set; }
         /// <summary> Indicates if the given alert processing rule is enabled or disabled. </summary>
         public bool? IsEnabled { get; set; }

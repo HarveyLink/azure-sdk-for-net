@@ -5,13 +5,24 @@
 
 #nullable disable
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Autorest.CSharp.Core;
 using Azure.Core;
+using Azure.Core.Pipeline;
+using Azure.ResourceManager.AlertsManagement.Models;
 
 namespace Azure.ResourceManager.AlertsManagement.Mocking
 {
     /// <summary> A class to add extension methods to ArmClient. </summary>
     public partial class MockableAlertsManagementArmClient : ArmResource
     {
+        private ClientDiagnostics _alertRuleRecommendationsClientDiagnostics;
+        private AlertRuleRecommendationsRestOperations _alertRuleRecommendationsRestClient;
+        private ClientDiagnostics _alertsClientDiagnostics;
+        private AlertsRestOperations _alertsRestClient;
+
         /// <summary> Initializes a new instance of the <see cref="MockableAlertsManagementArmClient"/> class for mocking. </summary>
         protected MockableAlertsManagementArmClient()
         {
@@ -28,12 +39,228 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
         {
         }
 
+        private ClientDiagnostics AlertRuleRecommendationsClientDiagnostics => _alertRuleRecommendationsClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.AlertsManagement", ProviderConstants.DefaultProviderNamespace, Diagnostics);
+        private AlertRuleRecommendationsRestOperations AlertRuleRecommendationsRestClient => _alertRuleRecommendationsRestClient ??= new AlertRuleRecommendationsRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint);
+        private ClientDiagnostics AlertsClientDiagnostics => _alertsClientDiagnostics ??= new ClientDiagnostics("Azure.ResourceManager.AlertsManagement", ProviderConstants.DefaultProviderNamespace, Diagnostics);
+        private AlertsRestOperations AlertsRestClient => _alertsRestClient ??= new AlertsRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint);
+
         private string GetApiVersionOrNull(ResourceType resourceType)
         {
             TryGetApiVersion(resourceType, out string apiVersion);
             return apiVersion;
         }
 
+        /// <summary> Gets a collection of ServiceAlertResources in the ArmClient. </summary>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <returns> An object representing collection of ServiceAlertResources and their operations over a ServiceAlertResource. </returns>
+        public virtual ServiceAlertCollection GetServiceAlerts(ResourceIdentifier scope)
+        {
+            return new ServiceAlertCollection(Client, scope);
+        }
+
+        /// <summary>
+        /// Get information related to a specific alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to get alert by id then use parent resource of scope. So in this example get alert by id call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}'.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{scope}/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetById</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="ServiceAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual async Task<Response<ServiceAlertResource>> GetServiceAlertAsync(ResourceIdentifier scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            return await GetServiceAlerts(scope).GetAsync(alertId, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get information related to a specific alert. If scope is a deleted resource then please use scope as parent resource of the delete resource. For example if my alert id is '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.AlertsManagement/alerts/{alertId}' and 'vm1' is deleted then if you want to get alert by id then use parent resource of scope. So in this example get alert by id call will look like this: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AlertsManagement/alerts/{alertId}'.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{scope}/providers/Microsoft.AlertsManagement/alerts/{alertId}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetById</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="ServiceAlertResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="alertId"> Unique ID of an alert instance. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual Response<ServiceAlertResource> GetServiceAlert(ResourceIdentifier scope, string alertId, CancellationToken cancellationToken = default)
+        {
+            return GetServiceAlerts(scope).Get(alertId, cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieve alert rule recommendations for a resource.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{resourceUri}/providers/Microsoft.AlertsManagement/alertRuleRecommendations</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>AlertRuleRecommendations_ListByResource</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-08-01-preview</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        /// <returns> An async collection of <see cref="AlertRuleRecommendationResource"/> that may take multiple service requests to iterate over. </returns>
+        public virtual AsyncPageable<AlertRuleRecommendationResource> GetAlertRuleRecommendationsByResourceAsync(ResourceIdentifier scope, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+
+            HttpMessage FirstPageRequest(int? pageSizeHint) => AlertRuleRecommendationsRestClient.CreateListByResourceRequest(scope);
+            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => AlertRuleRecommendationsRestClient.CreateListByResourceNextPageRequest(nextLink, scope);
+            return GeneratorPageableHelpers.CreateAsyncPageable(FirstPageRequest, NextPageRequest, e => AlertRuleRecommendationResource.DeserializeAlertRuleRecommendationResource(e), AlertRuleRecommendationsClientDiagnostics, Pipeline, "MockableAlertsManagementArmClient.GetAlertRuleRecommendationsByResource", "value", "nextLink", cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieve alert rule recommendations for a resource.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{resourceUri}/providers/Microsoft.AlertsManagement/alertRuleRecommendations</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>AlertRuleRecommendations_ListByResource</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-08-01-preview</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        /// <returns> A collection of <see cref="AlertRuleRecommendationResource"/> that may take multiple service requests to iterate over. </returns>
+        public virtual Pageable<AlertRuleRecommendationResource> GetAlertRuleRecommendationsByResource(ResourceIdentifier scope, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+
+            HttpMessage FirstPageRequest(int? pageSizeHint) => AlertRuleRecommendationsRestClient.CreateListByResourceRequest(scope);
+            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => AlertRuleRecommendationsRestClient.CreateListByResourceNextPageRequest(nextLink, scope);
+            return GeneratorPageableHelpers.CreatePageable(FirstPageRequest, NextPageRequest, e => AlertRuleRecommendationResource.DeserializeAlertRuleRecommendationResource(e), AlertRuleRecommendationsClientDiagnostics, Pipeline, "MockableAlertsManagementArmClient.GetAlertRuleRecommendationsByResource", "value", "nextLink", cancellationToken);
+        }
+
+        /// <summary>
+        /// Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity).
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{scope}/providers/Microsoft.AlertsManagement/alertsSummary</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetSummary</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="options"> A property bag which contains all the parameters of this method except the LRO qualifier and request context parameter. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="options"/> is null. </exception>
+        public virtual async Task<Response<ServiceAlertSummary>> GetServiceAlertSummaryAsync(ResourceIdentifier scope, ArmResourceGetServiceAlertSummaryOptions options, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNull(options, nameof(options));
+
+            using var scope0 = AlertsClientDiagnostics.CreateScope("MockableAlertsManagementArmClient.GetServiceAlertSummary");
+            scope0.Start();
+            try
+            {
+                var response = await AlertsRestClient.GetSummaryAsync(scope, options.Groupby, options.IncludeSmartGroupsCount, options.TargetResource, options.TargetResourceType, options.TargetResourceGroup, options.MonitorService, options.MonitorCondition, options.Severity, options.AlertState, options.AlertRule, options.TimeRange, options.CustomTimeRange, cancellationToken).ConfigureAwait(false);
+                return response;
+            }
+            catch (Exception e)
+            {
+                scope0.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get a summarized count of your alerts grouped by various parameters (e.g. grouping by 'Severity' returns the count of alerts for each severity).
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/{scope}/providers/Microsoft.AlertsManagement/alertsSummary</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>Alerts_GetSummary</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-05-25-preview</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="scope"> The scope that the resource will apply against. </param>
+        /// <param name="options"> A property bag which contains all the parameters of this method except the LRO qualifier and request context parameter. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="options"/> is null. </exception>
+        public virtual Response<ServiceAlertSummary> GetServiceAlertSummary(ResourceIdentifier scope, ArmResourceGetServiceAlertSummaryOptions options, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(scope, nameof(scope));
+            Argument.AssertNotNull(options, nameof(options));
+
+            using var scope0 = AlertsClientDiagnostics.CreateScope("MockableAlertsManagementArmClient.GetServiceAlertSummary");
+            scope0.Start();
+            try
+            {
+                var response = AlertsRestClient.GetSummary(scope, options.Groupby, options.IncludeSmartGroupsCount, options.TargetResource, options.TargetResourceType, options.TargetResourceGroup, options.MonitorService, options.MonitorCondition, options.Severity, options.AlertState, options.AlertRule, options.TimeRange, options.CustomTimeRange, cancellationToken);
+                return response;
+            }
+            catch (Exception e)
+            {
+                scope0.Failed(e);
+                throw;
+            }
+        }
         /// <summary>
         /// Gets an object representing an <see cref="AlertProcessingRuleResource"/> along with the instance operations that can be performed on it but with no data.
         /// You can use <see cref="AlertProcessingRuleResource.CreateResourceIdentifier" /> to create an <see cref="AlertProcessingRuleResource"/> <see cref="ResourceIdentifier"/> from its components.
@@ -56,6 +283,42 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
         {
             ServiceAlertResource.ValidateResourceId(id);
             return new ServiceAlertResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="TenantAlertResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="TenantAlertResource.CreateResourceIdentifier" /> to create a <see cref="TenantAlertResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="TenantAlertResource"/> object. </returns>
+        public virtual TenantAlertResource GetTenantAlertResource(ResourceIdentifier id)
+        {
+            TenantAlertResource.ValidateResourceId(id);
+            return new TenantAlertResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="PrometheusRuleGroupResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="PrometheusRuleGroupResource.CreateResourceIdentifier" /> to create a <see cref="PrometheusRuleGroupResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="PrometheusRuleGroupResource"/> object. </returns>
+        public virtual PrometheusRuleGroupResource GetPrometheusRuleGroupResource(ResourceIdentifier id)
+        {
+            PrometheusRuleGroupResource.ValidateResourceId(id);
+            return new PrometheusRuleGroupResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="TenantActivityLogAlertResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="TenantActivityLogAlertResource.CreateResourceIdentifier" /> to create a <see cref="TenantActivityLogAlertResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="TenantActivityLogAlertResource"/> object. </returns>
+        public virtual TenantActivityLogAlertResource GetTenantActivityLogAlertResource(ResourceIdentifier id)
+        {
+            TenantActivityLogAlertResource.ValidateResourceId(id);
+            return new TenantActivityLogAlertResource(Client, id);
         }
 
         /// <summary>

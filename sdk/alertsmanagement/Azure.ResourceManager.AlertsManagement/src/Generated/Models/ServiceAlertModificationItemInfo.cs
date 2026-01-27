@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertModificationItemInfo"/>. </summary>
-        public ServiceAlertModificationItemInfo()
+        internal ServiceAlertModificationItemInfo()
         {
         }
 
@@ -58,8 +58,13 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="modifiedBy"> Modified user details (Principal client name). </param>
         /// <param name="comments"> Modification comments. </param>
         /// <param name="description"> Description of the modification. </param>
+        /// <param name="details">
+        /// Base details class.
+        /// Please note <see cref="BaseDetails"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
+        /// The available derived classes include <see cref="ActionSuppressedDetails"/>, <see cref="ActionTriggeredDetails"/> and <see cref="PropertyChangeDetails"/>.
+        /// </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal ServiceAlertModificationItemInfo(ServiceAlertModificationEvent? modificationEvent, string oldValue, string newValue, string modifiedAt, string modifiedBy, string comments, string description, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal ServiceAlertModificationItemInfo(ServiceAlertModificationEvent? modificationEvent, string oldValue, string newValue, string modifiedAt, string modifiedBy, string comments, string description, BaseDetails details, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             ModificationEvent = modificationEvent;
             OldValue = oldValue;
@@ -68,22 +73,29 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             ModifiedBy = modifiedBy;
             Comments = comments;
             Description = description;
+            Details = details;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
         /// <summary> Reason for the modification. </summary>
-        public ServiceAlertModificationEvent? ModificationEvent { get; set; }
+        public ServiceAlertModificationEvent? ModificationEvent { get; }
         /// <summary> Old value. </summary>
-        public string OldValue { get; set; }
+        public string OldValue { get; }
         /// <summary> New value. </summary>
-        public string NewValue { get; set; }
+        public string NewValue { get; }
         /// <summary> Modified date and time. </summary>
-        public string ModifiedAt { get; set; }
+        public string ModifiedAt { get; }
         /// <summary> Modified user details (Principal client name). </summary>
-        public string ModifiedBy { get; set; }
+        public string ModifiedBy { get; }
         /// <summary> Modification comments. </summary>
-        public string Comments { get; set; }
+        public string Comments { get; }
         /// <summary> Description of the modification. </summary>
-        public string Description { get; set; }
+        public string Description { get; }
+        /// <summary>
+        /// Base details class.
+        /// Please note <see cref="BaseDetails"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
+        /// The available derived classes include <see cref="ActionSuppressedDetails"/>, <see cref="ActionTriggeredDetails"/> and <see cref="PropertyChangeDetails"/>.
+        /// </summary>
+        public BaseDetails Details { get; }
     }
 }

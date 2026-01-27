@@ -101,5 +101,74 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
         {
             return GetAlertProcessingRules().Get(alertProcessingRuleName, cancellationToken);
         }
+
+        /// <summary> Gets a collection of PrometheusRuleGroupResources in the ResourceGroupResource. </summary>
+        /// <returns> An object representing collection of PrometheusRuleGroupResources and their operations over a PrometheusRuleGroupResource. </returns>
+        public virtual PrometheusRuleGroupResourceCollection GetPrometheusRuleGroupResources()
+        {
+            return GetCachedClient(client => new PrometheusRuleGroupResourceCollection(client, Id));
+        }
+
+        /// <summary>
+        /// Retrieve a Prometheus rule group definition.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AlertsManagement/prometheusRuleGroups/{ruleGroupName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>PrometheusRuleGroups_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-03-01</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="PrometheusRuleGroupResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="ruleGroupName"> The name of the rule group. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="ruleGroupName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="ruleGroupName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual async Task<Response<PrometheusRuleGroupResource>> GetPrometheusRuleGroupResourceAsync(string ruleGroupName, CancellationToken cancellationToken = default)
+        {
+            return await GetPrometheusRuleGroupResources().GetAsync(ruleGroupName, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Retrieve a Prometheus rule group definition.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AlertsManagement/prometheusRuleGroups/{ruleGroupName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>PrometheusRuleGroups_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2023-03-01</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="PrometheusRuleGroupResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="ruleGroupName"> The name of the rule group. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="ruleGroupName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="ruleGroupName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual Response<PrometheusRuleGroupResource> GetPrometheusRuleGroupResource(string ruleGroupName, CancellationToken cancellationToken = default)
+        {
+            return GetPrometheusRuleGroupResources().Get(ruleGroupName, cancellationToken);
+        }
     }
 }

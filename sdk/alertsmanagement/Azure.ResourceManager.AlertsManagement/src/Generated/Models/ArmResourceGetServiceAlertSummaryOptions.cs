@@ -7,22 +7,22 @@
 
 namespace Azure.ResourceManager.AlertsManagement.Models
 {
-    /// <summary> The SubscriptionResourceGetServiceAlertSummaryOptions. </summary>
-    public partial class SubscriptionResourceGetServiceAlertSummaryOptions
+    /// <summary> The ArmResourceGetServiceAlertSummaryOptions. </summary>
+    public partial class ArmResourceGetServiceAlertSummaryOptions
     {
-        /// <summary> Initializes a new instance of <see cref="SubscriptionResourceGetServiceAlertSummaryOptions"/>. </summary>
-        /// <param name="groupby"> This parameter allows the result set to be grouped by input fields (Maximum 2 comma separated fields supported). For example, groupby=severity or groupby=severity,alertstate. </param>
-        public SubscriptionResourceGetServiceAlertSummaryOptions(AlertsSummaryGroupByField groupby)
+        /// <summary> Initializes a new instance of <see cref="ArmResourceGetServiceAlertSummaryOptions"/>. </summary>
+        /// <param name="groupby"> This parameter allows the result set to be grouped by input fields. For example, groupby=severity,alertstate. </param>
+        public ArmResourceGetServiceAlertSummaryOptions(AlertsSummaryGroupByField groupby)
         {
             Groupby = groupby;
         }
 
-        /// <summary> Initializes a new instance of <see cref="SubscriptionResourceGetServiceAlertSummaryOptions"/> for deserialization. </summary>
-        internal SubscriptionResourceGetServiceAlertSummaryOptions()
+        /// <summary> Initializes a new instance of <see cref="ArmResourceGetServiceAlertSummaryOptions"/> for deserialization. </summary>
+        internal ArmResourceGetServiceAlertSummaryOptions()
         {
         }
 
-        /// <summary> This parameter allows the result set to be grouped by input fields (Maximum 2 comma separated fields supported). For example, groupby=severity or groupby=severity,alertstate. </summary>
+        /// <summary> This parameter allows the result set to be grouped by input fields. For example, groupby=severity,alertstate. </summary>
         public AlertsSummaryGroupByField Groupby { get; }
         /// <summary> Include count of the SmartGroups as part of the summary. Default value is 'false'. </summary>
         public bool? IncludeSmartGroupsCount { get; set; }

@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="SmartGroupAggregatedProperty"/>. </summary>
-        public SmartGroupAggregatedProperty()
+        internal SmartGroupAggregatedProperty()
         {
         }
 
@@ -62,8 +62,8 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> Name of the type. </summary>
-        public string Name { get; set; }
+        public string Name { get; }
         /// <summary> Total number of items of type. </summary>
-        public long? Count { get; set; }
+        public long? Count { get; }
     }
 }

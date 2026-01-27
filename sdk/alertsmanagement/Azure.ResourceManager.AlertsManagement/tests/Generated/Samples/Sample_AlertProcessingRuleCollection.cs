@@ -7,7 +7,6 @@
 
 using System;
 using System.Threading.Tasks;
-using System.Xml;
 using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager.AlertsManagement.Models;
@@ -22,7 +21,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task CreateOrUpdate_CreateOrUpdateARuleThatAddsAnActionGroupToAllAlertsInASubscription()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_add_action_group_all_alerts_in_subscription.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_add_action_group_all_alerts_in_subscription.json
             // this example is just showing the usage of "AlertProcessingRules_CreateOrUpdate" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -68,7 +67,7 @@ new AlertProcessingRuleAddGroupsAction(new ResourceIdentifier[]{new ResourceIden
         [Ignore("Only validating compilation of examples")]
         public async Task CreateOrUpdate_CreateOrUpdateARuleThatAddsTwoActionGroupsToAllSev0AndSev1AlertsInTwoResourceGroups()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_add_two_action_groups_all_Sev0_Sev1_two_resource_groups.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_add_two_action_groups_all_Sev0_Sev1_two_resource_groups.json
             // this example is just showing the usage of "AlertProcessingRules_CreateOrUpdate" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -120,7 +119,7 @@ Values = {"sev0", "sev1"},
         [Ignore("Only validating compilation of examples")]
         public async Task CreateOrUpdate_CreateOrUpdateARuleThatRemovesAllActionGroupsFromAlertsOnASpecificVMDuringAOneOffMaintenanceWindow18002000AtASpecificDatePacificStandardTime()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_remove_all_action_groups_specific_VM_one-off_maintenance_window.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_remove_all_action_groups_specific_VM_one-off_maintenance_window.json
             // this example is just showing the usage of "AlertProcessingRules_CreateOrUpdate" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -172,7 +171,7 @@ new AlertProcessingRuleRemoveAllGroupsAction()
         [Ignore("Only validating compilation of examples")]
         public async Task CreateOrUpdate_CreateOrUpdateARuleThatRemovesAllActionGroupsFromAllAlertsInASubscriptionComingFromASpecificAlertRule()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_remove_all_action_groups_from_specific_alert_rule.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_remove_all_action_groups_from_specific_alert_rule.json
             // this example is just showing the usage of "AlertProcessingRules_CreateOrUpdate" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -224,7 +223,7 @@ Values = {"/subscriptions/suubId1/resourceGroups/Rgid2/providers/microsoft.insig
         [Ignore("Only validating compilation of examples")]
         public async Task CreateOrUpdate_CreateOrUpdateARuleThatRemovesAllActionGroupsFromAllAlertsOnAnyVMInTwoResourceGroupsDuringARecurringMaintenanceWindow22000400EverySatAndSunIndiaStandardTime()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_remove_all_action_groups_recurring_maintenance_window.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_remove_all_action_groups_recurring_maintenance_window.json
             // this example is just showing the usage of "AlertProcessingRules_CreateOrUpdate" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -262,8 +261,8 @@ Values = {"microsoft.compute/virtualmachines"},
                         TimeZone = "India Standard Time",
                         Recurrences = {new AlertProcessingRuleWeeklyRecurrence(new AlertsManagementDayOfWeek[]{AlertsManagementDayOfWeek.Saturday, AlertsManagementDayOfWeek.Sunday})
 {
-StartOn = XmlConvert.ToTimeSpan("22:00:00"),
-EndOn = XmlConvert.ToTimeSpan("04:00:00"),
+StartOn = "22:00:00",
+EndOn = "04:00:00",
 }},
                     },
                     Description = "Remove all ActionGroups from all Vitual machine Alerts during the recurring maintenance",
@@ -285,7 +284,7 @@ EndOn = XmlConvert.ToTimeSpan("04:00:00"),
         [Ignore("Only validating compilation of examples")]
         public async Task CreateOrUpdate_CreateOrUpdateARuleThatRemovesAllActionGroupsOutsideBusinessHoursMonFri09001700EasternStandardTime()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_remove_all_action_groups_outside_business_hours.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_Create_or_update_remove_all_action_groups_outside_business_hours.json
             // this example is just showing the usage of "AlertProcessingRules_CreateOrUpdate" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -317,8 +316,8 @@ new AlertProcessingRuleRemoveAllGroupsAction()
                         TimeZone = "Eastern Standard Time",
                         Recurrences = {new DailyRecurrence
 {
-StartOn = XmlConvert.ToTimeSpan("17:00:00"),
-EndOn = XmlConvert.ToTimeSpan("09:00:00"),
+StartOn = "17:00:00",
+EndOn = "09:00:00",
 }, new AlertProcessingRuleWeeklyRecurrence(new AlertsManagementDayOfWeek[]{AlertsManagementDayOfWeek.Saturday, AlertsManagementDayOfWeek.Sunday})},
                     },
                     Description = "Remove all ActionGroups outside business hours",
@@ -340,7 +339,7 @@ EndOn = XmlConvert.ToTimeSpan("09:00:00"),
         [Ignore("Only validating compilation of examples")]
         public async Task Get_GetAlertProcessingRuleById()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_GetById.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_GetById.json
             // this example is just showing the usage of "AlertProcessingRules_GetByName" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -373,7 +372,7 @@ EndOn = XmlConvert.ToTimeSpan("09:00:00"),
         [Ignore("Only validating compilation of examples")]
         public async Task GetAll_GetAlertProcessingRulesResourceGroupWide()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_List_ResourceGroup.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_List_ResourceGroup.json
             // this example is just showing the usage of "AlertProcessingRules_ListByResourceGroup" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -408,7 +407,7 @@ EndOn = XmlConvert.ToTimeSpan("09:00:00"),
         [Ignore("Only validating compilation of examples")]
         public async Task Exists_GetAlertProcessingRuleById()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_GetById.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_GetById.json
             // this example is just showing the usage of "AlertProcessingRules_GetByName" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -437,7 +436,7 @@ EndOn = XmlConvert.ToTimeSpan("09:00:00"),
         [Ignore("Only validating compilation of examples")]
         public async Task GetIfExists_GetAlertProcessingRuleById()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/stable/2021-08-08/examples/AlertProcessingRules_GetById.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules/stable/2021-08-08/examples/AlertProcessingRules_GetById.json
             // this example is just showing the usage of "AlertProcessingRules_GetByName" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line

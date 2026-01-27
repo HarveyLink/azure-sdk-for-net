@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Azure.ResourceManager.AlertsManagement.Models
 {
@@ -46,25 +47,34 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="AlertProcessingRulesList"/>. </summary>
-        internal AlertProcessingRulesList()
+        /// <param name="value"> The AlertProcessingRule items on this page. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        internal AlertProcessingRulesList(IEnumerable<AlertProcessingRuleData> value)
         {
-            Value = new ChangeTrackingList<AlertProcessingRuleData>();
+            Argument.AssertNotNull(value, nameof(value));
+
+            Value = value.ToList();
         }
 
         /// <summary> Initializes a new instance of <see cref="AlertProcessingRulesList"/>. </summary>
-        /// <param name="nextLink"> URL to fetch the next set of alert processing rules. </param>
-        /// <param name="value"> List of alert processing rules. </param>
+        /// <param name="value"> The AlertProcessingRule items on this page. </param>
+        /// <param name="nextLink"> The link to the next page of items. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal AlertProcessingRulesList(string nextLink, IReadOnlyList<AlertProcessingRuleData> value, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal AlertProcessingRulesList(IReadOnlyList<AlertProcessingRuleData> value, Uri nextLink, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
-            NextLink = nextLink;
             Value = value;
+            NextLink = nextLink;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
-        /// <summary> URL to fetch the next set of alert processing rules. </summary>
-        public string NextLink { get; }
-        /// <summary> List of alert processing rules. </summary>
+        /// <summary> Initializes a new instance of <see cref="AlertProcessingRulesList"/> for deserialization. </summary>
+        internal AlertProcessingRulesList()
+        {
+        }
+
+        /// <summary> The AlertProcessingRule items on this page. </summary>
         public IReadOnlyList<AlertProcessingRuleData> Value { get; }
+        /// <summary> The link to the next page of items. </summary>
+        public Uri NextLink { get; }
     }
 }

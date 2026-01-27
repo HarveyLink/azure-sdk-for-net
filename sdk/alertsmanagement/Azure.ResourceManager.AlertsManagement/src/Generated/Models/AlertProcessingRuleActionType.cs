@@ -10,7 +10,7 @@ using System.ComponentModel;
 
 namespace Azure.ResourceManager.AlertsManagement.Models
 {
-    /// <summary> Action that should be applied. </summary>
+    /// <summary> Enum. Indicates the action type. "Internal" refers to actions that are for internal only APIs. </summary>
     internal readonly partial struct AlertProcessingRuleActionType : IEquatable<AlertProcessingRuleActionType>
     {
         private readonly string _value;
@@ -22,9 +22,12 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             _value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
+        private const string InternalValue = "Internal";
         private const string AddActionGroupsValue = "AddActionGroups";
         private const string RemoveAllActionGroupsValue = "RemoveAllActionGroups";
 
+        /// <summary> Internal. </summary>
+        public static AlertProcessingRuleActionType Internal { get; } = new AlertProcessingRuleActionType(InternalValue);
         /// <summary> AddActionGroups. </summary>
         public static AlertProcessingRuleActionType AddActionGroups { get; } = new AlertProcessingRuleActionType(AddActionGroupsValue);
         /// <summary> RemoveAllActionGroups. </summary>

@@ -7,6 +7,7 @@
 
 using System;
 using System.Threading.Tasks;
+using System.Xml;
 using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager.AlertsManagement.Models;
@@ -21,7 +22,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task GetServiceAlertMetadata_MonService()
         {
-            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/preview/2019-05-05-preview/examples/AlertsMetaData_MonitorService.json
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertsManagement/preview/2025-05-25-preview/examples/AlertsMetaData_MonitorService.json
             // this example is just showing the usage of "Alerts_MetaData" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
@@ -36,6 +37,75 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
             ServiceAlertMetadata result = await tenantResource.GetServiceAlertMetadataAsync(identifier);
 
             Console.WriteLine($"Succeeded: {result}");
+        }
+
+        [Test]
+        [Ignore("Only validating compilation of examples")]
+        public async Task PreviewAlertRule_RunPreviewOfADynamicThresholdLogSearchAlertRule()
+        {
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/PreviewAlertRule/preview/2025-07-01-preview/examples/previewDynamicThresholdLogSearchAlertRule.json
+            // this example is just showing the usage of "PreviewAlertRule" operation, for the dependent resources, they will have to be created separately.
+
+            // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
+            TokenCredential cred = new DefaultAzureCredential();
+            // authenticate your client
+            ArmClient client = new ArmClient(cred);
+
+            TenantResource tenantResource = client.GetTenants().GetAllAsync().GetAsyncEnumerator().Current;
+
+            // invoke the operation
+            string resourceId = "subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.OperationalInsights/workspaces/myWorkspace";
+            PreviewAlertRuleContent content = new PreviewAlertRuleContent(new AzureLocation("eastus"), new PreviewAlertRuleRequestProperties(XmlConvert.ToTimeSpan("PT24H"))
+            {
+                ScheduledQueryRuleProperties = new LogAlertRuleResource(new AzureLocation("eastus"))
+                {
+                    Description = "Performance rule",
+                    Severity = AlertSeverity.Four,
+                    Enabled = true,
+                    Scopes = { "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.OperationalInsights/workspaces/myWorkspace" },
+                    EvaluationFrequency = XmlConvert.ToTimeSpan("PT1H"),
+                    WindowSize = XmlConvert.ToTimeSpan("PT1H"),
+                    CriteriaAllOf = {new LogAlertRuleCondition
+{
+CriterionType = CriterionType.DynamicThresholdCriterion,
+Query = "Alert",
+TimeAggregation = TimeAggregation.Count,
+Dimensions = {new LogAlertRuleDimension("AlertName", DimensionOperator.Include, new string[]{"alert"})},
+Operator = ConditionOperator.GreaterThan,
+AlertSensitivity = "Medium",
+}},
+                },
+            });
+            PreviewAlertRuleResponse result = await tenantResource.PreviewAlertRuleAsync(resourceId, content);
+
+            Console.WriteLine($"Succeeded: {result}");
+        }
+
+        [Test]
+        [Ignore("Only validating compilation of examples")]
+        public async Task GetTenantActivityLogAlertResources_ListActivityLogAlertsByTenant()
+        {
+            // Generated from example definition: specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/TenantActivityLogAlerts/preview/2023-04-01-preview/examples/TenantActivityLogAlertRule_ListByTenant.json
+            // this example is just showing the usage of "TenantActivityLogAlerts_ListByTenant" operation, for the dependent resources, they will have to be created separately.
+
+            // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
+            TokenCredential cred = new DefaultAzureCredential();
+            // authenticate your client
+            ArmClient client = new ArmClient(cred);
+
+            TenantResource tenantResource = client.GetTenants().GetAllAsync().GetAsyncEnumerator().Current;
+
+            // invoke the operation and iterate over the result
+            await foreach (TenantActivityLogAlertResource item in tenantResource.GetTenantActivityLogAlertResourcesAsync())
+            {
+                // the variable item is a resource, you could call other operations on this instance as well
+                // but just for demo, we get its data from this resource instance
+                TenantActivityLogAlertResourceData resourceData = item.Data;
+                // for demo we just print out the id
+                Console.WriteLine($"Succeeded on id: {resourceData.Id}");
+            }
+
+            Console.WriteLine("Succeeded");
         }
     }
 }

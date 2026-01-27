@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertEssentials"/>. </summary>
-        public ServiceAlertEssentials()
+        internal ServiceAlertEssentials()
         {
         }
 
@@ -54,7 +54,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="severity"> Severity of alert Sev0 being highest and Sev4 being lowest. </param>
         /// <param name="signalType"> The type of signal the alert is based on, which could be metrics, logs or activity logs. </param>
         /// <param name="alertState"> Alert object state, which can be modified by the user. </param>
-        /// <param name="monitorCondition"> Condition of the rule at the monitor service. It represents whether the underlying conditions have crossed the defined alert rule thresholds. </param>
+        /// <param name="monitorCondition"> Can be 'Fired' or 'Resolved', which represents whether the underlying conditions have crossed the defined alert rule thresholds. </param>
         /// <param name="targetResource"> Target ARM resource, on which alert got created. </param>
         /// <param name="targetResourceName"> Name of the target ARM resource name, on which alert got created. </param>
         /// <param name="targetResourceGroup"> Resource group of target ARM resource, on which alert got created. </param>
@@ -101,16 +101,16 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         public ServiceAlertSignalType? SignalType { get; }
         /// <summary> Alert object state, which can be modified by the user. </summary>
         public ServiceAlertState? AlertState { get; }
-        /// <summary> Condition of the rule at the monitor service. It represents whether the underlying conditions have crossed the defined alert rule thresholds. </summary>
+        /// <summary> Can be 'Fired' or 'Resolved', which represents whether the underlying conditions have crossed the defined alert rule thresholds. </summary>
         public MonitorCondition? MonitorCondition { get; }
         /// <summary> Target ARM resource, on which alert got created. </summary>
-        public string TargetResource { get; set; }
+        public string TargetResource { get; }
         /// <summary> Name of the target ARM resource name, on which alert got created. </summary>
-        public string TargetResourceName { get; set; }
+        public string TargetResourceName { get; }
         /// <summary> Resource group of target ARM resource, on which alert got created. </summary>
-        public string TargetResourceGroup { get; set; }
+        public string TargetResourceGroup { get; }
         /// <summary> Resource type of target ARM resource, on which alert got created. </summary>
-        public string TargetResourceType { get; set; }
+        public string TargetResourceType { get; }
         /// <summary> Monitor service on which the rule(monitor) is set. </summary>
         public MonitorServiceSourceForAlert? MonitorService { get; }
         /// <summary> Rule(monitor) which fired alert instance. Depending on the monitor service,  this would be ARM id or name of the rule. </summary>
@@ -130,20 +130,14 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <summary> User who last modified the alert, in case of monitor service updates user would be 'system', otherwise name of the user. </summary>
         public string LastModifiedBy { get; }
         /// <summary> Action status. </summary>
-        internal ServiceAlertActionStatus ActionStatus { get; set; }
+        internal ServiceAlertActionStatus ActionStatus { get; }
         /// <summary> Value indicating whether alert is suppressed. </summary>
         public bool? IsSuppressed
         {
-            get => ActionStatus is null ? default : ActionStatus.IsSuppressed;
-            set
-            {
-                if (ActionStatus is null)
-                    ActionStatus = new ServiceAlertActionStatus();
-                ActionStatus.IsSuppressed = value;
-            }
+            get => ActionStatus?.IsSuppressed;
         }
 
         /// <summary> Alert description. </summary>
-        public string Description { get; set; }
+        public string Description { get; }
     }
 }

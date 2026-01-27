@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Azure.ResourceManager.AlertsManagement.Models
 {
-    /// <summary> Properties of the alert modification item. </summary>
+    /// <summary> Alert modification history properties. </summary>
     public partial class ServiceAlertModificationProperties
     {
         /// <summary>
@@ -46,25 +46,25 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertModificationProperties"/>. </summary>
-        public ServiceAlertModificationProperties()
+        internal ServiceAlertModificationProperties()
         {
             Modifications = new ChangeTrackingList<ServiceAlertModificationItemInfo>();
         }
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertModificationProperties"/>. </summary>
-        /// <param name="alertId"> Unique Id of the alert for which the history is being retrieved. </param>
-        /// <param name="modifications"> Modification details. </param>
+        /// <param name="alertId"> Unique identifier of the alert. </param>
+        /// <param name="modifications"> Array of alert modification events. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal ServiceAlertModificationProperties(Guid? alertId, IList<ServiceAlertModificationItemInfo> modifications, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal ServiceAlertModificationProperties(Guid? alertId, IReadOnlyList<ServiceAlertModificationItemInfo> modifications, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             AlertId = alertId;
             Modifications = modifications;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
-        /// <summary> Unique Id of the alert for which the history is being retrieved. </summary>
+        /// <summary> Unique identifier of the alert. </summary>
         public Guid? AlertId { get; }
-        /// <summary> Modification details. </summary>
-        public IList<ServiceAlertModificationItemInfo> Modifications { get; }
+        /// <summary> Array of alert modification events. </summary>
+        public IReadOnlyList<ServiceAlertModificationItemInfo> Modifications { get; }
     }
 }
