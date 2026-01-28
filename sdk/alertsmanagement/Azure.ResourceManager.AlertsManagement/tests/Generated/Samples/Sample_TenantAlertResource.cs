@@ -30,7 +30,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
 
             // this example assumes you already have this TenantAlertResource created on azure
             // for more information of creating TenantAlertResource, please refer to the document of TenantAlertResource
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             ResourceIdentifier tenantAlertResourceId = TenantAlertResource.CreateResourceIdentifier(alertId);
             TenantAlertResource tenantAlert = client.GetTenantAlertResource(tenantAlertResourceId);
 
@@ -58,7 +58,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
 
             // this example assumes you already have this TenantAlertResource created on azure
             // for more information of creating TenantAlertResource, please refer to the document of TenantAlertResource
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             ResourceIdentifier tenantAlertResourceId = TenantAlertResource.CreateResourceIdentifier(alertId);
             TenantAlertResource tenantAlert = client.GetTenantAlertResource(tenantAlertResourceId);
 
@@ -87,7 +87,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
 
             // this example assumes you already have this TenantAlertResource created on azure
             // for more information of creating TenantAlertResource, please refer to the document of TenantAlertResource
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             ResourceIdentifier tenantAlertResourceId = TenantAlertResource.CreateResourceIdentifier(alertId);
             TenantAlertResource tenantAlert = client.GetTenantAlertResource(tenantAlertResourceId);
 

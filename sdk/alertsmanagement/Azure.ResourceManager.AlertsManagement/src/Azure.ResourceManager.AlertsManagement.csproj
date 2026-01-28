@@ -9,4 +9,7 @@
     <DisableEnhancedAnalysis>true</DisableEnhancedAnalysis>
     <IncludeAutorestDependency>true</IncludeAutorestDependency>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Custom\Extensions\" />
+  </ItemGroup>
 </Project>

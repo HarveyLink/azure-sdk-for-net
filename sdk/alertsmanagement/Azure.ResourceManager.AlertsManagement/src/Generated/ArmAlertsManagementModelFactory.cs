@@ -111,7 +111,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="egressConfig"> Config which would be used for displaying the data in portal. </param>
         /// <param name="customProperties"> Custom properties that can hold any user defined key-value pairs. </param>
         /// <returns> A new <see cref="Models.ServiceAlertProperties"/> instance for mocking. </returns>
-        public static ServiceAlertProperties ServiceAlertProperties(ServiceAlertEssentials essentials = null, BinaryData context = null, BinaryData egressConfig = null, IReadOnlyDictionary<string, string> customProperties = null)
+        public static ServiceAlertProperties ServiceAlertProperties(ServiceAlertEssentials essentials = null, BinaryData context = null, BinaryData egressConfig = null, IDictionary<string, string> customProperties = null)
         {
             customProperties ??= new Dictionary<string, string>();
 
@@ -244,34 +244,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             return new ServiceAlertModificationProperties(alertId, modifications?.ToList(), serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Models.ServiceAlertModificationItemInfo"/>. </summary>
-        /// <param name="modificationEvent"> Reason for the modification. </param>
-        /// <param name="oldValue"> Old value. </param>
-        /// <param name="newValue"> New value. </param>
-        /// <param name="modifiedAt"> Modified date and time. </param>
-        /// <param name="modifiedBy"> Modified user details (Principal client name). </param>
-        /// <param name="comments"> Modification comments. </param>
-        /// <param name="description"> Description of the modification. </param>
-        /// <param name="details">
-        /// Base details class.
-        /// Please note <see cref="BaseDetails"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
-        /// The available derived classes include <see cref="Models.ActionSuppressedDetails"/>, <see cref="Models.ActionTriggeredDetails"/> and <see cref="Models.PropertyChangeDetails"/>.
-        /// </param>
-        /// <returns> A new <see cref="Models.ServiceAlertModificationItemInfo"/> instance for mocking. </returns>
-        public static ServiceAlertModificationItemInfo ServiceAlertModificationItemInfo(ServiceAlertModificationEvent? modificationEvent = null, string oldValue = null, string newValue = null, string modifiedAt = null, string modifiedBy = null, string comments = null, string description = null, BaseDetails details = null)
-        {
-            return new ServiceAlertModificationItemInfo(
-                modificationEvent,
-                oldValue,
-                newValue,
-                modifiedAt,
-                modifiedBy,
-                comments,
-                description,
-                details,
-                serializedAdditionalRawData: null);
-        }
-
         /// <summary> Initializes a new instance of <see cref="Models.ServiceAlertSummary"/>. </summary>
         /// <param name="id"> The id. </param>
         /// <param name="name"> The name. </param>
@@ -288,32 +260,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
                 systemData,
                 properties,
                 serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Models.ServiceAlertSummaryGroup"/>. </summary>
-        /// <param name="total"> Total count of the result set. </param>
-        /// <param name="smartGroupsCount"> Total count of the smart groups. </param>
-        /// <param name="groupedBy"> Name of the field aggregated. </param>
-        /// <param name="values"> List of the items. </param>
-        /// <returns> A new <see cref="Models.ServiceAlertSummaryGroup"/> instance for mocking. </returns>
-        public static ServiceAlertSummaryGroup ServiceAlertSummaryGroup(long? total = null, long? smartGroupsCount = null, string groupedBy = null, IEnumerable<ServiceAlertSummaryGroupItemInfo> values = null)
-        {
-            values ??= new List<ServiceAlertSummaryGroupItemInfo>();
-
-            return new ServiceAlertSummaryGroup(total, smartGroupsCount, groupedBy, values?.ToList(), serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Models.ServiceAlertSummaryGroupItemInfo"/>. </summary>
-        /// <param name="name"> Value of the aggregated field. </param>
-        /// <param name="count"> Count of the aggregated field. </param>
-        /// <param name="groupedBy"> Name of the field aggregated. </param>
-        /// <param name="values"> List of the items. </param>
-        /// <returns> A new <see cref="Models.ServiceAlertSummaryGroupItemInfo"/> instance for mocking. </returns>
-        public static ServiceAlertSummaryGroupItemInfo ServiceAlertSummaryGroupItemInfo(string name = null, long? count = null, string groupedBy = null, IEnumerable<ServiceAlertSummaryGroupItemInfo> values = null)
-        {
-            values ??= new List<ServiceAlertSummaryGroupItemInfo>();
-
-            return new ServiceAlertSummaryGroupItemInfo(name, count, groupedBy, values?.ToList(), serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.ServiceAlertMetadata"/>. </summary>
@@ -563,15 +509,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
                 serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Models.SmartGroupAggregatedProperty"/>. </summary>
-        /// <param name="name"> Name of the type. </param>
-        /// <param name="count"> Total number of items of type. </param>
-        /// <returns> A new <see cref="Models.SmartGroupAggregatedProperty"/> instance for mocking. </returns>
-        public static SmartGroupAggregatedProperty SmartGroupAggregatedProperty(string name = null, long? count = null)
-        {
-            return new SmartGroupAggregatedProperty(name, count, serializedAdditionalRawData: null);
-        }
-
         /// <summary> Initializes a new instance of <see cref="Models.SmartGroupModification"/>. </summary>
         /// <param name="id"> The id. </param>
         /// <param name="name"> The name. </param>
@@ -600,28 +537,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             modifications ??= new List<SmartGroupModificationItemInfo>();
 
             return new SmartGroupModificationProperties(smartGroupId, modifications?.ToList(), nextLink, serializedAdditionalRawData: null);
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Models.SmartGroupModificationItemInfo"/>. </summary>
-        /// <param name="modificationEvent"> Reason for the modification. </param>
-        /// <param name="oldValue"> Old value. </param>
-        /// <param name="newValue"> New value. </param>
-        /// <param name="modifiedOn"> Modified date and time. </param>
-        /// <param name="modifiedBy"> Modified user details (Principal client name). </param>
-        /// <param name="comments"> Modification comments. </param>
-        /// <param name="description"> Description of the modification. </param>
-        /// <returns> A new <see cref="Models.SmartGroupModificationItemInfo"/> instance for mocking. </returns>
-        public static SmartGroupModificationItemInfo SmartGroupModificationItemInfo(SmartGroupModificationEvent? modificationEvent = null, string oldValue = null, string newValue = null, DateTimeOffset? modifiedOn = null, string modifiedBy = null, string comments = null, string description = null)
-        {
-            return new SmartGroupModificationItemInfo(
-                modificationEvent,
-                oldValue,
-                newValue,
-                modifiedOn,
-                modifiedBy,
-                comments,
-                description,
-                serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.ActionSuppressedDetails"/>. </summary>

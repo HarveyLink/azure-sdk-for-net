@@ -65,12 +65,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual async Task<Response<ServiceAlertResource>> GetAsync(string alertId, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<ServiceAlertResource>> GetAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _serviceAlertAlertsClientDiagnostics.CreateScope("ServiceAlertCollection.Get");
             scope.Start();
             try
@@ -110,12 +106,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual Response<ServiceAlertResource> Get(string alertId, CancellationToken cancellationToken = default)
+        public virtual Response<ServiceAlertResource> Get(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _serviceAlertAlertsClientDiagnostics.CreateScope("ServiceAlertCollection.Get");
             scope.Start();
             try
@@ -221,12 +213,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual async Task<Response<bool>> ExistsAsync(string alertId, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<bool>> ExistsAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _serviceAlertAlertsClientDiagnostics.CreateScope("ServiceAlertCollection.Exists");
             scope.Start();
             try
@@ -264,12 +252,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual Response<bool> Exists(string alertId, CancellationToken cancellationToken = default)
+        public virtual Response<bool> Exists(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _serviceAlertAlertsClientDiagnostics.CreateScope("ServiceAlertCollection.Exists");
             scope.Start();
             try
@@ -307,12 +291,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual async Task<NullableResponse<ServiceAlertResource>> GetIfExistsAsync(string alertId, CancellationToken cancellationToken = default)
+        public virtual async Task<NullableResponse<ServiceAlertResource>> GetIfExistsAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _serviceAlertAlertsClientDiagnostics.CreateScope("ServiceAlertCollection.GetIfExists");
             scope.Start();
             try
@@ -352,12 +332,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual NullableResponse<ServiceAlertResource> GetIfExists(string alertId, CancellationToken cancellationToken = default)
+        public virtual NullableResponse<ServiceAlertResource> GetIfExists(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _serviceAlertAlertsClientDiagnostics.CreateScope("ServiceAlertCollection.GetIfExists");
             scope.Start();
             try

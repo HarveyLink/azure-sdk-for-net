@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace Azure.ResourceManager.AlertsManagement.Models
 {
     /// <summary> Action status. </summary>
-    internal partial class ServiceAlertActionStatus
+    public partial class ServiceAlertActionStatus
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertActionStatus"/>. </summary>
-        internal ServiceAlertActionStatus()
+        public ServiceAlertActionStatus()
         {
         }
 
@@ -60,6 +60,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> Value indicating whether alert is suppressed. </summary>
-        public bool? IsSuppressed { get; }
+        public bool? IsSuppressed { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <summary> Generate the resource identifier of a <see cref="ServiceAlertResource"/> instance. </summary>
         /// <param name="scope"> The scope. </param>
         /// <param name="alertId"> The alertId. </param>
-        public static ResourceIdentifier CreateResourceIdentifier(string scope, string alertId)
+        public static ResourceIdentifier CreateResourceIdentifier(string scope, Guid alertId)
         {
             var resourceId = $"{scope}/providers/Microsoft.AlertsManagement/alerts/{alertId}";
             return new ResourceIdentifier(resourceId);
@@ -116,7 +116,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = await _serviceAlertAlertsRestClient.GetByIdAsync(Id.Parent, Id.Name, cancellationToken).ConfigureAwait(false);
+                var response = await _serviceAlertAlertsRestClient.GetByIdAsync(Id.Parent, Guid.Parse(Id.Name), cancellationToken).ConfigureAwait(false);
                 if (response.Value == null)
                     throw new RequestFailedException(response.GetRawResponse());
                 return Response.FromValue(new ServiceAlertResource(Client, response.Value), response.GetRawResponse());
@@ -156,7 +156,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = _serviceAlertAlertsRestClient.GetById(Id.Parent, Id.Name, cancellationToken);
+                var response = _serviceAlertAlertsRestClient.GetById(Id.Parent, Guid.Parse(Id.Name), cancellationToken);
                 if (response.Value == null)
                     throw new RequestFailedException(response.GetRawResponse());
                 return Response.FromValue(new ServiceAlertResource(Client, response.Value), response.GetRawResponse());
@@ -198,7 +198,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = await _serviceAlertAlertsRestClient.ChangeStateAsync(Id.Parent, Id.Name, newState, comment, cancellationToken).ConfigureAwait(false);
+                var response = await _serviceAlertAlertsRestClient.ChangeStateAsync(Id.Parent, Guid.Parse(Id.Name), newState, comment, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(new ServiceAlertResource(Client, response.Value), response.GetRawResponse());
             }
             catch (Exception e)
@@ -238,7 +238,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = _serviceAlertAlertsRestClient.ChangeState(Id.Parent, Id.Name, newState, comment, cancellationToken);
+                var response = _serviceAlertAlertsRestClient.ChangeState(Id.Parent, Guid.Parse(Id.Name), newState, comment, cancellationToken);
                 return Response.FromValue(new ServiceAlertResource(Client, response.Value), response.GetRawResponse());
             }
             catch (Exception e)
@@ -273,8 +273,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <returns> An async collection of <see cref="AlertEnrichmentResponse"/> that may take multiple service requests to iterate over. </returns>
         public virtual AsyncPageable<AlertEnrichmentResponse> GetEnrichmentsAsync(CancellationToken cancellationToken = default)
         {
-            HttpMessage FirstPageRequest(int? pageSizeHint) => _serviceAlertAlertsRestClient.CreateGetEnrichmentsRequest(Id.Parent, Id.Name);
-            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => _serviceAlertAlertsRestClient.CreateGetEnrichmentsNextPageRequest(nextLink, Id.Parent, Id.Name);
+            HttpMessage FirstPageRequest(int? pageSizeHint) => _serviceAlertAlertsRestClient.CreateGetEnrichmentsRequest(Id.Parent, Guid.Parse(Id.Name));
+            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => _serviceAlertAlertsRestClient.CreateGetEnrichmentsNextPageRequest(nextLink, Id.Parent, Guid.Parse(Id.Name));
             return GeneratorPageableHelpers.CreateAsyncPageable(FirstPageRequest, NextPageRequest, e => AlertEnrichmentResponse.DeserializeAlertEnrichmentResponse(e), _serviceAlertAlertsClientDiagnostics, Pipeline, "ServiceAlertResource.GetEnrichments", "value", "nextLink", cancellationToken);
         }
 
@@ -303,8 +303,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <returns> A collection of <see cref="AlertEnrichmentResponse"/> that may take multiple service requests to iterate over. </returns>
         public virtual Pageable<AlertEnrichmentResponse> GetEnrichments(CancellationToken cancellationToken = default)
         {
-            HttpMessage FirstPageRequest(int? pageSizeHint) => _serviceAlertAlertsRestClient.CreateGetEnrichmentsRequest(Id.Parent, Id.Name);
-            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => _serviceAlertAlertsRestClient.CreateGetEnrichmentsNextPageRequest(nextLink, Id.Parent, Id.Name);
+            HttpMessage FirstPageRequest(int? pageSizeHint) => _serviceAlertAlertsRestClient.CreateGetEnrichmentsRequest(Id.Parent, Guid.Parse(Id.Name));
+            HttpMessage NextPageRequest(int? pageSizeHint, string nextLink) => _serviceAlertAlertsRestClient.CreateGetEnrichmentsNextPageRequest(nextLink, Id.Parent, Guid.Parse(Id.Name));
             return GeneratorPageableHelpers.CreatePageable(FirstPageRequest, NextPageRequest, e => AlertEnrichmentResponse.DeserializeAlertEnrichmentResponse(e), _serviceAlertAlertsClientDiagnostics, Pipeline, "ServiceAlertResource.GetEnrichments", "value", "nextLink", cancellationToken);
         }
 
@@ -336,7 +336,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = await _serviceAlertAlertsRestClient.GetHistoryAsync(Id.Parent, Id.Name, cancellationToken).ConfigureAwait(false);
+                var response = await _serviceAlertAlertsRestClient.GetHistoryAsync(Id.Parent, Guid.Parse(Id.Name), cancellationToken).ConfigureAwait(false);
                 return response;
             }
             catch (Exception e)
@@ -374,7 +374,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = _serviceAlertAlertsRestClient.GetHistory(Id.Parent, Id.Name, cancellationToken);
+                var response = _serviceAlertAlertsRestClient.GetHistory(Id.Parent, Guid.Parse(Id.Name), cancellationToken);
                 return response;
             }
             catch (Exception e)

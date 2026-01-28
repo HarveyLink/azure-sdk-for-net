@@ -72,12 +72,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual async Task<Response<TenantAlertResource>> GetAsync(string alertId, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<TenantAlertResource>> GetAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _tenantAlertAlertsClientDiagnostics.CreateScope("TenantAlertCollection.Get");
             scope.Start();
             try
@@ -117,12 +113,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual Response<TenantAlertResource> Get(string alertId, CancellationToken cancellationToken = default)
+        public virtual Response<TenantAlertResource> Get(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _tenantAlertAlertsClientDiagnostics.CreateScope("TenantAlertCollection.Get");
             scope.Start();
             try
@@ -162,12 +154,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual async Task<Response<bool>> ExistsAsync(string alertId, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<bool>> ExistsAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _tenantAlertAlertsClientDiagnostics.CreateScope("TenantAlertCollection.Exists");
             scope.Start();
             try
@@ -205,12 +193,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual Response<bool> Exists(string alertId, CancellationToken cancellationToken = default)
+        public virtual Response<bool> Exists(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _tenantAlertAlertsClientDiagnostics.CreateScope("TenantAlertCollection.Exists");
             scope.Start();
             try
@@ -248,12 +232,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual async Task<NullableResponse<TenantAlertResource>> GetIfExistsAsync(string alertId, CancellationToken cancellationToken = default)
+        public virtual async Task<NullableResponse<TenantAlertResource>> GetIfExistsAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _tenantAlertAlertsClientDiagnostics.CreateScope("TenantAlertCollection.GetIfExists");
             scope.Start();
             try
@@ -293,12 +273,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        public virtual NullableResponse<TenantAlertResource> GetIfExists(string alertId, CancellationToken cancellationToken = default)
+        public virtual NullableResponse<TenantAlertResource> GetIfExists(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var scope = _tenantAlertAlertsClientDiagnostics.CreateScope("TenantAlertCollection.GetIfExists");
             scope.Start();
             try

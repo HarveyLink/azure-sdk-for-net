@@ -58,8 +58,8 @@ namespace Azure.ResourceManager.AlertsManagement.Models
                 return null;
             }
             RecurrenceType recurrenceType = "Unknown";
-            string startTime = default;
-            string endTime = default;
+            TimeSpan? startTime = default;
+            TimeSpan? endTime = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -71,12 +71,20 @@ namespace Azure.ResourceManager.AlertsManagement.Models
                 }
                 if (property.NameEquals("startTime"u8))
                 {
-                    startTime = property.Value.GetString();
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    startTime = property.Value.GetTimeSpan("T");
                     continue;
                 }
                 if (property.NameEquals("endTime"u8))
                 {
-                    endTime = property.Value.GetString();
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    endTime = property.Value.GetTimeSpan("T");
                     continue;
                 }
                 if (options.Format != "W")

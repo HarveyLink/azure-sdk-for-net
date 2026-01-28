@@ -33,7 +33,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
             ServiceAlertCollection collection = client.GetServiceAlerts(new ResourceIdentifier(scope));
 
             // invoke the operation
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             ServiceAlertResource result = await collection.GetAsync(alertId);
 
             // the variable result is a resource, you could call other operations on this instance as well
@@ -90,7 +90,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
             ServiceAlertCollection collection = client.GetServiceAlerts(new ResourceIdentifier(scope));
 
             // invoke the operation
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             bool result = await collection.ExistsAsync(alertId);
 
             Console.WriteLine($"Succeeded: {result}");
@@ -113,7 +113,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
             ServiceAlertCollection collection = client.GetServiceAlerts(new ResourceIdentifier(scope));
 
             // invoke the operation
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             NullableResponse<ServiceAlertResource> response = await collection.GetIfExistsAsync(alertId);
             ServiceAlertResource result = response.HasValue ? response.Value : null;
 

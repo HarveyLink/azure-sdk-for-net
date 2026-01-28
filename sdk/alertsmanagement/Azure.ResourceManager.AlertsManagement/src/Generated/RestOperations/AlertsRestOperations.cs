@@ -282,7 +282,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateGetByIdRequestUri(string scope, string alertId)
+        internal RequestUriBuilder CreateGetByIdRequestUri(string scope, Guid alertId)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -294,7 +294,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateGetByIdRequest(string scope, string alertId)
+        internal HttpMessage CreateGetByIdRequest(string scope, Guid alertId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -316,12 +316,10 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="scope"> undefined. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertData>> GetByIdAsync(string scope, string alertId, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public async Task<Response<ServiceAlertData>> GetByIdAsync(string scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateGetByIdRequest(scope, alertId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
@@ -345,12 +343,10 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="scope"> undefined. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertData> GetById(string scope, string alertId, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public Response<ServiceAlertData> GetById(string scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateGetByIdRequest(scope, alertId);
             _pipeline.Send(message, cancellationToken);
@@ -370,7 +366,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateChangeStateRequestUri(string scope, string alertId, ServiceAlertState newState, Comments comment)
+        internal RequestUriBuilder CreateChangeStateRequestUri(string scope, Guid alertId, ServiceAlertState newState, Comments comment)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -384,7 +380,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateChangeStateRequest(string scope, string alertId, ServiceAlertState newState, Comments comment)
+        internal HttpMessage CreateChangeStateRequest(string scope, Guid alertId, ServiceAlertState newState, Comments comment)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -417,12 +413,11 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="newState"> New state of the alert. </param>
         /// <param name="comment"> reason of change alert state. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="scope"/> or <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertData>> ChangeStateAsync(string scope, string alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="scope"/> is an empty string, and was expected to be non-empty. </exception>
+        public async Task<Response<ServiceAlertData>> ChangeStateAsync(string scope, Guid alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNullOrEmpty(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateChangeStateRequest(scope, alertId, newState, comment);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
@@ -446,12 +441,11 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="newState"> New state of the alert. </param>
         /// <param name="comment"> reason of change alert state. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="scope"/> or <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertData> ChangeState(string scope, string alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="scope"/> is an empty string, and was expected to be non-empty. </exception>
+        public Response<ServiceAlertData> ChangeState(string scope, Guid alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNullOrEmpty(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateChangeStateRequest(scope, alertId, newState, comment);
             _pipeline.Send(message, cancellationToken);
@@ -469,7 +463,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateGetEnrichmentsRequestUri(string scope, string alertId)
+        internal RequestUriBuilder CreateGetEnrichmentsRequestUri(string scope, Guid alertId)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -482,7 +476,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateGetEnrichmentsRequest(string scope, string alertId)
+        internal HttpMessage CreateGetEnrichmentsRequest(string scope, Guid alertId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -505,12 +499,10 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="scope"> undefined. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<AlertEnrichmentsList>> GetEnrichmentsAsync(string scope, string alertId, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public async Task<Response<AlertEnrichmentsList>> GetEnrichmentsAsync(string scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateGetEnrichmentsRequest(scope, alertId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
@@ -532,12 +524,10 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="scope"> undefined. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<AlertEnrichmentsList> GetEnrichments(string scope, string alertId, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public Response<AlertEnrichmentsList> GetEnrichments(string scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateGetEnrichmentsRequest(scope, alertId);
             _pipeline.Send(message, cancellationToken);
@@ -555,7 +545,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateGetHistoryRequestUri(string scope, string alertId)
+        internal RequestUriBuilder CreateGetHistoryRequestUri(string scope, Guid alertId)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -568,7 +558,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateGetHistoryRequest(string scope, string alertId)
+        internal HttpMessage CreateGetHistoryRequest(string scope, Guid alertId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -591,12 +581,10 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="scope"> undefined. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertModification>> GetHistoryAsync(string scope, string alertId, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public async Task<Response<ServiceAlertModification>> GetHistoryAsync(string scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateGetHistoryRequest(scope, alertId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
@@ -618,12 +606,10 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="scope"> undefined. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertModification> GetHistory(string scope, string alertId, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="scope"/> is null. </exception>
+        public Response<ServiceAlertModification> GetHistory(string scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateGetHistoryRequest(scope, alertId);
             _pipeline.Send(message, cancellationToken);
@@ -831,7 +817,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateGetByIdTenantRequestUri(string alertId)
+        internal RequestUriBuilder CreateGetByIdTenantRequestUri(Guid alertId)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -841,7 +827,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateGetByIdTenantRequest(string alertId)
+        internal HttpMessage CreateGetByIdTenantRequest(Guid alertId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -860,12 +846,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <summary> Get information related to a specific alert. </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertData>> GetByIdTenantAsync(string alertId, CancellationToken cancellationToken = default)
+        public async Task<Response<ServiceAlertData>> GetByIdTenantAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var message = CreateGetByIdTenantRequest(alertId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
@@ -887,12 +869,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <summary> Get information related to a specific alert. </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertData> GetByIdTenant(string alertId, CancellationToken cancellationToken = default)
+        public Response<ServiceAlertData> GetByIdTenant(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var message = CreateGetByIdTenantRequest(alertId);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
@@ -911,7 +889,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateChangeStateTenantRequestUri(string alertId, ServiceAlertState newState, Comments comment)
+        internal RequestUriBuilder CreateChangeStateTenantRequestUri(Guid alertId, ServiceAlertState newState, Comments comment)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -923,7 +901,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateChangeStateTenantRequest(string alertId, ServiceAlertState newState, Comments comment)
+        internal HttpMessage CreateChangeStateTenantRequest(Guid alertId, ServiceAlertState newState, Comments comment)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -953,12 +931,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="newState"> New state of the alert. </param>
         /// <param name="comment"> reason of change alert state. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertData>> ChangeStateTenantAsync(string alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
+        public async Task<Response<ServiceAlertData>> ChangeStateTenantAsync(Guid alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var message = CreateChangeStateTenantRequest(alertId, newState, comment);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
@@ -980,12 +954,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="newState"> New state of the alert. </param>
         /// <param name="comment"> reason of change alert state. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertData> ChangeStateTenant(string alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
+        public Response<ServiceAlertData> ChangeStateTenant(Guid alertId, ServiceAlertState newState, Comments comment = null, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var message = CreateChangeStateTenantRequest(alertId, newState, comment);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
@@ -1002,7 +972,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateGetHistoryTenantRequestUri(string alertId)
+        internal RequestUriBuilder CreateGetHistoryTenantRequestUri(Guid alertId)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -1013,7 +983,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateGetHistoryTenantRequest(string alertId)
+        internal HttpMessage CreateGetHistoryTenantRequest(Guid alertId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -1033,12 +1003,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <summary> Get the history of an alert, which captures any monitor condition changes (Fired/Resolved), alert state changes (New/Acknowledged/Closed) and applied action rules for that particular alert. </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<ServiceAlertModification>> GetHistoryTenantAsync(string alertId, CancellationToken cancellationToken = default)
+        public async Task<Response<ServiceAlertModification>> GetHistoryTenantAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var message = CreateGetHistoryTenantRequest(alertId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
@@ -1058,12 +1024,8 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <summary> Get the history of an alert, which captures any monitor condition changes (Fired/Resolved), alert state changes (New/Acknowledged/Closed) and applied action rules for that particular alert. </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<ServiceAlertModification> GetHistoryTenant(string alertId, CancellationToken cancellationToken = default)
+        public Response<ServiceAlertModification> GetHistoryTenant(Guid alertId, CancellationToken cancellationToken = default)
         {
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
-
             using var message = CreateGetHistoryTenantRequest(alertId);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
@@ -1256,7 +1218,7 @@ namespace Azure.ResourceManager.AlertsManagement
             }
         }
 
-        internal RequestUriBuilder CreateGetEnrichmentsNextPageRequestUri(string nextLink, string scope, string alertId)
+        internal RequestUriBuilder CreateGetEnrichmentsNextPageRequestUri(string nextLink, string scope, Guid alertId)
         {
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
@@ -1264,7 +1226,7 @@ namespace Azure.ResourceManager.AlertsManagement
             return uri;
         }
 
-        internal HttpMessage CreateGetEnrichmentsNextPageRequest(string nextLink, string scope, string alertId)
+        internal HttpMessage CreateGetEnrichmentsNextPageRequest(string nextLink, string scope, Guid alertId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -1283,13 +1245,11 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="scope"> undefined. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/>, <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<AlertEnrichmentsList>> GetEnrichmentsNextPageAsync(string nextLink, string scope, string alertId, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> or <paramref name="scope"/> is null. </exception>
+        public async Task<Response<AlertEnrichmentsList>> GetEnrichmentsNextPageAsync(string nextLink, string scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(nextLink, nameof(nextLink));
             Argument.AssertNotNull(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateGetEnrichmentsNextPageRequest(nextLink, scope, alertId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
@@ -1312,13 +1272,11 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="scope"> undefined. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/>, <paramref name="scope"/> or <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<AlertEnrichmentsList> GetEnrichmentsNextPage(string nextLink, string scope, string alertId, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> or <paramref name="scope"/> is null. </exception>
+        public Response<AlertEnrichmentsList> GetEnrichmentsNextPage(string nextLink, string scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(nextLink, nameof(nextLink));
             Argument.AssertNotNull(scope, nameof(scope));
-            Argument.AssertNotNullOrEmpty(alertId, nameof(alertId));
 
             using var message = CreateGetEnrichmentsNextPageRequest(nextLink, scope, alertId);
             _pipeline.Send(message, cancellationToken);

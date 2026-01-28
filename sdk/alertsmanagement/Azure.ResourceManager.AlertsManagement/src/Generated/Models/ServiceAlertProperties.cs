@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertProperties"/>. </summary>
-        internal ServiceAlertProperties()
+        public ServiceAlertProperties()
         {
             CustomProperties = new ChangeTrackingDictionary<string, string>();
         }
@@ -57,7 +57,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="egressConfig"> Config which would be used for displaying the data in portal. </param>
         /// <param name="customProperties"> Custom properties that can hold any user defined key-value pairs. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal ServiceAlertProperties(ServiceAlertEssentials essentials, BinaryData context, BinaryData egressConfig, IReadOnlyDictionary<string, string> customProperties, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal ServiceAlertProperties(ServiceAlertEssentials essentials, BinaryData context, BinaryData egressConfig, IDictionary<string, string> customProperties, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             Essentials = essentials;
             Context = context;
@@ -67,7 +67,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> This object contains consistent fields across different monitor services. </summary>
-        public ServiceAlertEssentials Essentials { get; }
+        public ServiceAlertEssentials Essentials { get; set; }
         /// <summary>
         /// Information specific to the monitor service that gives more contextual details about the alert.
         /// <para>
@@ -131,6 +131,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// </summary>
         public BinaryData EgressConfig { get; }
         /// <summary> Custom properties that can hold any user defined key-value pairs. </summary>
-        public IReadOnlyDictionary<string, string> CustomProperties { get; }
+        public IDictionary<string, string> CustomProperties { get; }
     }
 }

@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertEssentials"/>. </summary>
-        internal ServiceAlertEssentials()
+        public ServiceAlertEssentials()
         {
         }
 
@@ -104,13 +104,13 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <summary> Can be 'Fired' or 'Resolved', which represents whether the underlying conditions have crossed the defined alert rule thresholds. </summary>
         public MonitorCondition? MonitorCondition { get; }
         /// <summary> Target ARM resource, on which alert got created. </summary>
-        public string TargetResource { get; }
+        public string TargetResource { get; set; }
         /// <summary> Name of the target ARM resource name, on which alert got created. </summary>
-        public string TargetResourceName { get; }
+        public string TargetResourceName { get; set; }
         /// <summary> Resource group of target ARM resource, on which alert got created. </summary>
-        public string TargetResourceGroup { get; }
+        public string TargetResourceGroup { get; set; }
         /// <summary> Resource type of target ARM resource, on which alert got created. </summary>
-        public string TargetResourceType { get; }
+        public string TargetResourceType { get; set; }
         /// <summary> Monitor service on which the rule(monitor) is set. </summary>
         public MonitorServiceSourceForAlert? MonitorService { get; }
         /// <summary> Rule(monitor) which fired alert instance. Depending on the monitor service,  this would be ARM id or name of the rule. </summary>
@@ -130,14 +130,20 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <summary> User who last modified the alert, in case of monitor service updates user would be 'system', otherwise name of the user. </summary>
         public string LastModifiedBy { get; }
         /// <summary> Action status. </summary>
-        internal ServiceAlertActionStatus ActionStatus { get; }
+        internal ServiceAlertActionStatus ActionStatus { get; set; }
         /// <summary> Value indicating whether alert is suppressed. </summary>
         public bool? IsSuppressed
         {
-            get => ActionStatus?.IsSuppressed;
+            get => ActionStatus is null ? default : ActionStatus.IsSuppressed;
+            set
+            {
+                if (ActionStatus is null)
+                    ActionStatus = new ServiceAlertActionStatus();
+                ActionStatus.IsSuppressed = value;
+            }
         }
 
         /// <summary> Alert description. </summary>
-        public string Description { get; }
+        public string Description { get; set; }
     }
 }

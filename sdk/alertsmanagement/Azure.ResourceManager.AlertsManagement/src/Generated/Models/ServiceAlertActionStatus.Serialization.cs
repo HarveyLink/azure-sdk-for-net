@@ -13,7 +13,7 @@ using Azure.Core;
 
 namespace Azure.ResourceManager.AlertsManagement.Models
 {
-    internal partial class ServiceAlertActionStatus : IUtf8JsonSerializable, IJsonModel<ServiceAlertActionStatus>
+    public partial class ServiceAlertActionStatus : IUtf8JsonSerializable, IJsonModel<ServiceAlertActionStatus>
     {
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer) => ((IJsonModel<ServiceAlertActionStatus>)this).Write(writer, ModelSerializationExtensions.WireOptions);
 

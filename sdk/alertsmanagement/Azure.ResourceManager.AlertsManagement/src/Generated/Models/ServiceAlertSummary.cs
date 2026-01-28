@@ -48,7 +48,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertSummary"/>. </summary>
-        internal ServiceAlertSummary()
+        public ServiceAlertSummary()
         {
         }
 
@@ -66,6 +66,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> Group the result set. </summary>
-        public ServiceAlertSummaryGroup Properties { get; }
+        public ServiceAlertSummaryGroup Properties { get; set; }
     }
 }

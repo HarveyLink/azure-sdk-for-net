@@ -26,7 +26,7 @@ namespace Azure.ResourceManager.AlertsManagement
     {
         /// <summary> Generate the resource identifier of a <see cref="TenantAlertResource"/> instance. </summary>
         /// <param name="alertId"> The alertId. </param>
-        public static ResourceIdentifier CreateResourceIdentifier(string alertId)
+        public static ResourceIdentifier CreateResourceIdentifier(Guid alertId)
         {
             var resourceId = $"/providers/Microsoft.AlertsManagement/alerts/{alertId}";
             return new ResourceIdentifier(resourceId);
@@ -115,7 +115,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = await _tenantAlertAlertsRestClient.GetByIdTenantAsync(Id.Name, cancellationToken).ConfigureAwait(false);
+                var response = await _tenantAlertAlertsRestClient.GetByIdTenantAsync(Guid.Parse(Id.Name), cancellationToken).ConfigureAwait(false);
                 if (response.Value == null)
                     throw new RequestFailedException(response.GetRawResponse());
                 return Response.FromValue(new TenantAlertResource(Client, response.Value), response.GetRawResponse());
@@ -155,7 +155,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = _tenantAlertAlertsRestClient.GetByIdTenant(Id.Name, cancellationToken);
+                var response = _tenantAlertAlertsRestClient.GetByIdTenant(Guid.Parse(Id.Name), cancellationToken);
                 if (response.Value == null)
                     throw new RequestFailedException(response.GetRawResponse());
                 return Response.FromValue(new TenantAlertResource(Client, response.Value), response.GetRawResponse());
@@ -197,7 +197,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = await _tenantAlertAlertsRestClient.ChangeStateTenantAsync(Id.Name, newState, comment, cancellationToken).ConfigureAwait(false);
+                var response = await _tenantAlertAlertsRestClient.ChangeStateTenantAsync(Guid.Parse(Id.Name), newState, comment, cancellationToken).ConfigureAwait(false);
                 return Response.FromValue(new TenantAlertResource(Client, response.Value), response.GetRawResponse());
             }
             catch (Exception e)
@@ -237,7 +237,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = _tenantAlertAlertsRestClient.ChangeStateTenant(Id.Name, newState, comment, cancellationToken);
+                var response = _tenantAlertAlertsRestClient.ChangeStateTenant(Guid.Parse(Id.Name), newState, comment, cancellationToken);
                 return Response.FromValue(new TenantAlertResource(Client, response.Value), response.GetRawResponse());
             }
             catch (Exception e)
@@ -275,7 +275,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = await _tenantAlertAlertsRestClient.GetHistoryTenantAsync(Id.Name, cancellationToken).ConfigureAwait(false);
+                var response = await _tenantAlertAlertsRestClient.GetHistoryTenantAsync(Guid.Parse(Id.Name), cancellationToken).ConfigureAwait(false);
                 return response;
             }
             catch (Exception e)
@@ -313,7 +313,7 @@ namespace Azure.ResourceManager.AlertsManagement
             scope.Start();
             try
             {
-                var response = _tenantAlertAlertsRestClient.GetHistoryTenant(Id.Name, cancellationToken);
+                var response = _tenantAlertAlertsRestClient.GetHistoryTenant(Guid.Parse(Id.Name), cancellationToken);
                 return response;
             }
             catch (Exception e)

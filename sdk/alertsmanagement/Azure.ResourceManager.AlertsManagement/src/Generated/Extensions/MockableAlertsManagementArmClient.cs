@@ -82,10 +82,8 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
         /// <param name="scope"> The scope that the resource will apply against. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public virtual async Task<Response<ServiceAlertResource>> GetServiceAlertAsync(ResourceIdentifier scope, string alertId, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<ServiceAlertResource>> GetServiceAlertAsync(ResourceIdentifier scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             return await GetServiceAlerts(scope).GetAsync(alertId, cancellationToken).ConfigureAwait(false);
         }
@@ -114,10 +112,8 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
         /// <param name="scope"> The scope that the resource will apply against. </param>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public virtual Response<ServiceAlertResource> GetServiceAlert(ResourceIdentifier scope, string alertId, CancellationToken cancellationToken = default)
+        public virtual Response<ServiceAlertResource> GetServiceAlert(ResourceIdentifier scope, Guid alertId, CancellationToken cancellationToken = default)
         {
             return GetServiceAlerts(scope).Get(alertId, cancellationToken);
         }

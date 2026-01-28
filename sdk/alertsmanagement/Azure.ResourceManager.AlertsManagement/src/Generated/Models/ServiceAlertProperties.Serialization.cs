@@ -114,7 +114,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             ServiceAlertEssentials essentials = default;
             BinaryData context = default;
             BinaryData egressConfig = default;
-            IReadOnlyDictionary<string, string> customProperties = default;
+            IDictionary<string, string> customProperties = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())

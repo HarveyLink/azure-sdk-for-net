@@ -80,10 +80,8 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public virtual async Task<Response<TenantAlertResource>> GetTenantAlertAsync(string alertId, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<TenantAlertResource>> GetTenantAlertAsync(Guid alertId, CancellationToken cancellationToken = default)
         {
             return await GetTenantAlerts().GetAsync(alertId, cancellationToken).ConfigureAwait(false);
         }
@@ -111,10 +109,8 @@ namespace Azure.ResourceManager.AlertsManagement.Mocking
         /// </summary>
         /// <param name="alertId"> Unique ID of an alert instance. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="alertId"/> is null. </exception>
-        /// <exception cref="ArgumentException"> <paramref name="alertId"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public virtual Response<TenantAlertResource> GetTenantAlert(string alertId, CancellationToken cancellationToken = default)
+        public virtual Response<TenantAlertResource> GetTenantAlert(Guid alertId, CancellationToken cancellationToken = default)
         {
             return GetTenantAlerts().Get(alertId, cancellationToken);
         }

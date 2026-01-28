@@ -7,6 +7,7 @@
 
 using System;
 using System.Threading.Tasks;
+using System.Xml;
 using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager.AlertsManagement.Models;
@@ -261,8 +262,8 @@ Values = {"microsoft.compute/virtualmachines"},
                         TimeZone = "India Standard Time",
                         Recurrences = {new AlertProcessingRuleWeeklyRecurrence(new AlertsManagementDayOfWeek[]{AlertsManagementDayOfWeek.Saturday, AlertsManagementDayOfWeek.Sunday})
 {
-StartOn = "22:00:00",
-EndOn = "04:00:00",
+StartOn = XmlConvert.ToTimeSpan("22:00:00"),
+EndOn = XmlConvert.ToTimeSpan("04:00:00"),
 }},
                     },
                     Description = "Remove all ActionGroups from all Vitual machine Alerts during the recurring maintenance",
@@ -316,8 +317,8 @@ new AlertProcessingRuleRemoveAllGroupsAction()
                         TimeZone = "Eastern Standard Time",
                         Recurrences = {new DailyRecurrence
 {
-StartOn = "17:00:00",
-EndOn = "09:00:00",
+StartOn = XmlConvert.ToTimeSpan("17:00:00"),
+EndOn = XmlConvert.ToTimeSpan("09:00:00"),
 }, new AlertProcessingRuleWeeklyRecurrence(new AlertsManagementDayOfWeek[]{AlertsManagementDayOfWeek.Saturday, AlertsManagementDayOfWeek.Sunday})},
                     },
                     Description = "Remove all ActionGroups outside business hours",

@@ -18,7 +18,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="startOn"> Start time for recurrence. </param>
         /// <param name="endOn"> End time for recurrence. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal UnknownRecurrence(RecurrenceType recurrenceType, string startOn, string endOn, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(recurrenceType, startOn, endOn, serializedAdditionalRawData)
+        internal UnknownRecurrence(RecurrenceType recurrenceType, TimeSpan? startOn, TimeSpan? endOn, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(recurrenceType, startOn, endOn, serializedAdditionalRawData)
         {
             RecurrenceType = recurrenceType;
         }

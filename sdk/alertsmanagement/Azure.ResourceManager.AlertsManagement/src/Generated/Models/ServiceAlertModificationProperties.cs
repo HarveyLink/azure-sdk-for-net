@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertModificationProperties"/>. </summary>
-        internal ServiceAlertModificationProperties()
+        public ServiceAlertModificationProperties()
         {
             Modifications = new ChangeTrackingList<ServiceAlertModificationItemInfo>();
         }
@@ -55,7 +55,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <param name="alertId"> Unique identifier of the alert. </param>
         /// <param name="modifications"> Array of alert modification events. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal ServiceAlertModificationProperties(Guid? alertId, IReadOnlyList<ServiceAlertModificationItemInfo> modifications, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal ServiceAlertModificationProperties(Guid? alertId, IList<ServiceAlertModificationItemInfo> modifications, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             AlertId = alertId;
             Modifications = modifications;
@@ -65,6 +65,6 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         /// <summary> Unique identifier of the alert. </summary>
         public Guid? AlertId { get; }
         /// <summary> Array of alert modification events. </summary>
-        public IReadOnlyList<ServiceAlertModificationItemInfo> Modifications { get; }
+        public IList<ServiceAlertModificationItemInfo> Modifications { get; }
     }
 }

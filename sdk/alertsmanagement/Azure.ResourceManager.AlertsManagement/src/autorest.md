@@ -20,6 +20,9 @@ modelerfour:
   lenient-model-deduplication: true
 use-model-reader-writer: true
 
+# mgmt-debug:
+#  show-serialized-names: true
+
 ```
 
 ### Tag: package-all
@@ -38,7 +41,7 @@ input-file:
   - https://github.com/welovej/azure-rest-api-specs/blob/17d211d07bcde67d0511a35cb9d4313245eb6cad/specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/PreviewAlertRule/preview/2025-07-01-preview/PreviewAlertRule.json
   - https://github.com/welovej/azure-rest-api-specs/blob/e835843a15f48b1df6ca61c217206e7bcf56e478/specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/PrometheusRuleGroups/stable/2023-03-01/PrometheusRuleGroups.json
   - https://github.com/welovej/azure-rest-api-specs/blob/a77bab40da5cb83155e86ca1cd4ba645ec06f100/specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/TenantActivityLogAlerts/preview/2023-04-01-preview/TenantActivityLogAlerts.json
-  - https://github.com/Azure/azure-rest-api-specs/blob/44a12ed5a9045bb04ad3759bd96c32fe970a935c/specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/Legacy/preview/2019-05-05-preview/SmartGroups.json
+  - https://github.com/Azure/azure-rest-api-specs/blob/0077b4a8c5071d3ab33fd9f9ba013581c9a66b8f/specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/preview/2019-05-05-preview/SmartGroups.json
 
 rename-mapping:
   AlertModification.modifiedAt: modifiedOn|date-time
@@ -52,8 +55,6 @@ rename-mapping:
   PatchObject.properties.enabled: IsEnabled
   SmartGroup.properties.lastModifiedUserName: lastModifiedBy
   SmartGroupModificationItem.modifiedAt: modifiedOn|date-time
-  Recurrence.startTime: startOn
-  Recurrence.endTime: endOn
   Schedule.effectiveFrom: -|date-time
   Schedule.effectiveUntil: -|date-time
   TimeRange.1h: OneHour
@@ -86,6 +87,8 @@ rename-mapping:
   SmartGroupModificationItem: SmartGroupModificationItemInfo
   Schedule: AlertProcessingRuleSchedule
   Recurrence: AlertProcessingRuleRecurrence
+  Recurrence.startTime: StartOn|time
+  Recurrence.endTime: EndOn|time
   AlertsMetaData: ServiceAlertMetadata
   AlertsMetaDataProperties: ServiceAlertMetadataProperties
   AlertModification: ServiceAlertModification
@@ -141,6 +144,30 @@ acronym-mapping:
   SCOM: Scom
 
 directive:
+  - from: AlertsManagement.json
+    where: $
+    transform: >
+      for (var pathName in $.paths) {
+          var path = $.paths[pathName];
+          if (path.parameters) {
+              for (var i = 0; i < path.parameters.length; i++) {
+                  if (path.parameters[i].name === 'alertId') {
+                      path.parameters[i]['format'] = 'uuid';
+                  }
+              }
+          }
+          for (var methodName in path) {
+              if (methodName === 'parameters') continue;
+              var operation = path[methodName];
+              if (operation.parameters) {
+                  for (var i = 0; i < operation.parameters.length; i++) {
+                      if (operation.parameters[i].name === 'alertId') {
+                          operation.parameters[i]['format'] = 'uuid';
+                      }
+                  }
+              }
+          }
+      }
   - from: swagger-document
     where: $.definitions
     transform: >
@@ -152,8 +179,6 @@ directive:
     transform: >
       $.errorResponse['x-ms-client-name'] = 'AlertProcessingRuleErrorResponse';
       $.errorResponseBody['x-ms-client-name'] = 'AlertProcessingRuleErrorResponseBody';
-      $.Recurrence.properties.startTime['format'] = 'time';
-      $.Recurrence.properties.endTime['format'] = 'time';
   - from: swagger-document
     where: $.definitions
     transform: >
@@ -163,10 +188,6 @@ directive:
     where: $.parameters
     transform: >
       $.smartGroupId['format'] = 'uuid';
-  - from: swagger-document
-    where: $.parameters
-    transform: >
-      $.alertId['format'] = 'uuid';
   # Could not set ResourceTypeSegment for request path /{scope}
   - from: swagger-document
     where: $.paths

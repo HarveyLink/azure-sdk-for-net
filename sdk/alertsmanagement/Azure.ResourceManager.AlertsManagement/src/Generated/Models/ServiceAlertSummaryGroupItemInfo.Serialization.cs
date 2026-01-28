@@ -99,7 +99,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             string name = default;
             long? count = default;
             string groupedby = default;
-            IReadOnlyList<ServiceAlertSummaryGroupItemInfo> values = default;
+            IList<ServiceAlertSummaryGroupItemInfo> values = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> rawDataDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())

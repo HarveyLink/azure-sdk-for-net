@@ -31,7 +31,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
             // this example assumes you already have this ServiceAlertResource created on azure
             // for more information of creating ServiceAlertResource, please refer to the document of ServiceAlertResource
             string scope = "subscriptions/3b540246-808d-4331-99aa-917b808a9166/resourcegroups/servicedeskresourcegroup/providers/microsoft.insights/components/servicedeskappinsight";
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             ResourceIdentifier serviceAlertResourceId = ServiceAlertResource.CreateResourceIdentifier(scope, alertId);
             ServiceAlertResource serviceAlert = client.GetServiceAlertResource(serviceAlertResourceId);
 
@@ -60,7 +60,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
             // this example assumes you already have this ServiceAlertResource created on azure
             // for more information of creating ServiceAlertResource, please refer to the document of ServiceAlertResource
             string scope = "subscriptions/3b540246-808d-4331-99aa-917b808a9166/resourcegroups/servicedeskresourcegroup/providers/microsoft.insights/components/servicedeskappinsight";
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             ResourceIdentifier serviceAlertResourceId = ServiceAlertResource.CreateResourceIdentifier(scope, alertId);
             ServiceAlertResource serviceAlert = client.GetServiceAlertResource(serviceAlertResourceId);
 
@@ -90,7 +90,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
             // this example assumes you already have this ServiceAlertResource created on azure
             // for more information of creating ServiceAlertResource, please refer to the document of ServiceAlertResource
             string scope = "subscriptions/72fa99ef-9c84-4a7c-b343-ec62da107d81";
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502101";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502101");
             ResourceIdentifier serviceAlertResourceId = ServiceAlertResource.CreateResourceIdentifier(scope, alertId);
             ServiceAlertResource serviceAlert = client.GetServiceAlertResource(serviceAlertResourceId);
 
@@ -118,7 +118,7 @@ namespace Azure.ResourceManager.AlertsManagement.Samples
             // this example assumes you already have this ServiceAlertResource created on azure
             // for more information of creating ServiceAlertResource, please refer to the document of ServiceAlertResource
             string scope = "subscriptions/9e261de7-c804-4b9d-9ebf-6f50fe350a9a";
-            string alertId = "66114d64-d9d9-478b-95c9-b789d6502100";
+            Guid alertId = Guid.Parse("66114d64-d9d9-478b-95c9-b789d6502100");
             ResourceIdentifier serviceAlertResourceId = ServiceAlertResource.CreateResourceIdentifier(scope, alertId);
             ServiceAlertResource serviceAlert = client.GetServiceAlertResource(serviceAlertResourceId);
 

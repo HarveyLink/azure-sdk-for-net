@@ -39,12 +39,12 @@ namespace Azure.ResourceManager.AlertsManagement.Models
             if (Optional.IsDefined(StartOn))
             {
                 writer.WritePropertyName("startTime"u8);
-                writer.WriteStringValue(StartOn);
+                writer.WriteStringValue(StartOn.Value, "T");
             }
             if (Optional.IsDefined(EndOn))
             {
                 writer.WritePropertyName("endTime"u8);
-                writer.WriteStringValue(EndOn);
+                writer.WriteStringValue(EndOn.Value, "T");
             }
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {

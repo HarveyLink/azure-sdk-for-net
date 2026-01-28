@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ServiceAlertModificationItemInfo"/>. </summary>
-        internal ServiceAlertModificationItemInfo()
+        public ServiceAlertModificationItemInfo()
         {
         }
 
@@ -78,24 +78,24 @@ namespace Azure.ResourceManager.AlertsManagement.Models
         }
 
         /// <summary> Reason for the modification. </summary>
-        public ServiceAlertModificationEvent? ModificationEvent { get; }
+        public ServiceAlertModificationEvent? ModificationEvent { get; set; }
         /// <summary> Old value. </summary>
-        public string OldValue { get; }
+        public string OldValue { get; set; }
         /// <summary> New value. </summary>
-        public string NewValue { get; }
+        public string NewValue { get; set; }
         /// <summary> Modified date and time. </summary>
-        public string ModifiedAt { get; }
+        public string ModifiedAt { get; set; }
         /// <summary> Modified user details (Principal client name). </summary>
-        public string ModifiedBy { get; }
+        public string ModifiedBy { get; set; }
         /// <summary> Modification comments. </summary>
-        public string Comments { get; }
+        public string Comments { get; set; }
         /// <summary> Description of the modification. </summary>
-        public string Description { get; }
+        public string Description { get; set; }
         /// <summary>
         /// Base details class.
         /// Please note <see cref="BaseDetails"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
         /// The available derived classes include <see cref="ActionSuppressedDetails"/>, <see cref="ActionTriggeredDetails"/> and <see cref="PropertyChangeDetails"/>.
         /// </summary>
-        public BaseDetails Details { get; }
+        public BaseDetails Details { get; set; }
     }
 }

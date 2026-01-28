@@ -52,7 +52,7 @@ namespace Azure.ResourceManager.AlertsManagement
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="SmartGroupData"/>. </summary>
-        internal SmartGroupData()
+        public SmartGroupData()
         {
             Resources = new ChangeTrackingList<SmartGroupAggregatedProperty>();
             ResourceTypes = new ChangeTrackingList<SmartGroupAggregatedProperty>();
@@ -83,7 +83,7 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <param name="alertSeverities"> Summary of alertSeverities in the smart group. </param>
         /// <param name="nextLink"> The URI to fetch the next page of alerts. Call ListNext() with this URI to fetch the next page alerts. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal SmartGroupData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, long? alertsCount, SmartGroupState? smartGroupState, ServiceAlertSeverity? severity, DateTimeOffset? startOn, DateTimeOffset? lastModifiedOn, string lastModifiedBy, IReadOnlyList<SmartGroupAggregatedProperty> resources, IReadOnlyList<SmartGroupAggregatedProperty> resourceTypes, IReadOnlyList<SmartGroupAggregatedProperty> resourceGroups, IReadOnlyList<SmartGroupAggregatedProperty> monitorServices, IReadOnlyList<SmartGroupAggregatedProperty> monitorConditions, IReadOnlyList<SmartGroupAggregatedProperty> alertStates, IReadOnlyList<SmartGroupAggregatedProperty> alertSeverities, string nextLink, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData)
+        internal SmartGroupData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, long? alertsCount, SmartGroupState? smartGroupState, ServiceAlertSeverity? severity, DateTimeOffset? startOn, DateTimeOffset? lastModifiedOn, string lastModifiedBy, IList<SmartGroupAggregatedProperty> resources, IList<SmartGroupAggregatedProperty> resourceTypes, IList<SmartGroupAggregatedProperty> resourceGroups, IList<SmartGroupAggregatedProperty> monitorServices, IList<SmartGroupAggregatedProperty> monitorConditions, IList<SmartGroupAggregatedProperty> alertStates, IList<SmartGroupAggregatedProperty> alertSeverities, string nextLink, IDictionary<string, BinaryData> serializedAdditionalRawData) : base(id, name, resourceType, systemData)
         {
             AlertsCount = alertsCount;
             SmartGroupState = smartGroupState;
@@ -103,7 +103,7 @@ namespace Azure.ResourceManager.AlertsManagement
         }
 
         /// <summary> Total number of alerts in smart group. </summary>
-        public long? AlertsCount { get; }
+        public long? AlertsCount { get; set; }
         /// <summary> Smart group state. </summary>
         public SmartGroupState? SmartGroupState { get; }
         /// <summary> Severity of smart group is the highest(Sev0 &gt;... &gt; Sev4) severity of all the alerts in the group. </summary>
@@ -115,20 +115,20 @@ namespace Azure.ResourceManager.AlertsManagement
         /// <summary> Last modified by user name. </summary>
         public string LastModifiedBy { get; }
         /// <summary> Summary of target resources in the smart group. </summary>
-        public IReadOnlyList<SmartGroupAggregatedProperty> Resources { get; }
+        public IList<SmartGroupAggregatedProperty> Resources { get; }
         /// <summary> Summary of target resource types in the smart group. </summary>
-        public IReadOnlyList<SmartGroupAggregatedProperty> ResourceTypes { get; }
+        public IList<SmartGroupAggregatedProperty> ResourceTypes { get; }
         /// <summary> Summary of target resource groups in the smart group. </summary>
-        public IReadOnlyList<SmartGroupAggregatedProperty> ResourceGroups { get; }
+        public IList<SmartGroupAggregatedProperty> ResourceGroups { get; }
         /// <summary> Summary of monitorServices in the smart group. </summary>
-        public IReadOnlyList<SmartGroupAggregatedProperty> MonitorServices { get; }
+        public IList<SmartGroupAggregatedProperty> MonitorServices { get; }
         /// <summary> Summary of monitorConditions in the smart group. </summary>
-        public IReadOnlyList<SmartGroupAggregatedProperty> MonitorConditions { get; }
+        public IList<SmartGroupAggregatedProperty> MonitorConditions { get; }
         /// <summary> Summary of alertStates in the smart group. </summary>
-        public IReadOnlyList<SmartGroupAggregatedProperty> AlertStates { get; }
+        public IList<SmartGroupAggregatedProperty> AlertStates { get; }
         /// <summary> Summary of alertSeverities in the smart group. </summary>
-        public IReadOnlyList<SmartGroupAggregatedProperty> AlertSeverities { get; }
+        public IList<SmartGroupAggregatedProperty> AlertSeverities { get; }
         /// <summary> The URI to fetch the next page of alerts. Call ListNext() with this URI to fetch the next page alerts. </summary>
-        public string NextLink { get; }
+        public string NextLink { get; set; }
     }
 }
